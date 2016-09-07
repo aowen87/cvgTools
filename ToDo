@@ -5,16 +5,16 @@ Error handling:
     should be raised. 
 
 Reading files:
-    It may be much more efficient to process the data as the files
-    are being read, rather than storing all of the data and then manipulating
-    this data before writing. Instead, I could read the number of lines 
-    neccessary, process them, write them, and then continue on until
-    reaching the EOF. Write both version and test for speed?
+    bed file input need more testing.
 
+Normalize data:
+    Wait to hear back from Vince. 
 
-Diff Input:
-    make a method for diffing vairous input data; find the differences 
-    between average values, and find where the values differ the most
-    and by how much (how should this information be output? It would be 
-    nice to build a histogram or other type of display from the data, but
-    it might also be nice to have a wig file for view in IGV...).
+tools:
+    -coverage computation. 
+    -find correlations between data sets. 
+    -merge gene sections (DO NEXT)
+    -more advanced window options
+        *offsets
+        *target specific areas of genes
+     
