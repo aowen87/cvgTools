@@ -1,0 +1,170 @@
+/****************************************************
+*    TODO: License
+*    @author: Alister Maguire
+*    @version: 1.0 8/28/16
+*****************************************************/
+#include <writers.h>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::ofstream;
+
+
+
+/***
+* @author: Alister Maguire
+*
+* Create a WIG file from snkData. 
+* @param: filename -> the name of the file to be 
+*         written to. 
+*
+***/
+void WigWriter::Write(char *filename)
+{
+    ofstream outfile (filename);
+    if (outfile.is_open())
+    { 
+        string curChrom;
+        string prevChrom = "";
+        int    curStart;
+        int    curStop;
+        double curVal;
+        int    len      = snkData->GetDataSize();
+        DataLine *lines = snkData->GetLines();   
+        DataLine curLine;
+        for (int i = 0; i < len; i++)
+        {
+            curLine  = lines[i];
+            curChrom = curLine.GetChrom();
+            curStart = curLine.GetStart();
+            curStop  = curLine.GetStop();
+            curVal   = curLine.GetVal();
+            if (curChrom != prevChrom)
+            {
+                prevChrom = curChrom;
+                outfile << "variableStep\t" << "chrom=" << curChrom << "\n";
+            }    
+            while ((curStop - curStart) > 0)
+            {
+                outfile << curStart+1 << "\t" << curVal << "\n";//FIXME: testing
+                curStart++;
+            }
+        }      
+        outfile.close();
+    }
+    else
+        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+}
+
+
+/***
+* @author: Alister Maguire
+* 
+* Write a file containing window averages. 
+* Format is as follows, and all values are tab delimited:
+*  <title> <window start> <window end> <window average>
+*
+* @param: filename -> the name of the file to be written
+*         to. 
+*
+***/
+void WindowAvgWriter::Write(char *filename)
+{
+    ofstream outfile (filename);
+    if (outfile.is_open())
+    { 
+        unsigned long int len = snkWindowBlock->GetNumWindows();
+        Window  curWindow; 
+        if (snkWindowBlock->GetWindows() == NULL)
+            cerr << "ERROR: cannot write windows -> windows are NULL" << endl;
+        else
+        {
+            for (int i = 0; i < len; i++)
+            {
+                curWindow = snkWindowBlock->GetWindow(i);
+                outfile << curWindow.GetTitle() << "\t" << curWindow.GetStart() << "\t" << 
+                           curWindow.GetStop() << "\t" << curWindow.GetValAvg() << "\n";
+            }
+        }      
+        outfile.close();
+    }
+    else
+        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Output windows to a file in wig format. 
+*
+* @param: filename -> the name of the file to be written
+*         to. 
+***/
+//FIXME: testing needed
+void WindowWigWriter::Write(char *filename)
+{
+    ofstream outfile (filename);
+    if (outfile.is_open())
+    { 
+        unsigned long int numWin = snkWindowBlock->GetNumWindows();
+        Window  curWindow; 
+        Window *windows = snkWindowBlock->GetWindows();
+        if (windows == NULL)
+        {
+            cerr << "ERROR: cannot write windows -> windows are NULL" << endl;
+            return;
+        }
+        else
+        {
+            unsigned long int numLines;
+            DataLine *lines;
+            DataLine  curLine;
+            string    curChrom; 
+            string    prevChrom;
+            int       curStart;
+            int       curStop;
+            double    curVal;
+            for (int i = 0; i < numWin; i++)
+            {
+                curWindow = snkWindowBlock->GetWindow(i);
+                lines     = curWindow.GetLines();
+                numLines  = curWindow.GetDataSize();
+                prevChrom = "";
+                if (lines == NULL)
+                {
+                    cerr << "ERROR: cannot write windows -> NULL data found" << endl;
+                    return;
+                } 
+                else
+                {
+                    for (int j = 0; j < numLines; j++)
+                    {
+
+                        curLine  = lines[j];
+                        curChrom = curLine.GetChrom();
+                        curStart = curLine.GetStart();
+                        curStop  = curLine.GetStop();
+                        curVal   = curLine.GetVal();
+                        if (curChrom != prevChrom)
+                        {
+                            prevChrom = curChrom;
+                            outfile << "variableStep\t" << "chrom=" << curChrom << "\n";
+                        }    
+                        while ((curStop - curStart) > 0)
+                        {
+                            outfile << curStart+1 << "\t" << curVal << "\n";
+                            curStart++;
+                        }
+                    }
+                }
+            }
+        }      
+        outfile.close();
+    }
+    else
+        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+}

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+#TEST 1
+../src/cvgTools toWig -c input/countsFiles/count9 output/cov2wig/out1.wig
+
+DIFF=$(diff output/cov2wig/out1.wig correct/cov2wig/out1.wig)
+
+if [ "$DIFF" != "" ]
+then
+    printf "\nTEST 1 FAILED: "
+    printf "$DIFF\n\n"
+else
+    printf "test 1 passed\n"
+fi
+
+
+#TEST 2
+../src/cvgTools toWig -b input/bedFiles/gaps output/cov2wig/out2.wig
+
+DIFF=$(diff output/cov2wig/out2.wig correct/cov2wig/out2.wig)
+
+if [ "$DIFF" != "" ]
+then
+    printf "\nTEST 2 FAILED: "
+    printf "$DIFF\n\n"
+else
+    printf "test 2 passed\n"
+fi
+
+
+#TEST 3
+../src/cvgTools toWig -b input/bedFiles/gaps2 output/cov2wig/out3.wig
+
+DIFF=$(diff output/cov2wig/out3.wig correct/cov2wig/out2.wig)
+
+if [ "$DIFF" != "" ]
+then
+    printf "\nTEST 3 FAILED: "
+    printf "$DIFF\n\n"
+else
+    printf "test 3 passed\n"
+fi
+
+
+#TEST 4
+../src/cvgTools GeneAvg -c input/countsFiles/geneCount2 output/geneAvg/geneOut -t input/transcripts/small.bed 
+
+DIFF=$(diff output/geneAvg/geneOut correct/geneAvg/geneOut)
+
+if [ "$DIFF" != "" ]
+then
+    printf "\nTEST 4 FAILED: "
+    printf "$DIFF\n\n"
+else
+    printf "test 4 passed\n"
+fi

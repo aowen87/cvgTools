@@ -1,0 +1,20 @@
+Error handling:
+    if at any point it is discovered that the file being read is not 
+    sorted, than the program should alert the user and exit. 
+    Also, if the file being read is not of the type specified, an error
+    should be raised. 
+
+Reading files:
+    It may be much more efficient to process the data as the files
+    are being read, rather than storing all of the data and then manipulating
+    this data before writing. Instead, I could read the number of lines 
+    neccessary, process them, write them, and then continue on until
+    reaching the EOF. Write both version and test for speed?
+
+
+Diff Input:
+    make a method for diffing vairous input data; find the differences 
+    between average values, and find where the values differ the most
+    and by how much (how should this information be output? It would be 
+    nice to build a histogram or other type of display from the data, but
+    it might also be nice to have a wig file for view in IGV...).
