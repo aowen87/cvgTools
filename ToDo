@@ -1,3 +1,11 @@
+Foremost:
+    * Create a max-heap implemented priority queue to sort the data. 
+    * Once the data can be sorted, make sure that input data is sorted. 
+      If it isn't, sort the data. 
+    * Implement method for compressing genic regions (make sure there are
+      no repeats, i.e. data must be sorted. 
+    
+
 Error handling:
     if at any point it is discovered that the file being read is not 
     sorted, than the program should alert the user and exit. 

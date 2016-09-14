@@ -38,7 +38,6 @@ bedReader::bedReader(const char *dataFileName, string transcriptsFileName)
 {
     int size  = strlen(dataFileName) + 1;
     dfname    = new char[size];
-    tfname    = NULL;
     strcpy(dfname, dataFileName);
     SetScoreIdx();
     SetSrcDataSize();
@@ -52,7 +51,7 @@ bedReader::bedReader(const char *dataFileName, string transcriptsFileName)
         {
             tfname[i] = transcriptsFileName[i];
         } 
-        tfname[size] = '\0';
+        tfname[size-1] = '\0';
         SetSrcTranscriptDataSize();
     }
 }
@@ -226,7 +225,6 @@ bedCovPerBaseReader::bedCovPerBaseReader(const char *dataFileName, string transc
 {
     int size = strlen(dataFileName) + 1;
     dfname   = new char[size];
-    tfname   = NULL;
     strcpy(dfname, dataFileName);
     SetSrcDataSize();
     
@@ -239,7 +237,7 @@ bedCovPerBaseReader::bedCovPerBaseReader(const char *dataFileName, string transc
         {
             tfname[i] = transcriptsFileName[i];
         } 
-        tfname[size] = '\0';
+        tfname[size-1] = '\0';
         SetSrcTranscriptDataSize();
     }
 }

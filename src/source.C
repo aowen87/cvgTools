@@ -254,7 +254,7 @@ void Source::SetGenicWindows()
                         windowLines[pos] = curLine;
                         pos++;
                     }
-                    Window newWindow(curTranscript.GetTranscriptId(), span, geneStart, 
+                    Window newWindow(curTranscript.GetGeneId(), span, geneStart, 
                                      geneStop, curValTotal/span, windowLines);
                     curWindows[windowIdx] = newWindow;                 
                     pos         = 0;
