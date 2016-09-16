@@ -1,3 +1,8 @@
+/****************************************************
+*    @author: Alister Maguire
+*    @version: 1.0 8/28/16
+*****************************************************/
+
 #ifndef READER_H
 #define READER_H
 #include <source.h>

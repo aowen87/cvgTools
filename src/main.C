@@ -1,5 +1,4 @@
 /****************************************************
-* TODO: License
 * @author: Alister Maguire
 * @version: 1.0 8/28/16
 *****************************************************/
@@ -24,6 +23,7 @@ using std::cerr;
 //TODO: error handling for missing input
 int main(int argc, char *argv[])
 {
+
     if (!argv[1])
     {
         cerr << "Usage: " << argv[0] << " <command> -<input_format> <input_file> " 

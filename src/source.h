@@ -1,5 +1,4 @@
 /****************************************************
-*    TODO: License
 *    @author: Alister Maguire
 *    @version: 1.0 8/28/16
 *****************************************************/
@@ -20,7 +19,6 @@
 *    pairs on a single chromosome that have a value greater than 0. This 
 *    means that changes in chromosomes coincide with new windows. 
 *   
-*    @author: Alister Maguire
 ***/
 class Source
 {
@@ -29,6 +27,7 @@ class Source
     WindowBlock    srcNaturalWindows;
     WindowBlock    srcWindowBlock;
     TranscriptData srcTranscriptData;
+    bool           genic;
 
   public:
                     Source();
@@ -39,6 +38,7 @@ class Source
     TranscriptData *GetTranscriptData();
     void            SetGenicWindows();
     void            SetNaturalWindows();
+    void            CompressGenicWindows();
     //void            SetTranscriptData(TranscriptData *tData);
     virtual void    Execute() = 0;
     virtual unsigned long int SetDataSize(char *fname) = 0;
