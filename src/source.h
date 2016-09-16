@@ -19,7 +19,6 @@
 *    pairs on a single chromosome that have a value greater than 0. This 
 *    means that changes in chromosomes coincide with new windows. 
 *   
-*    @author: Alister Maguire
 ***/
 class Source
 {
