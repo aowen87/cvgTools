@@ -1,4 +1,4 @@
-SRC=main.C readers.C data.C source.C sink.C writers.C reader.C
+SRC=main.C readers.C data.C source.C sink.C writers.C reader.C helpers.C
 OBJ=$(SRC:.C=.o)
 
 prog: $(OBJ)

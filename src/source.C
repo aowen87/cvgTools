@@ -1,9 +1,9 @@
 /****************************************************
-*    TODO: License
 *    @author: Alister Maguire
 *    @version: 1.0 8/28/16
 *****************************************************/
 
+#include <stdlib.h>
 #include <source.h>
 #include <sstream>
 #include <string>
@@ -19,6 +19,7 @@ using std::endl;
 ***/
 Source::Source()
 {
+    genic = false;
 }
 
 
@@ -272,9 +273,55 @@ void Source::SetGenicWindows()
             } 
         }
         if (!missingGene)
+        {
             srcWindowBlock.SetWindows(exonCount, curWindows);
+            genic = true;
+        }
         delete [] curWindows;                
     }
 }
+
+
+/***
+*
+***/
+//FIXME: finish this method
+void Source::CompressGenicWindows()
+{
+    if (!genic)
+    {
+        SetGenicWindows();
+    }
+    
+    if (!genic)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    unsigned long int numWindows = srcWindowBlock.GetNumWindows();
+    Window *genicWindows         = srcWindowBlock.GetWindows();
+    Window *compressedWindows    = new Window[numWindows];
+
+    unsigned int count    = 0;
+    double       total    = 0.0;
+    bool         firstRun = true;
+    int          prevStart;
+    int          prevStop;
+    double       prevAvg;
+    string       prevTitle;
+    string       prevGene;
+
+    for (int i = 0; i < numWindows; ++i)
+    {
+        
+
+    }
+    
+    
+    
+}
+
+
+
 
 
