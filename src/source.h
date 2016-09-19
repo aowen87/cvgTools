@@ -23,24 +23,27 @@
 class Source
 {
   protected:
-    Data           srcData;
-    WindowBlock    srcNaturalWindows;
-    WindowBlock    srcWindowBlock;
-    TranscriptData srcTranscriptData;
-    bool           genic;
+    Data              srcData;
+    WindowBlock       srcNaturalWindows;
+    WindowBlock       srcWindowBlock;
+    TranscriptData    srcTranscriptData;
+    long int          natWinCount;
+    long int          geneCount;
+    bool              genicWindows;
 
   public:
-                    Source();
-                   ~Source();
-    Data           *GetData();
-    WindowBlock    *GetWindowBlock();
-    WindowBlock    *GetNaturalWindows();
-    TranscriptData *GetTranscriptData();
-    void            SetGenicWindows();
-    void            SetNaturalWindows();
-    void            CompressGenicWindows();
-    //void            SetTranscriptData(TranscriptData *tData);
-    virtual void    Execute() = 0;
+                       Source();
+                      ~Source();
+    Data              *GetData();
+    WindowBlock       *GetWindowBlock();
+    WindowBlock       *GetNaturalWindows();
+    TranscriptData    *GetTranscriptData();
+    long int           GetNatWinCount();
+    long int           GetGeneCount();
+    void               SetGeneCount(long int count);
+    void               SetGenicWindows();
+    void               SetNaturalWindows();
+    virtual void       Execute() = 0;
     virtual unsigned long int SetDataSize(char *fname) = 0;
 };
 

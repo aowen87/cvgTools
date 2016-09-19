@@ -4,6 +4,9 @@
 *****************************************************/
 
 #include <helpers.h>
+#include <iostream>
+using std::cerr;
+using std::endl;
 
 /***
 * @author: Alister Maguire
@@ -13,7 +16,7 @@
 * @param: c -> a character. 
 * @returns: true if c is a digit. False otherwise. 
 ***/
-bool CharIsDigit(char c)
+bool HPR::CharIsDigit(char c)
 {
     return (c >= '0' && c <= '9');
 }
@@ -27,7 +30,7 @@ bool CharIsDigit(char c)
 * @param: c -> a character. 
 * @returns: the integer form of c. 
 ***/
-int CharToInt(char c)
+int HPR::CharToInt(char c)
 {
     return c - '0';
 }
@@ -48,7 +51,7 @@ int CharToInt(char c)
 * @param: s -> a string.
 * @returns: a double found within the given string. 
 ***/
-double ExtractNumFromString(string s)
+double HPR::ExtractNumFromString(string s)
 {
     unsigned int len = s.length();
     char beforeDc[1024];
@@ -86,9 +89,9 @@ double ExtractNumFromString(string s)
         }
     }
 
-    for (int i = (bCount-1); i >= 0; i--)
+    for (int i = 0; i < bCount; i++)
     {
-        for (int j = 0; j < i; j++)
+        for (int j = i; j < (bCount-1); j++)
         {
             multiplier *= 10;
         }
@@ -111,4 +114,5 @@ double ExtractNumFromString(string s)
     }
     return total;
 }
+
 

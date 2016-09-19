@@ -5,12 +5,15 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 #include <string>
+#include <data.h>
 using std::string;
 
-bool CharIsDigit(char c);
-int CharToInt(char c);
-double ExtractNumFromString(string s);
-
+namespace HPR 
+{
+    bool CharIsDigit(char c);
+    int CharToInt(char c);
+    double ExtractNumFromString(string s);
+}
 #endif
 
 

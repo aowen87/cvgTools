@@ -20,7 +20,6 @@ using std::cerr;
 /***
 * The main driver for cvgTools. 
 ***/
-//TODO: error handling for missing input
 int main(int argc, char *argv[])
 {
 
@@ -69,7 +68,7 @@ int main(int argc, char *argv[])
 
             else if (command == "GenicWindows")
             { 
-                //FIXME: test this method
+                //TODO: needs more rigorous testing 
                 WindowWigWriter writer;
                 reader.SetGenicWindows();
                 writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
@@ -138,27 +137,41 @@ int main(int argc, char *argv[])
  
             else if (command == "NaturalWinAvg")
             {
+                //TODO: Currently unsuported for bed files. 
+                /**
                 WindowAvgWriter writer;
                 reader.SetNaturalWindows();
                 writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
                 writer.Write(argv[4]); 
+                **/
+                cerr << "ERROR: the NatualWinAvg command only accepts bed coverage" << 
+                         "counts files at this time" << endl;
             }
         
             else if (command == "GeneAvg")
             {
+                //TODO: Currently unsuported for bed files. 
+                /**
                 WindowAvgWriter writer;
                 reader.SetGenicWindows();
                 writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
                 writer.Write(argv[4]); 
+               **/
+                cerr << "ERROR: the GeneAvg command only accepts bed coverage" << 
+                         "counts files at this time" << endl;
             }
 
             else if (command == "GenicWindows")
             { 
-                //FIXME: test this method
+                //TODO: Currently unsuported for bed files. 
+                /**
                 WindowWigWriter writer;
                 reader.SetGenicWindows();
                 writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
                 writer.Write(argv[4]); 
+                **/
+                cerr << "ERROR: the GenicWindows command only accepts bed coverage" << 
+                         "counts files at this time" << endl;
             }
    
             else
@@ -181,10 +194,15 @@ int main(int argc, char *argv[])
  
             else if (command == "NaturalWinAvg")
             {
+                //TODO: Currently unsuported for bed files. 
+                /**
                 WindowAvgWriter writer;
                 reader.SetNaturalWindows();
                 writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
                 writer.Write(argv[4]); 
+                **/
+                cerr << "ERROR: the NatualWinAvg command only accepts bed coverage" << 
+                         "counts files at this time" << endl;
             }
         
             else if (command == "GeneAvg")
@@ -212,8 +230,6 @@ int main(int argc, char *argv[])
         cerr << "ERROR: invalid input file type." << endl;
         exit(EXIT_FAILURE);
     }
-
-
 }
 
 

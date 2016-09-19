@@ -56,6 +56,18 @@ else
 fi
 
 
+#TEST5
+../src/cvgTools GenicWindows -c input/countsFiles/geneCount2 output/geneWig/genic2.wig -t input/transcripts/small.bed
+
+DIFF=$(diff output/geneWig/genic2.wig correct/geneWig/genic2.wig)
+
+if [ "$DIFF" != "" ]
+then 
+    printf "\nTEST 5 FAILED: \n"
+    printf "$DIFF\n\n"
+else
+    printf "test 5 passed\n"
+fi
 
 printf "TESTS END\n"
 printf "Checking for memory leaks...\n\n"
