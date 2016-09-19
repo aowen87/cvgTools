@@ -116,6 +116,7 @@ void Reader::ReadTranscripts()
         string thickStart;
         string thickEnd;
         string scrap;
+        string prevName = "";
         char   rgb;
         int    start;
         int    stop;
@@ -128,7 +129,7 @@ void Reader::ReadTranscripts()
             if (!(iss >> chrom >> start >> stop >> name >> scrap >> strand >> thickStart 
                >> thickEnd >> rgb >> scrap >> geneId >> scrap >> transcriptId))
                 break;
-            if (thickEnd == "exon")
+            if (name != prevName)
                 eCount++;
             geneId.erase(0, 1);
             geneId.erase(geneId.length()-2, 2);
@@ -138,6 +139,7 @@ void Reader::ReadTranscripts()
                                 start, stop, strand);
             TranscriptLines[count] = line; 
             count++;
+            prevName = name;
         } 
         srcTranscriptData.SetExonCount(eCount);
     }

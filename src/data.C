@@ -235,6 +235,19 @@ void Data::SetData(unsigned long int size, DataLine *lines)
 /***
 * @author: Alister Maguire
 *
+* Set the valAverage.
+* 
+* @param: avg -> the value to set valAverage to. 
+***/
+void Data::SetValAvg(double avg)
+{
+    valAverage = avg;
+}
+
+
+/***
+* @author: Alister Maguire
+*
 * Get the size of lines (number of DataLine objects within lines).
 *
 * @returns: dataSize -> the max capacity for data. 
@@ -605,9 +618,9 @@ unsigned long int WindowBlock::GetNumWindows() { return numWindows; }
 * this member, but it works for now. 
 * 
 * @returns: &numWindows -> the address to numWindows. 
-***/
 unsigned long int *WindowBlock::GetNumWindowsPtr() { return &numWindows; }
 
+***/
 
 /***
 * @author: Alister Maguire

@@ -5,12 +5,16 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 #include <string>
+#include <data.h>
 using std::string;
 
-bool CharIsDigit(char c);
-int CharToInt(char c);
-double ExtractNumFromString(string s);
-
+namespace HPR 
+{
+    bool CharIsDigit(char c);
+    int CharToInt(char c);
+    double ExtractNumFromString(string s);
+    Window CombineWindows(Window d1, Window d2);//FIXME: change to merge windows
+}
 #endif
 
 

@@ -62,6 +62,7 @@ class Data
              ~Data();
     DataLine *GetLines();
     void      SetData(unsigned long int size, DataLine *lines);
+    void      SetValAvg(double avg);
     void      InitData(unsigned long int size);
     double    GetValAvg();
     unsigned long int GetDataSize();
@@ -119,7 +120,7 @@ class WindowBlock
     Window    GetWindow(int idx);
     Window   *GetWindowPtr(int idx);//FIXME: do I really want to do this?
     Window   *GetWindows();
-    unsigned long int *GetNumWindowsPtr();
+    //unsigned long int *GetNumWindowsPtr();
     unsigned long int  GetNumWindows();
 };
 

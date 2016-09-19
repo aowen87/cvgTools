@@ -4,6 +4,9 @@
 *****************************************************/
 
 #include <helpers.h>
+#include <iostream>
+using std::cerr;
+using std::endl;
 
 /***
 * @author: Alister Maguire
@@ -13,7 +16,7 @@
 * @param: c -> a character. 
 * @returns: true if c is a digit. False otherwise. 
 ***/
-bool CharIsDigit(char c)
+bool HPR::CharIsDigit(char c)
 {
     return (c >= '0' && c <= '9');
 }
@@ -27,7 +30,7 @@ bool CharIsDigit(char c)
 * @param: c -> a character. 
 * @returns: the integer form of c. 
 ***/
-int CharToInt(char c)
+int HPR::CharToInt(char c)
 {
     return c - '0';
 }
@@ -48,7 +51,7 @@ int CharToInt(char c)
 * @param: s -> a string.
 * @returns: a double found within the given string. 
 ***/
-double ExtractNumFromString(string s)
+double HPR::ExtractNumFromString(string s)
 {
     unsigned int len = s.length();
     char beforeDc[1024];
@@ -112,3 +115,58 @@ double ExtractNumFromString(string s)
     return total;
 }
 
+
+/***
+* @author: Alister Maguire
+*
+* Combine two windows and return the result. NOTE: Memory
+* is allocated and is not deleted within this method. This 
+* memory will be deleted when the object goes out of scope. 
+*
+* @param: w1 -> the first window to be copied over. 
+*         w2 -> the second window to be copied over. 
+* @returns: cData -> a new window which consists of 
+*               w1's data followed by w2's data. 
+*           If one or both of the entered windows contain
+*           DataLines which are null, a scrap Data object is 
+*           returned. 
+Window HPR::CombineWindows(Window w1, Window w2)
+{
+    DataLine *w1Lines    = w1.GetLines();
+    DataLine *w2Lines    = w2.GetLines();
+    if (w1Lines == NULL || w2Lines == NULL)
+    {
+        cerr << "ERROR: cannot combine null data!\n" << endl;
+        Window scrap;
+        return scrap;
+    }
+
+    else
+    {
+        unsigned long int w1Size = w1.GetDataSize();
+        unsigned long int w2Size = w2.GetDataSize();
+        unsigned long int totalSize = w1Size + w2Size;
+        DataLine *cDataLines = new DataLine[totalSize];
+        
+        for (int i = 0; i < w1Size; i++)
+        {
+            DataLine curLine = w1Lines[i];
+            DataLine newLine(curLine.GetChrom(), curLine.GetStart(), curLine.GetStop(), curLine.GetVal());
+            cDataLines[i] = newLine;
+        }
+
+        for (int j = w1Size; j < totalSize; j++)
+        {
+            DataLine curLine = w2Lines[j-w1Size];
+            DataLine newLine(curLine.GetChrom(), curLine.GetStart(), curLine.GetStop(), curLine.GetVal());
+            cDataLines[j] = newLine; 
+        } 
+       
+         
+        double newAvg = (w1.GetValAvg() + w2.GetValAvg()) / 2;
+        Window cWindow(w1.GetTitle, totalSize, w1.GetStart(), w2.GetStop(), newAvg, cDataLines);
+        return cWindow;
+    }
+}
+
+***/

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <helpers.h>
 using std::cerr;
 using std::endl;
 
@@ -19,7 +20,9 @@ using std::endl;
 ***/
 Source::Source()
 {
-    genic = false;
+    genic       = false;
+    geneCount   = -1;
+    natWinCount = -1;
 }
 
 
@@ -72,6 +75,39 @@ TranscriptData *Source::GetTranscriptData() { return &srcTranscriptData; }
 /***
 * @author: Alister Maguire
 *
+* Get the number of natural windows.
+*
+* @returns: natWinCount 
+***/
+long int Source::GetNatWinCount() { return natWinCount; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the number of genes. 
+*
+* @returns: geneCount;
+***/
+long int Source::GetGeneCount() { return geneCount; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the geneCount.
+*
+* @param: count
+***/
+void Source::SetGeneCount(long int count)
+{
+    geneCount = count;
+}
+
+
+/***
+* @author: Alister Maguire
+*
 * Find the natural windows contained within srcData, and 
 * create instances of windows containing copies of these
 * natural windows of data to be contained within 
@@ -88,14 +124,13 @@ void Source::SetNaturalWindows()
     //      until after walking through all windows. This means
     //      that we need two iterations through all the data, one
     //      for the count, and one for the set.  
-    unsigned long int *winCount = srcNaturalWindows.GetNumWindowsPtr();
     DataLine *lines = srcData.GetLines();
     if (lines != NULL)
     {
  
         unsigned long int size = srcData.GetDataSize();
         DataLine *sparseLines  = new DataLine[size];
-        Window *curWindows = new Window[*winCount];
+        Window *curWindows = new Window[natWinCount];
         int windowIdx      = 0;
         int counter        = 0;
         int sparseCount    = 0;
@@ -163,7 +198,7 @@ void Source::SetNaturalWindows()
         curChrom = curLine.GetChrom();
         Window newWindow(curChrom, counter, windowStart, prevStop, curValTotal/counter, windowLines);
         curWindows[windowIdx] = newWindow;
-        srcNaturalWindows.SetWindows(*winCount, curWindows);
+        srcNaturalWindows.SetWindows(natWinCount, curWindows);
         delete [] windowLines;
         delete [] curWindows;
         delete [] sparseLines;
@@ -189,6 +224,14 @@ void Source::SetNaturalWindows()
 ***/
 void Source::SetGenicWindows()
 {
+//TODO: Currently, it is assumed that all genic regions will be 
+//      accounted for, and thus the computations will only be completed
+//      if all genes are discovered within the data. This method was made
+//      specifically for coverage counts that account for all base pairs, 
+//      so this makes sense. In the future, we may want to use this method
+//      on data taken from bed files, and this approach may need to change.
+//      Either that or we change the way we read in bed files.  
+
     TranscriptLine *transcripts = srcTranscriptData.GetLines();
     DataLine *dataLines         = srcData.GetLines();
     if (transcripts == NULL)
@@ -209,22 +252,42 @@ void Source::SetGenicWindows()
         double curValTotal         = 0.0; 
         bool missingGene           = false;
         TranscriptLine curTranscript;
+        TranscriptLine nxtTranscript;
         string geneChrom;
         unsigned int geneStart;
         unsigned int geneStop;
+        string nextChrom;
         for (int i = 0; i < tranSize; i++)
         {
             curTranscript = transcripts[i];
             if (curTranscript.GetThickEnd() == "exon")//TODO: I could also store all exons when reading in.
             {
+                geneChrom = curTranscript.GetChrom();
                 geneStart = curTranscript.GetStart();
                 geneStop  = curTranscript.GetStop();
-                geneChrom = curTranscript.GetChrom();
-                span      = geneStop - geneStart;
+                nextChrom = geneChrom;
+                while (i < (tranSize - 2) && geneChrom == nextChrom)
+                {
+                    i++;
+                    nxtTranscript = transcripts[i];
+                    if (nxtTranscript.GetThickEnd() == "exon")
+                    {
+                        nextChrom = nxtTranscript.GetChrom(); 
+                        if (nextChrom == geneChrom && geneStop < nxtTranscript.GetStop())
+                        {
+                            geneStop  = nxtTranscript.GetStop();
+                        }
+                    }
+                }
+                span = geneStop - geneStart;
                 
+                //FIXME: this is comparing two strings that contain integers
+                //       => this will fail in certain circumstances
                 while (dataLines[m].GetChrom() < geneChrom && m < dataSize)
                     m++;
 
+                //FIXME: this is comparing two strings that contain integers
+                //       => this will fail in certain circumstances
                 if (dataLines[m].GetChrom() > geneChrom)
                 {
                     cerr << "Gene not found: " << curTranscript.GetGeneId() << " "
@@ -236,6 +299,7 @@ void Source::SetGenicWindows()
                 while (dataLines[m].GetStart() < geneStart && m < dataSize)
                     m++; 
 
+
                 if (dataLines[m].GetStart() > geneStart)
                 {
                     cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
@@ -243,7 +307,6 @@ void Source::SetGenicWindows()
                     missingGene = true;
                     break;
                 }
-                
                 else if (geneStop == dataLines[m+span-1].GetStop() && geneChrom == dataLines[m+span-1].GetChrom())
                 {
                     DataLine *windowLines = new DataLine[span];
@@ -280,48 +343,4 @@ void Source::SetGenicWindows()
         delete [] curWindows;                
     }
 }
-
-
-/***
-*
-***/
-//FIXME: finish this method
-void Source::CompressGenicWindows()
-{
-    if (!genic)
-    {
-        SetGenicWindows();
-    }
-    
-    if (!genic)
-    {
-        exit(EXIT_FAILURE);
-    }
-
-    unsigned long int numWindows = srcWindowBlock.GetNumWindows();
-    Window *genicWindows         = srcWindowBlock.GetWindows();
-    Window *compressedWindows    = new Window[numWindows];
-
-    unsigned int count    = 0;
-    double       total    = 0.0;
-    bool         firstRun = true;
-    int          prevStart;
-    int          prevStop;
-    double       prevAvg;
-    string       prevTitle;
-    string       prevGene;
-
-    for (int i = 0; i < numWindows; ++i)
-    {
-        
-
-    }
-    
-    
-    
-}
-
-
-
-
 

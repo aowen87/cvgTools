@@ -124,7 +124,7 @@ void bedReader::Execute()
         int count = 0;
         int prevScore = 0;
         unsigned long int limit = srcData.GetDataSize()-1; 
-        unsigned long int *windowCount = srcWindowBlock.GetNumWindowsPtr();
+        //unsigned long int *windowCount = srcWindowBlock.GetNumWindowsPtr();
         DataLine *dataSet = srcData.GetLines();
         switch (scoreIdx)
         {
@@ -148,14 +148,14 @@ void bedReader::Execute()
                     if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && score != 0.0 && prevName == name) || 
                     (score == 0.0 && prevScore != 0.0 && prevName == name) || 
                     (prevName != name && prevScore != 0))
-                        (*windowCount)++; 
+                        natWinCount++; 
                     prevStop  = stop;
                     prevScore = score;
                     prevName  = name;
                     count++;
                 } 
                 if (score != 0)
-                    (*windowCount)++;//Account for the last window
+                    natWinCount++;//Account for the last window
                 break;
             }
 
@@ -180,14 +180,14 @@ void bedReader::Execute()
                     if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && score != 0.0 && prevName == name) || 
                     (score == 0.0 && prevScore != 0.0 && prevName == name) || 
                     (prevName != name && prevScore != 0))
-                        (*windowCount)++; 
+                       natWinCount++; 
                     count++;
                     prevStop  = stop;
                     prevScore = score;
                     prevName  = name;
                 } 
                 if (score != 0)
-                    (*windowCount)++;//Account for the last window
+                    natWinCount++;//Account for the last window
                 break;
              }
         }
@@ -265,7 +265,7 @@ void bedCovPerBaseReader::Execute()
         int count = 0;
         DataLine *dataSet = srcData.GetLines();
         unsigned long int limit = srcData.GetDataSize()-1; 
-        unsigned long int *windowCount = srcNaturalWindows.GetNumWindowsPtr();//TODO: it may be better to have this
+        //unsigned long int *windowCount = srcNaturalWindows.GetNumWindowsPtr();//TODO: it may be better to have this
         std::getline(inFile, rawLine);                                        // count in source
         std::istringstream iss(rawLine);
         if (!(iss >> prevName >> prevStop >> score))//Set prevStop and prevName
@@ -284,7 +284,7 @@ void bedCovPerBaseReader::Execute()
             (score == 0.0 && prevScore != 0.0 && prevName == name) || 
             (prevName != name && prevScore != 0))
              //TODO: optimize
-                (*windowCount)++; 
+                natWinCount++; 
             count++;
             prevStop  = start;
             prevScore = score;
@@ -292,7 +292,7 @@ void bedCovPerBaseReader::Execute()
         } 
 
         if (score != 0)
-            (*windowCount)++;//Account for the last window
+            natWinCount++;//Account for the last window
 
         if (tfname != NULL)
         {
