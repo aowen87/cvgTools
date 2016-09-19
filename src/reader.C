@@ -107,7 +107,7 @@ void Reader::ReadTranscripts()
     ifstream inFile (tfname);
     if (inFile.is_open())
     {
-        unsigned int eCount = 0;
+        unsigned int gCount = 0;
         string rawLine;
         string chrom;
         string geneId;
@@ -130,7 +130,7 @@ void Reader::ReadTranscripts()
                >> thickEnd >> rgb >> scrap >> geneId >> scrap >> transcriptId))
                 break;
             if (name != prevName)
-                eCount++;
+                gCount++;
             geneId.erase(0, 1);
             geneId.erase(geneId.length()-2, 2);
             transcriptId.erase(0, 1);
@@ -141,7 +141,7 @@ void Reader::ReadTranscripts()
             count++;
             prevName = name;
         } 
-        srcTranscriptData.SetExonCount(eCount);
+        srcTranscriptData.SetGeneCount(gCount);
     }
     else
         cerr << "ERROR: Unable to open transcripts file" << endl; //TODO: error handling needed

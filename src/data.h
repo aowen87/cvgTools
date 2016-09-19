@@ -118,9 +118,8 @@ class WindowBlock
     void      SetWindows(unsigned long int winCount, Window *_windows);
     void      SetNumWindows(unsigned long int winCount);
     Window    GetWindow(int idx);
-    Window   *GetWindowPtr(int idx);//FIXME: do I really want to do this?
+    Window   *GetWindowPtr(int idx);
     Window   *GetWindows();
-    //unsigned long int *GetNumWindowsPtr();
     unsigned long int  GetNumWindows();
 };
 
@@ -187,11 +186,11 @@ class TranscriptData
   private:
     TranscriptLine   *transcripts;
     unsigned long int dataSize;
-    unsigned int      exonCount;
+    unsigned int      geneCount;
 
   public:
                     TranscriptData();
-                    TranscriptData(unsigned long int size, TranscriptLine *data, unsigned int eCount);
+                    TranscriptData(unsigned long int size, TranscriptLine *data, unsigned int gCount);
                    ~TranscriptData();
                     TranscriptData(TranscriptData const &copy);
     void            TranscriptDataSwap(TranscriptData &s);
@@ -202,11 +201,11 @@ class TranscriptData
                     } 
     void            SetData(unsigned long int size, TranscriptLine *data);
     void            SetDataSize(unsigned long int);
-    void            SetExonCount(unsigned int eCount);
+    void            SetGeneCount(unsigned int gCount);
     TranscriptLine *GetLines();
     void            InitData(unsigned long int size);
     TranscriptLine  GetTranscriptLine(int idx);
-    unsigned int    GetExonCount();
+    unsigned int    GetGeneCount();
     unsigned long int GetDataSize();
 };
 

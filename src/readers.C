@@ -124,7 +124,6 @@ void bedReader::Execute()
         int count = 0;
         int prevScore = 0;
         unsigned long int limit = srcData.GetDataSize()-1; 
-        //unsigned long int *windowCount = srcWindowBlock.GetNumWindowsPtr();
         DataLine *dataSet = srcData.GetLines();
         switch (scoreIdx)
         {
@@ -265,8 +264,7 @@ void bedCovPerBaseReader::Execute()
         int count = 0;
         DataLine *dataSet = srcData.GetLines();
         unsigned long int limit = srcData.GetDataSize()-1; 
-        //unsigned long int *windowCount = srcNaturalWindows.GetNumWindowsPtr();//TODO: it may be better to have this
-        std::getline(inFile, rawLine);                                        // count in source
+        std::getline(inFile, rawLine);                                        
         std::istringstream iss(rawLine);
         if (!(iss >> prevName >> prevStop >> score))//Set prevStop and prevName
         inFile.clear();
@@ -283,7 +281,7 @@ void bedCovPerBaseReader::Execute()
             if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && score != 0.0 && prevName == name) || 
             (score == 0.0 && prevScore != 0.0 && prevName == name) || 
             (prevName != name && prevScore != 0))
-             //TODO: optimize
+             //TODO: optimize?
                 natWinCount++; 
             count++;
             prevStop  = start;

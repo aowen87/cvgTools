@@ -885,7 +885,7 @@ char TranscriptLine::GetRGB() { return rgb; }
 TranscriptData::TranscriptData()
 {
     dataSize    = 0.0;
-    exonCount   = 0;
+    geneCount   = 0;
     transcripts = NULL;
 }
 
@@ -900,11 +900,11 @@ TranscriptData::TranscriptData()
 * @param: size   -> the maximum capacity for data. 
 *         *data  -> the data to be copied (deep) over into this
 *             TranscriptData's data. 
-*         eCount -> the number of exons in *data.  
+*         gCount -> the number of genes in *data.  
 ***/
-TranscriptData::TranscriptData(unsigned long int size, TranscriptLine *data, unsigned int eCount)
+TranscriptData::TranscriptData(unsigned long int size, TranscriptLine *data, unsigned int gCount)
 {
-    exonCount = eCount;
+    geneCount = gCount;
     SetData(size, data);
 }
 
@@ -932,7 +932,7 @@ TranscriptData::~TranscriptData()
 TranscriptData::TranscriptData(TranscriptData const &copy)
 {
     dataSize  = copy.dataSize;
-    exonCount = copy.exonCount;
+    geneCount = copy.geneCount;
     transcripts = new TranscriptLine[dataSize];
     std::copy(&copy.transcripts[0], &copy.transcripts[dataSize], transcripts);//FIXME: make my own copy?
 }
@@ -950,7 +950,7 @@ void TranscriptData::TranscriptDataSwap(TranscriptData &s)
 {
     swap(this->transcripts, s.transcripts); //FIXME: use my own swap?
     swap(this->dataSize, s.dataSize);
-    swap(this->exonCount, s.exonCount);
+    swap(this->geneCount, s.geneCount);
 }
 
 
@@ -994,11 +994,11 @@ void TranscriptData::SetData(unsigned long int size, TranscriptLine *data)
 /***
 * @author: Alister Maguire
 *
-* Set the exon count for this TranscriptData. 
+* Set the gene count for this TranscriptData. 
 *
-* @param: eCount -> exon count. 
+* @param: gCount -> gene count. 
 ***/
-void TranscriptData::SetExonCount(unsigned int eCount) { exonCount = eCount; }
+void TranscriptData::SetGeneCount(unsigned int gCount) { geneCount = gCount; }
 
 
 /***
@@ -1024,11 +1024,11 @@ unsigned long int TranscriptData::GetDataSize() { return dataSize; }
 /***
 * @author: Alister Maguire
 *
-* Get the exon count for transcripts. 
+* Get the gene count for transcripts. 
 *
-* @returns: exonCount -> the number of exons found within transcripts. 
+* @returns: geneCount -> the number of gene found within transcripts. 
 ***/
-unsigned int TranscriptData::GetExonCount() { return exonCount; }
+unsigned int TranscriptData::GetGeneCount() { return geneCount; }
 
 
 /***

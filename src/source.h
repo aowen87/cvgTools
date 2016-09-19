@@ -29,7 +29,7 @@ class Source
     TranscriptData    srcTranscriptData;
     long int          natWinCount;
     long int          geneCount;
-    bool              genic;
+    bool              genicWindows;
 
   public:
                        Source();
