@@ -254,7 +254,8 @@ void Source::SetGenicWindows()
         TranscriptLine curTranscript;
         TranscriptLine nxtTranscript;
         string geneChrom;
-        string nextChrom;
+        string geneName;
+        string nextName;
         double chromNum;
         unsigned int geneStart;
         unsigned int geneStop;
@@ -264,9 +265,10 @@ void Source::SetGenicWindows()
             if (curTranscript.GetThickEnd() == "exon")//TODO: I could also store all exons when reading in.
             {
                 geneChrom = curTranscript.GetChrom();
+                geneName  = curTranscript.GetName();
                 geneStart = curTranscript.GetStart();
                 geneStop  = curTranscript.GetStop();
-                nextChrom = geneChrom;
+                nextName  = geneName;
                 //Note: because the chromosome names contain a string of letters followed
                 //      by some number, we need to extract that number in order to compare
                 //      chromosome names. 
@@ -274,14 +276,14 @@ void Source::SetGenicWindows()
 
                 //We want to "compress" genic windows so that they don't 
                 //contain gaps => we need to find the full gene span. 
-                while (i < (tranSize - 2) && geneChrom == nextChrom)
+                while (i < (tranSize - 2) && geneName == nextName)
                 {
                     i++;
                     nxtTranscript = transcripts[i];
+                    nextName = nxtTranscript.GetName(); 
                     if (nxtTranscript.GetThickEnd() == "exon")
                     {
-                        nextChrom = nxtTranscript.GetChrom(); 
-                        if (nextChrom == geneChrom && geneStop < nxtTranscript.GetStop())
+                        if (nextName == geneName && geneStop < nxtTranscript.GetStop())
                         {
                             geneStop  = nxtTranscript.GetStop();
                         }
