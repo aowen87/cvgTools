@@ -12,16 +12,58 @@
 #include <writers.h>
 #include <iostream>
 #include <string.h>
+#include <avl.h>
 using std::string;
 using std::cout;
 using std::endl;
 using std::cerr;
+
+
+//FIXME: testing avl tree
+/**
+void AVLTest()
+{
+    TreeData *t1 = new TreeData(0, 5, '+', "supercontig12.5", "gene5", "");
+    TreeData *t2 = new TreeData(6, 9, '+', "supercontig12.5", "gene1", "");
+    TreeData *t3 = new TreeData(9, 12, '+', "supercontig12.5", "gene6", "");
+    TreeData *t4 = new TreeData(20, 30, '+', "supercontig12.5", "gene5", "");
+    TreeData *t5 = new TreeData(15, 25, '+', "supercontig12.5", "gene1", "");
+    TreeData *t6 = new TreeData(12, 14, '+', "supercontig12.5", "gene4", "");
+    TreeData *t7 = new TreeData(14, 16, '+', "supercontig12.5", "gene6", "");
+    TreeData *t8 = new TreeData(9, 20, '-', "supercontig12.5", "gene3", "");
+    TreeData *t9 = new TreeData(8, 33, '-', "supercontig12.5", "gene2", "");
+    TreeData *t10 = new TreeData(8, 33, '-', "supercontig12.5", "gene9", "");
+
+    //TreeData *d1 = new TreeData(8, 33, '-', "supercontig12.5", "gene5", "");
+    TreeData *d2 = new TreeData(8, 33, '-', "supercontig12.5", "gene1", "");
+   
+
+    AVLTree tree('g');
+    tree.Insert(t1);
+    tree.Insert(t2);
+    tree.Insert(t3);
+    tree.Insert(t4);
+    tree.Insert(t5);
+    tree.Insert(t6);
+    tree.Insert(t7);
+    tree.Insert(t8);
+    tree.Insert(t9);
+    tree.Insert(t10);
+    tree.InorderTraverse();
+    tree.Delete(d2);
+    cerr << "\n" << endl;
+    tree.InorderTraverse();
+}
+**/
+
 
 /***
 * The main driver for cvgTools. 
 ***/
 int main(int argc, char *argv[])
 {
+
+    //AVLTest();
 
     if (!argv[1])
     {
@@ -138,12 +180,10 @@ int main(int argc, char *argv[])
             else if (command == "NaturalWinAvg")
             {
                 //TODO: Currently unsuported for bed files. 
-                /**
-                WindowAvgWriter writer;
-                reader.SetNaturalWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
-                **/
+                //WindowAvgWriter writer;
+                //reader.SetNaturalWindows();
+                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
+                //writer.Write(argv[4]); 
                 cerr << "ERROR: the NatualWinAvg command only accepts bed coverage" << 
                          "counts files at this time" << endl;
             }
@@ -151,12 +191,10 @@ int main(int argc, char *argv[])
             else if (command == "GeneAvg")
             {
                 //TODO: Currently unsuported for bed files. 
-                /**
-                WindowAvgWriter writer;
-                reader.SetGenicWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
-               **/
+                //WindowAvgWriter writer;
+                //reader.SetGenicWindows();
+                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
+                //writer.Write(argv[4]); 
                 cerr << "ERROR: the GeneAvg command only accepts bed coverage" << 
                          "counts files at this time" << endl;
             }
@@ -164,12 +202,10 @@ int main(int argc, char *argv[])
             else if (command == "GenicWindows")
             { 
                 //TODO: Currently unsuported for bed files. 
-                /**
-                WindowWigWriter writer;
-                reader.SetGenicWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
-                **/
+                //WindowWigWriter writer;
+                //reader.SetGenicWindows();
+                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
+                //writer.Write(argv[4]); 
                 cerr << "ERROR: the GenicWindows command only accepts bed coverage" << 
                          "counts files at this time" << endl;
             }
@@ -195,12 +231,10 @@ int main(int argc, char *argv[])
             else if (command == "NaturalWinAvg")
             {
                 //TODO: Currently unsuported for bed files. 
-                /**
-                WindowAvgWriter writer;
-                reader.SetNaturalWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
-                **/
+                //WindowAvgWriter writer;
+                //reader.SetNaturalWindows();
+                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
+                //writer.Write(argv[4]); 
                 cerr << "ERROR: the NatualWinAvg command only accepts bed coverage" << 
                          "counts files at this time" << endl;
             }
