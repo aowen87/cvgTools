@@ -430,6 +430,34 @@ Node *AVLTree::GetMin()
 ***/
 Node *AVLTree::DeletionSearch(Node *current, Node *target)
 {
+    if (current == NULL)
+        cerr << "Target node could not be deleted -> DNE in this tree." << endl;
+
+    AVLTree::Equality e;
+
+    e = StandardCompare(target, current);            
+
+    switch (e)
+    {
+        case Eq:
+            return CheckBalance(DeleteNode(current));
+        case Lt:
+            current->SetLeftChild(DeletionSearch(current->GetLeftChild(), target));
+            SetHeight(current);
+            break;
+        case Gt:
+            current->SetRightChild(DeletionSearch(current->GetRightChild(), target));
+            SetHeight(current);
+            break;
+        default:
+            cerr << "ERROR: invalid case line: " << __LINE__ << endl;
+            break; 
+    }
+    
+    return CheckBalance(current);
+
+
+/*
     string targetId = target->GetData()->GetGeneId();
     string curId    = current->GetData()->GetGeneId();
 
@@ -457,6 +485,8 @@ Node *AVLTree::DeletionSearch(Node *current, Node *target)
     }
 
     return CheckBalance(current);
+
+*/
 }
 
 
