@@ -10,6 +10,7 @@
 #include <string.h>
 #include <iostream>
 #include <fstream>
+#include <avl.h>
 using std::cerr;
 using std::endl;
 using std::ifstream;
@@ -52,7 +53,7 @@ Reader::~Reader()
 * IMPORTANT: All input files must be sorted beforehand. 
 ***/
  //TODO: Make sure the files are sorted
-unsigned long int Reader::SetDataSize(char *fname)
+unsigned long int Reader::SetDataSize(char *fname)//FIXME: change to GetLineCount
 {
     ifstream inFile (fname);
     unsigned long int size = 0;
@@ -89,7 +90,8 @@ void Reader::SetSrcDataSize()
 ***/
 void Reader::SetSrcTranscriptDataSize()
 {
-    srcTranscriptData.InitData(SetDataSize(tfname));
+    srcTranscriptData.InitData(SetDataSize(tfname));  //FIXME: I can just initialize this 
+                                                      // when reading => saves space and time
 }
 
 
@@ -107,6 +109,8 @@ void Reader::ReadTranscripts()
     ifstream inFile (tfname);
     if (inFile.is_open())
     {
+        AVLTree geneTree('g');
+        AVLTree posTree('s');
         unsigned int gCount = 0;
         string rawLine;
         string chrom;
@@ -122,25 +126,46 @@ void Reader::ReadTranscripts()
         int    stop;
         char   strand;
         TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
-        int count = 0;
         while (std::getline(inFile, rawLine))
         {
             std::istringstream iss(rawLine);
             if (!(iss >> chrom >> start >> stop >> name >> scrap >> strand >> thickStart 
                >> thickEnd >> rgb >> scrap >> geneId >> scrap >> transcriptId))
                 break;
-            if (name != prevName)
-                gCount++;
             geneId.erase(0, 1);
             geneId.erase(geneId.length()-2, 2);
             transcriptId.erase(0, 1);
             transcriptId.erase(transcriptId.length()-2, 2);
-            TranscriptLine line(chrom, geneId, transcriptId, name, thickStart, thickEnd, rgb,
-                                start, stop, strand);
-            TranscriptLines[count] = line; 
-            count++;
+            TranscriptLine *line = new TranscriptLine(chrom, geneId, transcriptId, 
+                                       name, thickStart, thickEnd, rgb, start, stop, strand);
+            geneTree.Insert(line);
             prevName = name;
         } 
+      
+
+        //FIXME: testing
+        while (!geneTree.IsEmpty())
+        {
+            //FIXME: I can get the size of TranscriptLines here (Gene count)
+            TranscriptLine *line = geneTree.RemoveMin();
+            cerr << "gene: " << line->GetGeneId() << endl;//FIXME: testing 
+            posTree.Insert(line);  
+            gCount++;
+        }
+        cerr << gCount << endl;
+        srcTranscriptData.InitData(gCount);
+        cerr << srcTranscriptData.GetDataSize() << endl;
+        cerr << "Pos Tree" << endl; //FIXME: testing 
+        int tCount = 0;
+        cerr << "Gene tree" << endl;//FIXME: testing 
+        while (!posTree.IsEmpty())
+        {
+            TranscriptLine *line = posTree.RemoveMin();
+            cerr << "gene: " << line->GetGeneId() << endl;//FIXME: testing 
+            TranscriptLines[tCount] = *line;
+            tCount++;
+        }
+
         srcTranscriptData.SetGeneCount(gCount);
     }
     else

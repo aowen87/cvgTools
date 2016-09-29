@@ -676,6 +676,24 @@ TranscriptLine::TranscriptLine(string _chrom, string _geneId, string _transcript
 
 
 /***
+*FIXME: doctstring needed
+***/
+void TranscriptLine::DeepCopy(TranscriptLine line)
+{
+    chrom        = line.chrom;
+    geneId       = line.geneId;
+    transcriptId = line.transcriptId;
+    name         = line.name;
+    thickStart   = line.thickStart;
+    thickEnd     = line.thickEnd;
+    rgb          = line.rgb;
+    start        = line.start;
+    stop         = line.stop;
+    strand       = line.strand;
+}
+
+
+/***
 * @author: Alister Maguire
 *
 * Set chrom to equal a chromosome name. 

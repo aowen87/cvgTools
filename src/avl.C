@@ -27,7 +27,7 @@ Node::Node()
 /***
 *
 ***/
-Node::Node(TreeData *d)
+Node::Node(TranscriptLine *d)
 {
     tData  = d;
     right  = NULL;
@@ -44,7 +44,7 @@ Node::Node(Node const &n)
     left   = n.left;
     right  = n.right;
     height = n.height;
-    tData  = new TreeData();
+    tData  = new TranscriptLine();
     tData->DeepCopy(*(n.tData));
 }
 
@@ -90,7 +90,7 @@ bool Node::ExpandDataStop(int _stop)
 /***
 *
 ***/
-TreeData *Node::GetData() { return tData; }
+TranscriptLine *Node::GetData() { return tData; }
 
 
 /***
@@ -127,7 +127,7 @@ void Node::SetRightChild(Node *r)
 /***
 *
 ***/
-void Node::SetData(TreeData *d)
+void Node::SetData(TranscriptLine *d)
 {
     tData = d;
 }
@@ -154,145 +154,6 @@ unsigned int Node::GetHeight() { return height; }
 /***
 *
 ***/
-TreeData::TreeData() 
-{
-    start        = -1;
-    stop         = -1;
-    strand       = 'X';
-    chrom        = "";
-    geneId       = "";
-    transcriptId = "";
-}
-
-
-/***
-*
-***/
-TreeData::TreeData(int _start, int _stop , char _strand, string _chrom, string _geneId, 
-                   string _transcriptId)
-{
-    start        = _start;
-    stop         = _stop;
-    strand       = _strand;
-    chrom        = _chrom;
-    geneId       = _geneId;
-    transcriptId = _transcriptId;
-}
-
-
-/***
-*
-***/
-TreeData::~TreeData() {}
-
-
-/***
-*
-***/
-void TreeData::DeepCopy(TreeData t)
-{
-    start        = t.start;
-    stop         = t.stop;
-    strand       = t.strand;
-    chrom        = t.chrom;
-    geneId       = t.geneId;
-    transcriptId = t.transcriptId;
-}
-
-
-/***
-*
-***/
-void TreeData::SetStart(int _start)
-{
-    start = _start;
-}
-
-
-/***
-*
-***/
-void TreeData::SetStop(int _stop)
-{
-    stop = _stop;
-}
-
-
-/***
-*
-***/
-void TreeData::SetStrand(char _strand)
-{
-    strand = _strand;
-}
-
-
-/***
-*
-***/
-void TreeData::SetChrom(string _chrom)
-{
-    chrom = _chrom;
-}
-
-
-/***
-*
-***/
-void TreeData::SetGeneId(string _geneId)
-{
-    geneId = _geneId;
-}
-
-
-/***
-*
-***/
-void TreeData::SetTranscriptId(string _transcriptId)
-{
-    transcriptId = _transcriptId;
-}
-
-
-/***
-*
-***/
-int TreeData::GetStart() { return start; }
-
-
-/***
-*
-***/
-int TreeData::GetStop() { return stop; }
-
-
-/***
-*
-***/
-char TreeData::GetStrand() { return strand; }
-
-
-/***
-*
-***/
-string TreeData::GetChrom() { return chrom; }
-
-
-/***
-*
-***/
-string TreeData::GetGeneId() { return geneId; }
-
-
-/***
-*
-***/
-string TreeData::GetTranscriptId() { return transcriptId; }
-
-
-/***
-*
-***/
 AVLTree::AVLTree()
 {
     root = NULL;
@@ -300,14 +161,13 @@ AVLTree::AVLTree()
 }
 
 
-
 /***
 *
 ***/
 AVLTree::AVLTree(char s) 
 { 
-    root = NULL; 
-    if (s == 'g')
+    root = NULL;       //FIXME: I'm not a fan of this method
+    if (s == 'g')      //       for setting Sort. Let's change it.
         Sort = Genic;
     else if (s == 's')
         Sort = Standard;
@@ -350,7 +210,7 @@ void AVLTree::DeleteTree(Node *current)
 /***
 *
 ***/
-void AVLTree::Insert(TreeData *d)
+void AVLTree::Insert(TranscriptLine *d)
 {
     Node *n = new Node(d);
     root    = CheckBalance(DoInsertion(root, n));
@@ -361,7 +221,7 @@ void AVLTree::Insert(TreeData *d)
 /***
 *
 ***/
-void AVLTree::Delete(TreeData *d)
+void AVLTree::Delete(TranscriptLine *d)
 {
     Node *n = new Node(d);
     root    = DeletionSearch(root, n);
@@ -372,7 +232,7 @@ void AVLTree::Delete(TreeData *d)
 /***
 *
 ***/
-bool AVLTree::Search(TreeData *d)
+bool AVLTree::Search(TranscriptLine *d)
 {
     Node *n    = new Node(d);
     bool found = DoSearch(root, n);
@@ -428,6 +288,28 @@ Node *AVLTree::GetMin()
 /***
 *
 ***/
+TranscriptLine *AVLTree::RemoveMin()
+{
+    if (root == NULL)
+    {
+        TranscriptLine *scrap = NULL;
+        return scrap;
+    }
+    TranscriptLine *outData    = new TranscriptLine; 
+    TranscriptLine *searchData = new TranscriptLine;
+    Node *minNode              = FindMin(root);
+    searchData->DeepCopy( *(minNode->GetData()) );
+    outData->DeepCopy( *(minNode->GetData()) );
+    Node *searchNode = new Node(searchData);
+    root             = DeletionSearch(root, searchNode);
+    delete searchNode;
+    return outData;
+}
+
+
+/***
+*
+***/
 Node *AVLTree::DeletionSearch(Node *current, Node *target)
 {
     if (current == NULL)
@@ -435,7 +317,18 @@ Node *AVLTree::DeletionSearch(Node *current, Node *target)
 
     AVLTree::Equality e;
 
-    e = StandardCompare(target, current);            
+    switch (Sort)
+    {
+        case Standard:
+            e = StandardCompare(target, current);            
+            break;
+        case Genic:
+            e = GenicCompare(target, current);
+            break;
+        default:
+            cerr << "ERROR: invalide case line: " << __LINE__ << endl;
+            exit(EXIT_FAILURE);
+    }
 
     switch (e)
     {
@@ -455,38 +348,6 @@ Node *AVLTree::DeletionSearch(Node *current, Node *target)
     }
     
     return CheckBalance(current);
-
-
-/*
-    string targetId = target->GetData()->GetGeneId();
-    string curId    = current->GetData()->GetGeneId();
-
-    if (current == NULL)
-    {
-        cerr << "Target node could not be deleted -> DNE in this tree." << endl;
-        
-    } 
-
-    else if (targetId == curId)
-    {
-        return CheckBalance(DeleteNode(current));
-    }
-
-    else if (targetId < curId)
-    {
-        current->SetLeftChild(DeletionSearch(current->GetLeftChild(), target));
-        SetHeight(current);
-    }
-
-    else if (targetId > curId)
-    {
-        current->SetRightChild(DeletionSearch(current->GetRightChild(), target));
-        SetHeight(current);
-    }
-
-    return CheckBalance(current);
-
-*/
 }
 
 
@@ -520,7 +381,7 @@ Node *AVLTree::DeleteNode(Node *n)
         }
     }
    
-    TreeData *nData = n->GetData(); 
+    TranscriptLine *nData = n->GetData(); 
     Node *origin    = new Node(nData);
     Node *leftmost  = FindLeftmost(nData, n->GetRightChild());
     n->SetData(leftmost->GetData());
@@ -533,7 +394,7 @@ Node *AVLTree::DeleteNode(Node *n)
 /***
 *
 ***/
-Node *AVLTree::FindLeftmost(TreeData *originData, Node *searchNode)
+Node *AVLTree::FindLeftmost(TranscriptLine *originData, Node *searchNode)
 {
     Node *leftmost;
     while (searchNode->GetLeftChild() != NULL)
@@ -551,8 +412,8 @@ Node *AVLTree::FindLeftmost(TreeData *originData, Node *searchNode)
 ***/
 AVLTree::Equality AVLTree::StandardCompare(Node *n1, Node *n2)
 {
-    TreeData *n1Data  = n1->GetData();
-    TreeData *n2Data  = n2->GetData();
+    TranscriptLine *n1Data  = n1->GetData();
+    TranscriptLine *n2Data  = n2->GetData();
     double n1ChromNum = HPR::ExtractNumFromString(n1Data->GetChrom());    
     double n2ChromNum = HPR::ExtractNumFromString(n2Data->GetChrom());
     AVLTree::Equality e;
@@ -609,8 +470,8 @@ AVLTree::Equality AVLTree::StandardCompare(Node *n1, Node *n2)
 ***/
 AVLTree::Equality AVLTree::GenicCompare(Node *n1, Node *n2)
 {
-    TreeData *n1Data = n1->GetData();
-    TreeData *n2Data = n2->GetData();
+    TranscriptLine *n1Data = n1->GetData();
+    TranscriptLine *n2Data = n2->GetData();
     string n1GeneId  = n1Data->GetGeneId();
     string n2GeneId  = n2Data->GetGeneId();
     AVLTree::Equality e;  
@@ -704,7 +565,7 @@ void AVLTree::InorderTraversal(Node *current)
 {
     Node *left      = current->GetLeftChild();
     Node *right     = current->GetRightChild();
-    TreeData *tData = current->GetData();
+    TranscriptLine *tData = current->GetData();
     
     if (left != NULL)
     {
@@ -729,7 +590,7 @@ void AVLTree::PreorderTraversal(Node *current)
 {
     if (current != NULL)
     {
-        TreeData *tData = current->GetData();
+        TranscriptLine *tData = current->GetData();
         cerr << tData->GetChrom() << "\t" << tData->GetStart() << "\t" << tData->GetStop()
              << "\t" << tData->GetGeneId() << endl;
     
@@ -965,7 +826,15 @@ unsigned int AVLTree::GetNodeHeight(Node *n)
 }
 
 
-
+/***
+*
+***/
+bool AVLTree::IsEmpty()
+{
+    if (root == NULL)
+       return true;
+    return false;
+}
 
 
 

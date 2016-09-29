@@ -19,7 +19,6 @@ using std::endl;
 using std::cerr;
 
 
-
 /***
 * The main driver for cvgTools. 
 ***/

@@ -151,6 +151,7 @@ class TranscriptLine
            TranscriptLine();
            TranscriptLine(string _chrom, string _geneId, string _transcriptId, string _name,  
            string _thickStart, string _thickEnd, char _rgb, int _start, int _stop, char _strand);
+    void   DeepCopy(TranscriptLine line);
     void   SetChrom(string _chrom);
     void   SetGeneId(string id);
     void   SetTranscriptId(string transcriptId);
