@@ -247,7 +247,7 @@ void Source::SetGenicWindows()
         Window *curWindows         = new Window[geneCount];
         unsigned int windowIdx     = 0;
         unsigned int pos           = 0;
-        unsigned int m             = 0;
+        unsigned int dataIdx       = 0;
         int span                   = 0;
         double curValTotal         = 0.0; 
         bool missingGene           = false;
@@ -259,87 +259,88 @@ void Source::SetGenicWindows()
         double chromNum;
         unsigned int geneStart;
         unsigned int geneStop;
+        unsigned int prevGeneStop = 0;
+        unsigned int prevGeneStart;
+        unsigned int prevLineStart;
         for (int i = 0; i < tranSize; i++)
         {
             curTranscript = transcripts[i];
-            if (curTranscript.GetThickEnd() == "exon")//TODO: I could also store all exons when reading in.
+            geneChrom = curTranscript.GetChrom();
+            geneName  = curTranscript.GetName();
+            geneStart = curTranscript.GetStart();
+            geneStop  = curTranscript.GetStop();
+            nextName  = geneName;
+
+            //Note: because the chromosome names contain a string of letters followed
+            //      by some number, we need to extract that number in order to compare
+            //      chromosome names. 
+            chromNum  = HPR::ExtractNumFromString(geneChrom);        
+
+            //Check for overlap. If it exists, 
+            //see if we can start looking for the 
+            //gene from the previous start. If not,
+            //look from the beginning.
+            if (geneStart < prevGeneStop)
             {
-                geneChrom = curTranscript.GetChrom();
-                geneName  = curTranscript.GetName();
-                geneStart = curTranscript.GetStart();
-                geneStop  = curTranscript.GetStop();
-                nextName  = geneName;
-                //Note: because the chromosome names contain a string of letters followed
-                //      by some number, we need to extract that number in order to compare
-                //      chromosome names. 
-                chromNum  = HPR::ExtractNumFromString(geneChrom);        
-
-                //We want to "compress" genic windows so that they don't 
-                //contain gaps => we need to find the full gene span. 
-                while (i < (tranSize - 2) && geneName == nextName)
-                {
-                    i++;
-                    nxtTranscript = transcripts[i];
-                    nextName = nxtTranscript.GetName(); 
-                    if (nxtTranscript.GetThickEnd() == "exon")
-                    {
-                        if (nextName == geneName && geneStop < nxtTranscript.GetStop())
-                        {
-                            geneStop  = nxtTranscript.GetStop();
-                        }
-                    }
-                }
-                span = geneStop - geneStart;
-
-                while (HPR::ExtractNumFromString(dataLines[m].GetChrom()) < chromNum && m < dataSize)
-                    m++;
-
-                if (HPR::ExtractNumFromString(dataLines[m].GetChrom()) > chromNum)
-                {
-                    cerr << "Gene not found: " << curTranscript.GetGeneId() << " "
-                         << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
-                    missingGene = true;
-                    break;
-                }
-
-                while (dataLines[m].GetStart() < geneStart && m < dataSize)
-                    m++; 
-
-
-                if (dataLines[m].GetStart() > geneStart)
-                {
-                    cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
-                         << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
-                    missingGene = true;
-                    break;
-                }
-                else if (geneStop == dataLines[m+span-1].GetStop() && geneChrom == dataLines[m+span-1].GetChrom())
-                {
-                    DataLine *windowLines = new DataLine[span];
-                    DataLine curLine;
-                    for (int j = m; j < (m+span); j++)
-                    {
-                        curLine          = dataLines[j];
-                        curValTotal     += curLine.GetVal();
-                        windowLines[pos] = curLine;
-                        pos++;
-                    }
-                    Window newWindow(curTranscript.GetGeneId(), span, geneStart, 
-                                     geneStop, curValTotal/span, windowLines);
-                    curWindows[windowIdx] = newWindow;                 
-                    pos         = 0;
-                    curValTotal = 0.0;
-                    windowIdx++;
-                    delete [] windowLines;
-                }
+                if (geneStart < prevGeneStart)
+                    dataIdx = 0;
                 else
-                {
-                    cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
-                         << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
-                    missingGene = true;
-                    break;
-                }
+                    dataIdx = prevGeneStart;
             } 
+
+            span = geneStop - geneStart;
+
+            //search for the gene within our data
+            while (HPR::ExtractNumFromString(dataLines[dataIdx].GetChrom()) < chromNum && dataIdx < dataSize)
+                dataIdx++;
+
+            if (HPR::ExtractNumFromString(dataLines[dataIdx].GetChrom()) > chromNum)
+            {
+                cerr << "Gene not found: " << curTranscript.GetGeneId() << " "
+                     << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
+                missingGene = true;
+                break;
+            }
+
+            while (dataLines[dataIdx].GetStart() < geneStart && dataIdx < dataSize)
+                dataIdx++; 
+
+            if (dataLines[dataIdx].GetStart() > geneStart)
+            {
+                cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
+                     << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
+                missingGene = true;
+                break;
+            }
+            else if (geneStop == dataLines[dataIdx+span-1].GetStop() && geneChrom == dataLines[dataIdx+span-1].GetChrom())
+            {
+                DataLine *windowLines = new DataLine[span];
+                DataLine curLine;
+                prevLineStart = dataIdx; 
+                for (int j = dataIdx; j < (dataIdx+span); j++)
+                {
+                    curLine          = dataLines[j];
+                    curValTotal     += curLine.GetVal();
+                    windowLines[pos] = curLine;
+                    pos++;
+                }
+                Window newWindow(curTranscript.GetGeneId(), span, geneStart, 
+                                 geneStop, curValTotal/span, windowLines);
+                curWindows[windowIdx] = newWindow;                 
+                prevGeneStart = geneStart;
+                prevGeneStop  = geneStop;
+                pos         = 0;
+                curValTotal = 0.0;
+                windowIdx++;
+                delete [] windowLines;
+            }
+            else
+            {
+                cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
+                     << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
+                missingGene = true;
+                break;
+            }
         }
         if (!missingGene)
         {
@@ -349,4 +350,3 @@ void Source::SetGenicWindows()
         delete [] curWindows;                
     }
 }
-

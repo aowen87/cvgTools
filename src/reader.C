@@ -103,7 +103,8 @@ void Reader::SetSrcTranscriptDataSize()
 *
 * IMPORTANT: All input files must be sorted beforehand. 
 ***/
-//TODO: make sure the files are sorted
+//TODO: make capable of reading different sections of the transcript (other than 
+//      genic regions)
 void Reader::ReadTranscripts()
 {
     ifstream inFile (tfname);
@@ -141,28 +142,17 @@ void Reader::ReadTranscripts()
             geneTree.Insert(line);
             prevName = name;
         } 
-      
 
-        //FIXME: testing
         while (!geneTree.IsEmpty())
         {
-            //FIXME: I can get the size of TranscriptLines here (Gene count)
-            TranscriptLine *line = geneTree.RemoveMin();
-            cerr << "gene: " << line->GetGeneId() << endl;//FIXME: testing 
-            posTree.Insert(line);  
+            posTree.Insert(geneTree.RemoveMin());  
             gCount++;
         }
-        cerr << gCount << endl;
         srcTranscriptData.InitData(gCount);
-        cerr << srcTranscriptData.GetDataSize() << endl;
-        cerr << "Pos Tree" << endl; //FIXME: testing 
         int tCount = 0;
-        cerr << "Gene tree" << endl;//FIXME: testing 
         while (!posTree.IsEmpty())
         {
-            TranscriptLine *line = posTree.RemoveMin();
-            cerr << "gene: " << line->GetGeneId() << endl;//FIXME: testing 
-            TranscriptLines[tCount] = *line;
+            TranscriptLines[tCount] = *posTree.RemoveMin();
             tCount++;
         }
 
