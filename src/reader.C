@@ -87,12 +87,11 @@ void Reader::SetSrcDataSize()
 * Compute the size of the data file being used
 * to create srcTranscriptData, and initialize
 * srcTranscriptData. 
-***/
 void Reader::SetSrcTranscriptDataSize()
 {
-    srcTranscriptData.InitData(SetDataSize(tfname));  //FIXME: I can just initialize this 
-                                                      // when reading => saves space and time
+    srcTranscriptData.InitData(SetDataSize(tfname));  
 }
+***/
 
 
 /***
@@ -126,7 +125,6 @@ void Reader::ReadTranscripts()
         int    start;
         int    stop;
         char   strand;
-        TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
         while (std::getline(inFile, rawLine))
         {
             std::istringstream iss(rawLine);
@@ -149,10 +147,14 @@ void Reader::ReadTranscripts()
             gCount++;
         }
         srcTranscriptData.InitData(gCount);
+        TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
+        TranscriptLine *treeLine;
         int tCount = 0;
         while (!posTree.IsEmpty())
         {
-            TranscriptLines[tCount] = *posTree.RemoveMin();
+            treeLine = posTree.RemoveMin();
+            TranscriptLines[tCount] = *treeLine;
+            delete treeLine;
             tCount++;
         }
 

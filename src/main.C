@@ -224,6 +224,7 @@ int main(int argc, char *argv[])
         cerr << "ERROR: invalid input file type." << endl;
         exit(EXIT_FAILURE);
     }
+
 }
 
 
