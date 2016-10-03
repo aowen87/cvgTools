@@ -103,7 +103,8 @@ void WindowAvgWriter::Write(char *filename)
 * @param: filename -> the name of the file to be written
 *         to. 
 ***/
-//FIXME: testing needed
+//FIXME: need to remove overlaps from genic windows
+//       may also need to show all zero values (not sure yet)
 void WindowWigWriter::Write(char *filename)
 {
     ofstream outfile (filename);
