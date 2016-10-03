@@ -5,7 +5,7 @@ prog: $(OBJ)
 	g++ $(OBJ) -o cvgTools
 
 .C.o: $<
-	g++ -I. -g -c $<
+	g++ -I. -c $<
 
 clean:
 	rm *.o cvgTools

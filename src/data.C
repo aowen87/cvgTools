@@ -676,7 +676,11 @@ TranscriptLine::TranscriptLine(string _chrom, string _geneId, string _transcript
 
 
 /***
-*FIXME: doctstring needed
+* @author: Alister Maguire
+*
+* Deep copy of a TranscriptLine. 
+*
+* @param: line -> a transcript line to copy from. 
 ***/
 void TranscriptLine::DeepCopy(TranscriptLine line)
 {

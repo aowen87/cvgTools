@@ -143,8 +143,8 @@ void Reader::ReadTranscripts()
 
         while (!geneTree.IsEmpty())
         {
-            posTree.Insert(geneTree.RemoveMin());  
-            gCount++;
+            posTree.Insert(geneTree.RemoveMin());  //TODO: it would probably be faster to use a min heap for the. 
+            gCount++;                              //      second data structure.
         }
         srcTranscriptData.InitData(gCount);
         TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();

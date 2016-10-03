@@ -51,7 +51,6 @@ bedReader::bedReader(const char *dataFileName, string transcriptsFileName)
             tfname[i] = transcriptsFileName[i];
         } 
         tfname[size-1] = '\0';
-        //SetSrcTranscriptDataSize();//FIXME: testing 
     }
 }
 
@@ -236,7 +235,6 @@ bedCovPerBaseReader::bedCovPerBaseReader(const char *dataFileName, string transc
             tfname[i] = transcriptsFileName[i];
         } 
         tfname[size-1] = '\0';
-        //SetSrcTranscriptDataSize();//FIXME: testing 
     }
 }
 
