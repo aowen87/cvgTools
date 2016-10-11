@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -116,28 +117,30 @@ void WindowWigWriter::Write(char *filename)
         if (windows == NULL)
         {
             cerr << "ERROR: cannot write windows -> windows are NULL" << endl;
-            return;
+            exit(EXIT_FAILURE);
         }
         else
         {
             unsigned long int numLines;
-            DataLine *lines;
-            DataLine  curLine;
-            string    curChrom; 
-            string    prevChrom;
-            int       curStart;
-            int       curStop;
-            double    curVal;
+            DataLine    *lines;
+            DataLine     curLine;
+            string       curChrom; 
+            string       prevChrom;
+            unsigned int curStart;
+            unsigned int curStop;
+            unsigned int prevStop = 0;
+            double       curVal;
+            prevChrom = "";
+
             for (int i = 0; i < numWin; i++)
             {
                 curWindow = snkWindowBlock->GetWindow(i);
                 lines     = curWindow.GetLines();
                 numLines  = curWindow.GetDataSize();
-                prevChrom = "";
                 if (lines == NULL)
                 {
                     cerr << "ERROR: cannot write windows -> NULL data found" << endl;
-                    return;
+                    exit(EXIT_FAILURE);
                 } 
                 else
                 {
@@ -149,16 +152,29 @@ void WindowWigWriter::Write(char *filename)
                         curStart = curLine.GetStart();
                         curStop  = curLine.GetStop();
                         curVal   = curLine.GetVal();
+
                         if (curChrom != prevChrom)
                         {
                             prevChrom = curChrom;
                             outfile << "variableStep\t" << "chrom=" << curChrom << "\n";
                         }    
+
+                        while (curStart < prevStop)
+                        {
+                           curStart++;
+                        }
+
+                        if (curStart > curStop)
+                        {
+                            continue;
+                        }
+
                         while ((curStop - curStart) > 0)
                         {
                             outfile << curStart+1 << "\t" << curVal << "\n";
                             curStart++;
                         }
+                        prevStop = curStop;
                     }
                 }
             }
