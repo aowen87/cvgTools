@@ -156,6 +156,7 @@ void WindowWigWriter::Write(char *filename)
                         if (curChrom != prevChrom)
                         {
                             prevChrom = curChrom;
+                            prevStop  = 0;
                             outfile << "variableStep\t" << "chrom=" << curChrom << "\n";
                         }    
 
