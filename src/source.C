@@ -239,7 +239,7 @@ void Source::SetGenicWindows()
     else if (dataLines == NULL)
         cerr << "ERROR: data has not been loaded -> cannot compute gene windows" << endl;
     else
-    {
+{
         
         unsigned long int dataSize = srcData.GetDataSize();
         unsigned long int tranSize = srcTranscriptData.GetDataSize();
@@ -248,9 +248,9 @@ void Source::SetGenicWindows()
         unsigned int windowIdx     = 0;
         unsigned int pos           = 0;
         unsigned int dataIdx       = 0;
+        unsigned int prevDataIdx   = 0;
         int span                   = 0;
         double curValTotal         = 0.0; 
-        bool missingGene           = false;
         TranscriptLine curTranscript;
         TranscriptLine nxtTranscript;
         string geneChrom;
@@ -270,6 +270,7 @@ void Source::SetGenicWindows()
             geneStart = curTranscript.GetStart();
             geneStop  = curTranscript.GetStop();
             nextName  = geneName;
+            prevDataIdx = dataIdx;
 
             //Note: because the chromosome names contain a string of letters followed
             //      by some number, we need to extract that number in order to compare
@@ -285,7 +286,7 @@ void Source::SetGenicWindows()
                 if (geneStart < prevGeneStart)
                     dataIdx = 0;
                 else
-                    dataIdx = prevGeneStart;
+                    dataIdx = prevDataIdx;
             } 
 
             span = geneStop - geneStart;
@@ -298,8 +299,8 @@ void Source::SetGenicWindows()
             {
                 cerr << "Gene not found: " << curTranscript.GetGeneId() << " "
                      << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
-                missingGene = true;
-                break;
+                cerr << "line: " << __LINE__ << endl;
+                exit(EXIT_FAILURE);
             }
 
             while (dataLines[dataIdx].GetStart() < geneStart && dataIdx < dataSize)
@@ -309,8 +310,8 @@ void Source::SetGenicWindows()
             {
                 cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
                      << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
-                missingGene = true;
-                break;
+                cerr << "line: " << __LINE__ << endl;
+                exit(EXIT_FAILURE);
             }
             else if (geneStop == dataLines[dataIdx+span-1].GetStop() && geneChrom == dataLines[dataIdx+span-1].GetChrom())
             {
@@ -338,15 +339,12 @@ void Source::SetGenicWindows()
             {
                 cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
                      << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
-                missingGene = true;
-                break;
+                cerr << "line: " << __LINE__ << endl;
+                exit(EXIT_FAILURE);
             }
         }
-        if (!missingGene)
-        {
-            srcWindowBlock.SetWindows(geneCount, curWindows);
-            genicWindows = true;
-        }
+        srcWindowBlock.SetWindows(geneCount, curWindows);
+        genicWindows = true;
         delete [] curWindows;                
     }
 }
