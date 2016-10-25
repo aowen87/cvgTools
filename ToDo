@@ -1,6 +1,6 @@
 
 Foremost:
-    * Test window wig writer
+    * Create diff writer and test the diff tool
     * Create a max-heap implemented priority queue to sort the data. 
     * Once the data can be sorted, make sure that input data is sorted. 
       If it isn't, sort the data. 

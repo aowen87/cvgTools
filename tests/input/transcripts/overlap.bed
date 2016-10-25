@@ -1,0 +1,6 @@
+Supercontig_12.1	1150	1153	NCU10129	.	-	NC12_CALLGENES_FINAL_7	exon	.	gene_id "NCU10129"; transcript_id "NCU10129T0";
+Supercontig_12.1	1151	1152	NCU10129	.	-	NC12_CALLGENES_FINAL_7	start_codon	0	gene_id "NCU10129"; transcript_id "NCU10129T0";
+Supercontig_12.1	1151	1155	NCU10129	.	-	NC12_CALLGENES_FINAL_7	exon	.	gene_id "NCU10129"; transcript_id "NCU10129T0";
+Supercontig_12.1	1151	1156	NCU10129	.	-	NC12_CALLGENES_FINAL_7	stop_codon	0	gene_id "NCU10129"; transcript_id "NCU10129T0";
+Supercontig_12.1	1151	1160	NCU19800	.	+	NC12_CALLGENES_FINAL_7	exon	.	gene_id "NCU19800"; transcript_id "";
+Supercontig_12.2	3177	3179	NCU09901	.	+	NC12_CALLGENES_FINAL_7	exon	.	gene_id "NCU09901"; transcript_id "NCU09901T0";

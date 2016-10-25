@@ -23,11 +23,13 @@ class DataLine
     int     start;
     int     stop; 
     double  val; 
+    double  diff;
   public:
            DataLine(string _chrom, int _start, int _stop, int _val);
            DataLine();
           ~DataLine();
     void   SetData(string _chrom, int _start, int _stop, int _val);
+    void   SetDiff(double d);
     int    GetStart();
     int    GetStop();
     double GetVal();

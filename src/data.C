@@ -72,6 +72,12 @@ void DataLine::SetData(string _chrom, int _start, int _stop, int _val)
 
 
 /***
+*FIXME: fill in docstring 
+***/
+void DataLine::SetDiff(double d) { diff = d; }
+
+
+/***
 * @author: Alister Maguire
 *
 * Get the chromosome from a line. 

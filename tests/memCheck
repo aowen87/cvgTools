@@ -1,0 +1,24 @@
+#!/bin/bash
+printf "Checking for memory leaks...\n\n"
+
+printf "\nTEST 1\n\n"
+valgrind ../src/cvgTools toWig -c input/countsFiles/count9 output/cov2wig/out1.wig
+
+printf "\nTEST 2\n\n"
+valgrind ../src/cvgTools toWig -b input/bedFiles/gaps output/cov2wig/out2.wig
+
+printf "\nTEST 3\n\n"
+valgrind ../src/cvgTools toWig -b input/bedFiles/gaps2 output/cov2wig/out3.wig
+
+printf "\nTEST 4\n\n"
+valgrind ../src/cvgTools GeneAvg -c input/countsFiles/geneCount2 output/geneAvg/geneOut -t input/transcripts/small.bed 
+
+printf "\nTEST 5\n\n"
+valgrind ../src/cvgTools GenicWindows -c input/countsFiles/geneCount2 output/geneWig/overlap.wig -t input/transcripts/overlap.bed
+
+printf "\nTEST 6\n\n"
+valgrind ../src/cvgTools GeneAvg -c input/countsFiles/geneCount2 output/geneAvg/overlap -t input/transcripts/overlap.bed
+
+printf "\nTEST 7\n\n"
+valgrind ../src/cvgTools GenicWindows -c input/countsFiles/geneCount2 output/geneWig/genic2.wig -t input/transcripts/small.bed
+printf "MEMORY CHECKING COMPLETE\n"
