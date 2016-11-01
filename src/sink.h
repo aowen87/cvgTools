@@ -23,9 +23,10 @@ class Sink
     WindowBlock    *snkWindowBlock;
     TranscriptData *snkTranscriptData;
   public:
-    void SetSinkData(Data *data);
-    void SetSinkWindowBlock(WindowBlock *block);
-    void SetSinkTranscriptData(TranscriptData *tData);
+    void  SetSinkData(Data *data);
+    void  SetSinkWindowBlock(WindowBlock *block);
+    void  SetSinkTranscriptData(TranscriptData *tData);
+    void  Diff(Data *d2);
 };
 
 #endif

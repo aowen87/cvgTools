@@ -1,6 +1,7 @@
 
 Foremost:
-    * Create diff writer and test the diff tool
+    * Implement diff for window averages
+    * Replace avl tree with hash map for compressing genic regions.
     * Create a max-heap implemented priority queue to sort the data. 
     * Once the data can be sorted, make sure that input data is sorted. 
       If it isn't, sort the data. 
@@ -10,7 +11,7 @@ Foremost:
 
 Error handling:
     if at any point it is discovered that the file being read is not 
-    sorted, than the program should alert the user and exit. 
+    sorted, the program should alert the user and exit. 
     Also, if the file being read is not of the type specified, an error
     should be raised. 
 
@@ -23,7 +24,6 @@ Normalize data:
 tools:
     -coverage computation. 
     -find correlations between data sets. 
-    -merge gene sections (DO NEXT)
     -more advanced window options
         *offsets
         *target specific areas of genes

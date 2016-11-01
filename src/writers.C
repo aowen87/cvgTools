@@ -32,6 +32,7 @@ void WigWriter::Write(char *filename)
         int    curStart;
         int    curStop;
         double curVal;
+        bool   diff     = snkData->IsDiffSet();
         int    len      = snkData->GetDataSize();
         DataLine *lines = snkData->GetLines();   
         DataLine curLine;
@@ -47,10 +48,23 @@ void WigWriter::Write(char *filename)
                 prevChrom = curChrom;
                 outfile << "variableStep\t" << "chrom=" << curChrom << "\n";
             }    
-            while ((curStop - curStart) > 0)
+           
+            if (diff)
             {
-                outfile << curStart+1 << "\t" << curVal << "\n";//FIXME: testing
-                curStart++;
+                while ((curStop - curStart) > 0)
+                {
+                    outfile << curStart+1 << "\t" << curVal << "\t" << curLine.GetDiff() << "\n";
+                    curStart++;
+                }
+            }
+ 
+            else
+            {
+                while ((curStop - curStart) > 0)
+                {
+                    outfile << curStart+1 << "\t" << curVal << "\n";
+                    curStart++;
+                }
             }
         }      
         outfile.close();

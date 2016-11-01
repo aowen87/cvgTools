@@ -30,6 +30,7 @@ class DataLine
           ~DataLine();
     void   SetData(string _chrom, int _start, int _stop, int _val);
     void   SetDiff(double d);
+    double GetDiff();
     int    GetStart();
     int    GetStop();
     double GetVal();
@@ -47,10 +48,12 @@ class Data
 {
   protected:
     DataLine *data;
+    bool      diffSet;
     double    valAverage;
     void      SetDataSize(unsigned long int size);
     void      ComputeValAvg();
     unsigned long int dataSize;
+    
   public:
               Data(int size, DataLine *_data);
               Data();
@@ -63,6 +66,8 @@ class Data
               } 
              ~Data();
     DataLine *GetLines();
+    bool      IsDiffSet();
+    void      DiffSet(bool set);
     void      SetData(unsigned long int size, DataLine *lines);
     void      SetValAvg(double avg);
     void      InitData(unsigned long int size);

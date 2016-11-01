@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 {
 
     if (!argv[1])
-    {
+    {   //TODO: need to change the way args are handled (need room for multiple input and output)
         cerr << "Usage: " << argv[0] << " <command> -<input_format> <input_file> " 
              << "<output_file> -t <transcripts_file> (if applicable)" << endl;
         exit(EXIT_FAILURE);
@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
 
             else if (command == "Diff")
             {
-                Diff differ;
-                //TODO: finish this                  
+                cerr << "Diff doesn't currently support transcript files" << endl;
+                
  
             }
    
@@ -119,6 +119,18 @@ int main(int argc, char *argv[])
             { 
                 cerr << "ERROR: transcripts are needed for this command" << endl;
                 exit(EXIT_FAILURE);
+            }
+
+            else if (command == "Diff")
+            { 
+                //FIXME: testing
+                bedCovPerBaseReader reader2(argv[4]);
+                reader2.Execute();
+                WigWriter w1;
+                w1.SetSinkData(reader.GetData());
+                w1.Diff(reader2.GetData());
+                char o1[] = "out1";
+                w1.Write(o1);
             }
    
             else
