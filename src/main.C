@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     if (!argv[1])
     {   //TODO: need to change the way args are handled (need room for multiple input and output)
         cerr << "Usage: " << argv[0] << " <command> -<input_format> <input_file> " 
-             << "<output_file> -t <transcripts_file> (if applicable)" << endl;
+             << "<output_file> -<option> <optional_files> " << endl;
         exit(EXIT_FAILURE);
     }
     string inputFormat = argv[2];
@@ -76,12 +76,26 @@ int main(int argc, char *argv[])
                 writer.Write(argv[4]); 
             }
 
-            else if (command == "Diff")
+            else if (command == "BaseDiff")
             {
                 cerr << "Diff doesn't currently support transcript files" << endl;
-                
- 
             }
+
+            else if (command == "WindowDiff")
+            { 
+                //FIXME: testing
+                bedCovPerBaseReader reader2(argv[4], argv[6]);
+                reader2.Execute();
+
+                WindowAvgWriter writer;
+                reader.SetGenicWindows();
+                reader2.SetGenicWindows();
+                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
+                writer.WindowDiff(reader2.GetWindowBlock());
+                char o1[] = "WindowDiffs";
+                writer.Write(o1); 
+            }
+   
    
             else
             {
@@ -121,18 +135,18 @@ int main(int argc, char *argv[])
                 exit(EXIT_FAILURE);
             }
 
-            else if (command == "Diff")
+            else if (command == "BaseDiff")
             { 
                 //FIXME: testing
                 bedCovPerBaseReader reader2(argv[4]);
                 reader2.Execute();
                 WigWriter w1;
                 w1.SetSinkData(reader.GetData());
-                w1.Diff(reader2.GetData());
+                w1.BaseDiff(reader2.GetData());
                 char o1[] = "out1";
                 w1.Write(o1);
             }
-   
+
             else
             {
                 cout << "ERROR: invalid command provided" << endl;

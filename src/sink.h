@@ -26,7 +26,8 @@ class Sink
     void  SetSinkData(Data *data);
     void  SetSinkWindowBlock(WindowBlock *block);
     void  SetSinkTranscriptData(TranscriptData *tData);
-    void  Diff(Data *d2);
+    void  BaseDiff(Data *d2);
+    void  WindowDiff(WindowBlock *w2);//TODO: implement
 };
 
 #endif

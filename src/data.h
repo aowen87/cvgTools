@@ -29,8 +29,8 @@ class DataLine
            DataLine();
           ~DataLine();
     void   SetData(string _chrom, int _start, int _stop, int _val);
-    void   SetDiff(double d);
-    double GetDiff();
+    void   SetBaseDiff(double d);
+    double GetBaseDiff();
     int    GetStart();
     int    GetStop();
     double GetVal();
@@ -66,8 +66,8 @@ class Data
               } 
              ~Data();
     DataLine *GetLines();
-    bool      IsDiffSet();
-    void      DiffSet(bool set);
+    bool      IsBaseDiffSet();
+    void      BaseDiffSet(bool set);
     void      SetData(unsigned long int size, DataLine *lines);
     void      SetValAvg(double avg);
     void      InitData(unsigned long int size);
@@ -89,12 +89,15 @@ class Window : public Data
     string    title;
     int       start;//TODO: check to make sure these can hold enough data for the ranges required
     int       stop;
+    double    diff;//TODO: implement this
   public:
               Window();
               Window(unsigned long int size);
               Window(string _title, unsigned long int size, int _start, int _stop, double _avgVal, DataLine *lines);
     void      SetTitle(string _title);
     void      SetAtts(string _title, int _start, int _stop, double _avg);
+    void      SetWindowDiff(double d);
+    double    GetDiff();
     string    GetTitle();
     int       GetStart();
     int       GetStop();
@@ -111,6 +114,7 @@ class WindowBlock
 {
   private:
     Window  *windows;
+    bool     diffSet;
     unsigned long int numWindows;
   public:
               WindowBlock();
@@ -124,6 +128,8 @@ class WindowBlock
               } 
     void      SetWindows(unsigned long int winCount, Window *_windows);
     void      SetNumWindows(unsigned long int winCount);
+    void      WindowDiffSet(bool set);//TODO: this name sucks
+    bool      IsWindowDiffSet();
     Window    GetWindow(int idx);
     Window   *GetWindowPtr(int idx);
     Window   *GetWindows();

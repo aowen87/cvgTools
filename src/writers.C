@@ -5,6 +5,7 @@
 #include <writers.h>
 #include <stdio.h>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <stdlib.h>
 using std::cout;
@@ -32,7 +33,7 @@ void WigWriter::Write(char *filename)
         int    curStart;
         int    curStop;
         double curVal;
-        bool   diff     = snkData->IsDiffSet();
+        bool   diff     = snkData->IsBaseDiffSet();
         int    len      = snkData->GetDataSize();
         DataLine *lines = snkData->GetLines();   
         DataLine curLine;
@@ -53,7 +54,7 @@ void WigWriter::Write(char *filename)
             {
                 while ((curStop - curStart) > 0)
                 {
-                    outfile << curStart+1 << "\t" << curVal << "\t" << curLine.GetDiff() << "\n";
+                    outfile << curStart+1 << "\t" << curVal << "\t" << curLine.GetBaseDiff() << "\n";
                     curStart++;
                 }
             }
@@ -91,16 +92,34 @@ void WindowAvgWriter::Write(char *filename)
     if (outfile.is_open())
     { 
         unsigned long int len = snkWindowBlock->GetNumWindows();
+        bool diff = snkWindowBlock->IsWindowDiffSet();
         Window  curWindow; 
         if (snkWindowBlock->GetWindows() == NULL)
             cerr << "ERROR: cannot write windows -> windows are NULL" << endl;
         else
         {
-            for (int i = 0; i < len; i++)
+  
+            if (diff)
             {
-                curWindow = snkWindowBlock->GetWindow(i);
-                outfile << curWindow.GetTitle() << "\t" << curWindow.GetStart() << "\t" << 
-                           curWindow.GetStop() << "\t" << curWindow.GetValAvg() << "\n";
+                for (int i = 0; i < len; i++)
+                {
+                    curWindow = snkWindowBlock->GetWindow(i);
+                    outfile << std::setprecision(3) << curWindow.GetTitle() << "\t"
+                            << curWindow.GetStart() << "\t" << curWindow.GetStop() 
+                            << "\t" << curWindow.GetValAvg() << "\t" << curWindow.GetDiff() 
+                            << "\n";
+                }
+            }
+
+            else 
+            {
+                for (int i = 0; i < len; i++)
+                {
+                    curWindow = snkWindowBlock->GetWindow(i);
+                    outfile << std::setprecision(3) << curWindow.GetTitle() << "\t"  
+                            << curWindow.GetStart() << "\t" << curWindow.GetStop() 
+                            << "\t" << curWindow.GetValAvg() << "\n";
+                }
             }
         }      
         outfile.close();

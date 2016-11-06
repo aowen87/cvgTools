@@ -79,7 +79,7 @@ void DataLine::SetData(string _chrom, int _start, int _stop, int _val)
 * 
 * @param: d -> the input diff value. 
 ***/
-void DataLine::SetDiff(double d) { diff = d; }
+void DataLine::SetBaseDiff(double d) { diff = d; }
 
 
 /***
@@ -89,7 +89,7 @@ void DataLine::SetDiff(double d) { diff = d; }
 *
 * @returns: diff
 ***/
-double DataLine::GetDiff() {return diff; }
+double DataLine::GetBaseDiff() {return diff; }
 
 
 /***
@@ -182,6 +182,7 @@ Data::Data(Data const &copy)
     valAverage = copy.valAverage;
     data       = new DataLine[dataSize];
     std::copy(&copy.data[0], &copy.data[dataSize], data);
+    diffSet = false;
 }
 
 
@@ -354,7 +355,7 @@ DataLine *Data::GetLines() { return data; }
 *
 * @returns: diffSet
 ***/
-bool Data::IsDiffSet() { return diffSet; }
+bool Data::IsBaseDiffSet() { return diffSet; }
 
 
 /***
@@ -365,7 +366,7 @@ bool Data::IsDiffSet() { return diffSet; }
 * @param: set -> true if diff has been set. 
 *             False otherwise. 
 ***/
-void Data::DiffSet(bool set) { diffSet = set; }
+void Data::BaseDiffSet(bool set) { diffSet = set; }
 
 /***
 * @author: Alister Maguire
@@ -459,6 +460,26 @@ void Window::SetTitle(string _title) { title = _title; }
 /***
 * @author: Alister Maguire
 *
+* Set the value of diff to d.
+*
+* @param: d -> a diff value.
+***/
+void Window::SetWindowDiff(double d) { diff = d; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the diff value.
+*
+* @returns: diff -> diff value. 
+***/
+double Window::GetDiff() { return diff; }
+
+
+/***
+* @author: Alister Maguire
+*
 * Get the window title. 
 * 
 * @returns: title -> The window title. 
@@ -496,6 +517,7 @@ WindowBlock::WindowBlock()
 {
     windows    = NULL;
     numWindows = 0;
+    diffSet    = false;
 }
 
 
@@ -512,6 +534,7 @@ WindowBlock::WindowBlock(WindowBlock const &copy)
     numWindows = copy.numWindows;
     windows = new Window[numWindows];
     std::copy(&copy.windows[0], &copy.windows[numWindows], windows);//TODO: make my own copy?
+    diffSet = false;
 }
 
 
@@ -585,6 +608,29 @@ void WindowBlock::SetWindows(unsigned long int winCount, Window *_windows)
 *             windows to be contained within windows. 
 ***/
 void WindowBlock::SetNumWindows(unsigned long int winCount) { numWindows = winCount; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set diffSet to reflect whether or not the diff value
+* has been set.
+*
+* @param: set -> bool: true if set, false otherwise. 
+***/
+void WindowBlock::WindowDiffSet(bool set) { diffSet = set; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the value of diffSet.
+*
+* @returns: diffSet -> bool determining 
+*            whether or not window diff has been
+*            set. 
+***/
+bool WindowBlock::IsWindowDiffSet() { return diffSet; }
 
 
 /***

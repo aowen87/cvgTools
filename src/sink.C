@@ -53,7 +53,7 @@ void Sink::SetSinkTranscriptData(TranscriptData *tData)
 * @param: d2 -> a Data object to act as a baseline to 
 *           compare to. 
 ***/
-void Sink::Diff(Data *d2)
+void Sink::BaseDiff(Data *d2)
 {
     unsigned long int size = snkData->GetDataSize(); 
     if (size != d2->GetDataSize())
@@ -81,9 +81,48 @@ void Sink::Diff(Data *d2)
         d1Line = d1Lines[i]; 
         d2Line = d2Lines[i];
         diff   = d1Line.GetVal() - d2Line.GetVal();
-        d1Lines[i].SetDiff(diff);
+        d1Lines[i].SetBaseDiff(diff);
         diff = 0.0;
     }
-    snkData->DiffSet(true);
+    snkData->BaseDiffSet(true);
 }
 
+
+/***
+* @author: Alister Maguire
+*
+*
+***/
+void Sink::WindowDiff(WindowBlock *w2)
+{
+    unsigned long int size = snkWindowBlock->GetNumWindows(); 
+    if (size != w2->GetNumWindows())
+    {
+        cerr << "ERROR: cannot diff datasets of different size!" << endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    double diff; //d1 - d2
+    Window *d1Windows;
+    Window *d2Windows;
+    Window  d1Window;
+    Window  d2Window;
+    d1Windows = snkWindowBlock->GetWindows();
+    d2Windows = w2->GetWindows();
+    
+    if (d1Windows == NULL || d2Windows == NULL)
+    {
+        cerr << "ERROR: trying to diff NULL windows!" << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < size; ++i)
+    {
+        d1Window = d1Windows[i]; 
+        d2Window = d2Windows[i];
+        diff     = d1Window.GetValAvg() - d2Window.GetValAvg();
+        d1Windows[i].SetWindowDiff(diff);
+        diff = 0.0;
+    }
+    snkWindowBlock->WindowDiffSet(true);
+}
