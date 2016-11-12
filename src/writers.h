@@ -15,7 +15,7 @@
 class WigWriter : public Writer
 {
   public:
-    void Write(char *filename);
+    void Write(const char *filename);
 };
 
 
@@ -28,7 +28,7 @@ class WigWriter : public Writer
 class WindowAvgWriter : public Writer
 {
   public:
-    void Write(char *filename);
+    void Write(const char *filename);
 };
 
 
@@ -40,7 +40,7 @@ class WindowAvgWriter : public Writer
 class WindowWigWriter : public Writer
 {
   public:
-    void Write(char *filename);
+    void Write(const char *filename);
 };
 
 #endif

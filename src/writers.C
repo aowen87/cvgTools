@@ -23,7 +23,7 @@ using std::ofstream;
 *         written to. 
 *
 ***/
-void WigWriter::Write(char *filename)
+void WigWriter::Write(const char *filename)
 {
     ofstream outfile (filename);
     if (outfile.is_open())
@@ -86,7 +86,7 @@ void WigWriter::Write(char *filename)
 *         to. 
 *
 ***/
-void WindowAvgWriter::Write(char *filename)
+void WindowAvgWriter::Write(const char *filename)
 {
     ofstream outfile (filename);
     if (outfile.is_open())
@@ -139,7 +139,7 @@ void WindowAvgWriter::Write(char *filename)
 ***/
 //FIXME: need to remove overlaps from genic windows
 //       may also need to show all zero values (not sure yet)
-void WindowWigWriter::Write(char *filename)
+void WindowWigWriter::Write(const char *filename)
 {
     ofstream outfile (filename);
     if (outfile.is_open())
