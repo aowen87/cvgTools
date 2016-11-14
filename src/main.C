@@ -70,10 +70,9 @@ int main(int argc, char *argv[])
 
             else if (command == "GenicWindows")
             { 
-                //TODO: needs more rigorous testing 
                 WindowWigWriter writer;
                 reader.SetGenicWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); //FIXME: need to remove overlaps
+                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
                 writer.Write(argv[4]); 
             }
    
