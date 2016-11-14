@@ -1,8 +1,14 @@
 
 Foremost:
+    * Finish integrating boost into arg parsing.
     * Create a heap implemented priority queue to sort the data. 
     * Once the data can be sorted, make sure that input data is sorted. 
       If it isn't, sort the data. 
+
+Soon:
+    * Work on diff operations.
+    * Define windows by baseline differences.
+    * Integrate normalization into cvgTools.
 
 Error handling:
     if at any point it is discovered that the file being read is not 
@@ -10,16 +16,9 @@ Error handling:
     Also, if the file being read is not of the type specified, an error
     should be raised. 
 
-Reading files:
-    bed file input need more testing.
-
-Normalize data:
-    Wait to hear back from Vince. 
-
 tools:
     -coverage computation. 
     -find correlations between data sets. 
-    -merge gene sections (DO NEXT)
     -more advanced window options
         *offsets
         *target specific areas of genes
