@@ -2,6 +2,10 @@
 * @author: Alister Maguire
 * @version: 1.0 8/28/16
 *****************************************************/
+#include <sstream>
+#include <iomanip>
+#include <string>
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,16 +89,28 @@ int main(int argc, char *argv[])
         int in_size = input.size();                                           
         if (in_type == "c")
         {
-            bedCovReaders.reserve(in_size); //TODO: if command doesn't need 
-                                           //       transcripts, just ignore them. 
+            bedCovReaders.reserve(in_size);  
+            //TODO: if command doesn't need 
+           //       transcripts, just ignore them.
 
             if (transcriptsFile != "\0")
             {
-                for (int i = 0; i < in_size; ++i)    
+                /*
+                const char *file = input[0].c_str();
+                bedCovPerBaseReader reader(file, transcriptsFile);
+                bedCovReaders[0] = reader;
+                bedCovReaders[0].Execute();
+                */
+                //TODO: create a means for one source to 
+                //      get its transcript data from another
+                //      source that has already loaded it into
+                //      memory. 
+                for (int i = 1; i < in_size; ++i)    
                 {
                     const char *file = input[i].c_str();
                     bedCovPerBaseReader reader(file, transcriptsFile);
                     bedCovReaders[i] = reader;
+                    bedCovReaders[i].Execute();
                 }
             }
 
@@ -105,20 +121,139 @@ int main(int argc, char *argv[])
                     const char *file = input[i].c_str();
                     bedCovPerBaseReader reader(file);
                     bedCovReaders[i] = reader;
+                    bedCovReaders[i].Execute();
                 }
             }
 
             if (command == "toWig")
             {
-                for (int i = 0; i < in_size; +i)
+                for (int i = 0; i < in_size; ++i)
                 {
                     WigWriter writer;
                     writer.SetSinkData(bedCovReaders[i].GetData());
-                    string out_f_str = FileName(input[i]) +/*i to string*/ + ".wig";
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".wig";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
                 }            
             }
+
+            else if (command == "NautralWinAvg")
+            {
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WindowAvgWriter writer;
+                    bedCovReaders[i].SetNaturalWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i].GetWindowBlock());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".txt";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }
+            }
+
+            else if (command == "GeneAvg")
+            {
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WindowAvgWriter writer;
+                    bedCovReaders[i].SetGenicWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i].GetWindowBlock());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".txt";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }
+            }
+
+            else if (command == "GenicWindows")
+            {
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WindowWigWriter writer;
+                    bedCovReaders[i].SetGenicWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i].GetWindowBlock());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".txt";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }
+            }
+
+            else if (command == "WindowDiff")
+            {
+                if (in_size > 2)
+                {
+                    cerr << "ERROR: WindowDiff currently only supports 2 " 
+                         << "files at a time.\n" << endl;
+                    cerr << "The first two will be compared, but the remaining "
+                         << "will be ignored.\n" << endl;
+                }
+                
+                WindowAvgWriter writer;
+                bedCovReaders[0].SetGenicWindows();
+                bedCovReaders[1].SetGenicWindows();
+                writer.SetSinkWindowBlock(bedCovReaders[0].GetWindowBlock());
+                writer.WindowDiff(bedCovReaders[1].GetWindowBlock());
+              
+                string out_f_str = FileName(input[0]) + "_WindowDiff.txt";
+                const char *out_f_pt = out_f_str.c_str();
+                writer.Write(out_f_pt);
+            }
+
+            else if (command == "BaseDiff")
+            {
+                //FIXME: testing 
+                if (in_size > 2)
+                {
+                    cerr << "ERROR: BaseDiff currently only supports 2 " 
+                         << "files at a time.\n" << endl;
+                    cerr << "The first two will be compared, but the remaining "
+                         << "will be ignored.\n" << endl;
+                }
+
+                WigWriter writer;
+                writer.SetSinkData(bedCovReaders[0].GetData());
+                writer.BaseDiff(bedCovReaders[1].GetData());
+               
+                string out_f_str = FileName(input[0]) + "_BaseDiff.wig";
+                const char *out_f_pt = out_f_str.c_str();
+                writer.Write(out_f_pt);
+            }
+        }
+
+        else if (in_type == "b")
+        {
+
+            if (command == "toWig")
+            {
+                for (int i = 0; i < in_size; ++i)
+                {
+                    const char *file = input[i].c_str();
+                    bedCovPerBaseReader reader(file);
+                    bedCovReaders[i] = reader;
+                    bedCovReaders[i].Execute();
+                    WigWriter writer;
+                    writer.SetSinkData(bedCovReaders[i].GetData());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".wig";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }            
+            }
+ 
+            else 
+            {
+                cerr << "ERROR: the only currently supported command for " 
+                     << "bed files input it toWig\n" << endl;
+                return 1;
+            }
+
         }
     }
 
