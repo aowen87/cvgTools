@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
     vector<string> input;
     vector<string> options;
-    vector<bedCovPerBaseReader> bedCovReaders;
+    string out_path;
     string transcriptsFile;
     string command;
     string in_type;
@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
             ("help", "dislpaly usage")
             ("input_type", po::value<string>(&in_type)->required(), "input file type")
             ("input", po::value<vector<string> >(&input)->required(), "input files")
+            ("out_path", po::value<string>(&out_path), "optional path for output files")
             ("command", po::value<string>(&command)->required(), "command to be run")
             ("transcripts", po::value<string>(&transcriptsFile), "transcripts file")
             ("options", po::value<vector<string> >(&options), "additional options");
@@ -86,28 +87,22 @@ int main(int argc, char *argv[])
         int in_size = input.size();                                           
         if (in_type == "c")
         {
-            bedCovReaders.reserve(in_size);  
+            bedCovPerBaseReader **bedCovReaders = new bedCovPerBaseReader*[in_size];
             //TODO: if command doesn't need 
            //       transcripts, just ignore them.
 
-            if (transcriptsFile != "\0")
+            if (!transcriptsFile.empty())
             {
-                /*
-                const char *file = input[0].c_str();
-                bedCovPerBaseReader reader(file, transcriptsFile);
-                bedCovReaders[0] = reader;
-                bedCovReaders[0].Execute();
-                */
                 //TODO: create a means for one source to 
                 //      get its transcript data from another
                 //      source that has already loaded it into
                 //      memory. 
-                for (int i = 1; i < in_size; ++i)    
+                for (int i = 0; i < in_size; ++i)    
                 {
                     const char *file = input[i].c_str();
-                    bedCovPerBaseReader reader(file, transcriptsFile);
+                    bedCovPerBaseReader *reader = new bedCovPerBaseReader(file, transcriptsFile); 
+                    reader->Execute();
                     bedCovReaders[i] = reader;
-                    bedCovReaders[i].Execute();
                 }
             }
 
@@ -116,9 +111,9 @@ int main(int argc, char *argv[])
                 for (int i = 0; i < in_size; ++i)    
                 {
                     const char *file = input[i].c_str();
-                    bedCovPerBaseReader reader(file);
+                    bedCovPerBaseReader *reader = new bedCovPerBaseReader(file); 
+                    reader->Execute(); 
                     bedCovReaders[i] = reader;
-                    bedCovReaders[i].Execute();
                 }
             }
 
@@ -127,10 +122,10 @@ int main(int argc, char *argv[])
                 for (int i = 0; i < in_size; ++i)
                 {
                     WigWriter writer;
-                    writer.SetSinkData(bedCovReaders[i].GetData());
+                    writer.SetSinkData(bedCovReaders[i]->GetData());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
-                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".wig";
+                    string out_f_str = out_path + FileName(input[i]) + "_" + s_i  + ".wig";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
                 }            
@@ -141,11 +136,11 @@ int main(int argc, char *argv[])
                 for (int i = 0; i < in_size; ++i)
                 {
                     WindowAvgWriter writer;
-                    bedCovReaders[i].SetNaturalWindows();
-                    writer.SetSinkWindowBlock(bedCovReaders[i].GetWindowBlock());
+                    bedCovReaders[i]->SetNaturalWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
-                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".txt";
+                    string out_f_str = out_path + FileName(input[i]) + "_" + s_i  + ".txt";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
                 }
@@ -156,11 +151,11 @@ int main(int argc, char *argv[])
                 for (int i = 0; i < in_size; ++i)
                 {
                     WindowAvgWriter writer;
-                    bedCovReaders[i].SetGenicWindows();
-                    writer.SetSinkWindowBlock(bedCovReaders[i].GetWindowBlock());
+                    bedCovReaders[i]->SetGenicWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
-                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".txt";
+                    string out_f_str = out_path + FileName(input[i]) + "_GA_" + s_i  + ".txt";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
                 }
@@ -171,11 +166,11 @@ int main(int argc, char *argv[])
                 for (int i = 0; i < in_size; ++i)
                 {
                     WindowWigWriter writer;
-                    bedCovReaders[i].SetGenicWindows();
-                    writer.SetSinkWindowBlock(bedCovReaders[i].GetWindowBlock());
+                    bedCovReaders[i]->SetGenicWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
-                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".txt";
+                    string out_f_str = out_path + FileName(input[i]) + "_GW_" + s_i  + ".wig";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
                 }
@@ -192,12 +187,12 @@ int main(int argc, char *argv[])
                 }
                 
                 WindowAvgWriter writer;
-                bedCovReaders[0].SetGenicWindows();
-                bedCovReaders[1].SetGenicWindows();
-                writer.SetSinkWindowBlock(bedCovReaders[0].GetWindowBlock());
-                writer.WindowDiff(bedCovReaders[1].GetWindowBlock());
+                bedCovReaders[0]->SetGenicWindows();
+                bedCovReaders[1]->SetGenicWindows();
+                writer.SetSinkWindowBlock(bedCovReaders[0]->GetWindowBlock());
+                writer.WindowDiff(bedCovReaders[1]->GetWindowBlock());
               
-                string out_f_str = FileName(input[0]) + "_WindowDiff.txt";
+                string out_f_str = out_path + FileName(input[0]) + "_WindowDiff.txt";
                 const char *out_f_pt = out_f_str.c_str();
                 writer.Write(out_f_pt);
             }
@@ -214,31 +209,34 @@ int main(int argc, char *argv[])
                 }
 
                 WigWriter writer;
-                writer.SetSinkData(bedCovReaders[0].GetData());
-                writer.BaseDiff(bedCovReaders[1].GetData());
+                writer.SetSinkData(bedCovReaders[0]->GetData());
+                writer.BaseDiff(bedCovReaders[1]->GetData());
                
-                string out_f_str = FileName(input[0]) + "_BaseDiff.wig";
+                string out_f_str = out_path + FileName(input[0]) + "_BaseDiff.wig";
                 const char *out_f_pt = out_f_str.c_str();
                 writer.Write(out_f_pt);
             }
+            
+            for (int i = 0; i < in_size; ++i)
+                delete bedCovReaders[i];
+            delete [] bedCovReaders;
+
         }
 
         else if (in_type == "b")
         {
-
             if (command == "toWig")
             {
                 for (int i = 0; i < in_size; ++i)
                 {
                     const char *file = input[i].c_str();
-                    bedCovPerBaseReader reader(file);
-                    bedCovReaders[i] = reader;
-                    bedCovReaders[i].Execute();
+                    bedReader reader(file);
+                    reader.Execute();
                     WigWriter writer;
-                    writer.SetSinkData(bedCovReaders[i].GetData());
+                    writer.SetSinkData(reader.GetData());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
-                    string out_f_str = FileName(input[i]) + "_" + s_i  + ".wig";
+                    string out_f_str = out_path + FileName(input[i]) + "_" + s_i  + ".wig";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
                 }            
@@ -275,9 +273,15 @@ static bool IsValidCommand(string command, vector<string> validCommands)
 
 static string FileName(string const &f)
 {
-    string::size_type pos = f.find('.');
-    if (pos != string::npos)
-        return f.substr(0, pos);
-    return f;
+
+    if (f[0] == string::npos)
+        return f;
+
+    std::size_t start = f.find_last_of("/\\");
+    string fname      = f.substr(start + 1); 
+    std::size_t end   = fname.find_last_of('.'); 
+    if (end == string::npos)
+        return fname; 
+    return fname.substr(0, end);
 }
 
