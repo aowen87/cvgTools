@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #TEST 1
-../src/cvgTools toWig -c input/countsFiles/count9 output/cov2wig/out1.wig
+../src/cvgTools --command=ToWig --input_type=c --input=input/countsFiles/count9 --out_path=output/cov2wig/
 
-DIFF=$(diff output/cov2wig/out1.wig correct/cov2wig/out1.wig)
+DIFF=$(diff correct/cov2wig/out1.wig output/cov2wig/count9_0.wig)
 
 if [ "$DIFF" != "" ]
 then
@@ -15,9 +15,9 @@ fi
 
 
 #TEST 2
-../src/cvgTools toWig -b input/bedFiles/gaps output/cov2wig/out2.wig
+../src/cvgTools --command=ToWig --input_type=b --input=input/bedFiles/gaps --out_path=output/cov2wig/
 
-DIFF=$(diff output/cov2wig/out2.wig correct/cov2wig/out2.wig)
+DIFF=$(diff correct/cov2wig/out2.wig output/cov2wig/gaps_0.wig)
 
 if [ "$DIFF" != "" ]
 then
@@ -29,9 +29,9 @@ fi
 
 
 #TEST 3
-../src/cvgTools toWig -b input/bedFiles/gaps2 output/cov2wig/out3.wig
+../src/cvgTools --command=ToWig --input_type=b --input=input/bedFiles/gaps2 --out_path=output/cov2wig/
 
-DIFF=$(diff output/cov2wig/out3.wig correct/cov2wig/out2.wig)
+DIFF=$(diff correct/cov2wig/out2.wig output/cov2wig/gaps2_0.wig)
 
 if [ "$DIFF" != "" ]
 then
@@ -43,9 +43,9 @@ fi
 
 
 #TEST 4
-../src/cvgTools GeneAvg -c input/countsFiles/geneCount2 output/geneAvg/geneOut -t input/transcripts/small.bed 
+../src/cvgTools --command=GeneAvg --input_type=c --input=input/countsFiles/geneCount2 --out_path=output/geneAvg/ --transcripts=input/transcripts/small.bed 
 
-DIFF=$(diff output/geneAvg/geneOut correct/geneAvg/geneOut)
+DIFF=$(diff correct/geneAvg/geneOut output/geneAvg/geneCount2_GA_0.txt)
 
 if [ "$DIFF" != "" ]
 then
@@ -57,9 +57,9 @@ fi
 
 
 #TEST5
-../src/cvgTools GenicWindows -c input/countsFiles/geneCount2 output/geneWig/genic2.wig -t input/transcripts/small.bed
+../src/cvgTools --command=GenicWindows --input_type=c --input=input/countsFiles/geneCount2 --out_path=output/geneWig/ --transcripts=input/transcripts/small.bed
 
-DIFF=$(diff output/geneWig/genic2.wig correct/geneWig/genic2.wig)
+DIFF=$(diff correct/geneWig/genic2.wig output/geneWig/geneCount2_GW_0.wig)
 
 if [ "$DIFF" != "" ]
 then 
@@ -71,9 +71,9 @@ fi
 
 
 #TEST6
-../src/cvgTools GeneAvg -c input/countsFiles/geneCount2 output/geneAvg/overlap -t input/transcripts/overlap.bed
+../src/cvgTools --command=GeneAvg --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/geneAvg/ --transcripts=input/transcripts/overlap.bed
 
-DIFF=$(diff output/geneAvg/overlap correct/geneAvg/overlap)
+DIFF=$(diff correct/geneAvg/overlap output/geneAvg/geneCount2_O_GA_0.txt)
 
 if [ "$DIFF" != "" ]
 then 
@@ -85,9 +85,9 @@ fi
 
 
 #TEST7
-../src/cvgTools GenicWindows -c input/countsFiles/geneCount2 output/geneWig/overlap.wig -t input/transcripts/overlap.bed
+../src/cvgTools --command=GenicWindows --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/geneWig/ --transcripts=input/transcripts/overlap.bed
 
-DIFF=$(diff output/geneWig/overlap.wig correct/geneWig/overlap.wig)
+DIFF=$(diff correct/geneWig/overlap.wig output/geneWig/geneCount2_O_GW_0.wig)
 
 if [ "$DIFF" != "" ]
 then 

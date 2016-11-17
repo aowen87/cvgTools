@@ -1,0 +1,24 @@
+#!/bin/bash
+printf "Checking for memory leaks...\n\n"
+printf "\nTEST 1\n\n"
+valgrind ../src/cvgTools --command=ToWig --input_type=c --input=input/countsFiles/count9 --out_path=output/cov2wig/
+
+printf "\nTEST 2\n\n"
+valgrind ../src/cvgTools --command=ToWig --input_type=b --input=input/bedFiles/gaps --out_path=output/cov2wig/
+
+printf "\nTEST 3\n\n"
+valgrind ../src/cvgTools --command=ToWig --input_type=b --input=input/bedFiles/gaps2 --out_path=output/cov2wig/
+
+printf "\nTEST 4\n\n"
+valgrind ../src/cvgTools --command=GeneAvg --input_type=c --input=input/countsFiles/geneCount2 --out_path=output/geneAvg/ --transcripts=input/transcripts/small.bed 
+
+printf "\nTEST 5\n\n"
+valgrind ../src/cvgTools --command=GenicWindows --input_type=c --input=input/countsFiles/geneCount2 --out_path=output/geneWig/ --transcripts=input/transcripts/small.bed
+
+printf "\nTEST 6\n\n"
+valgrind ../src/cvgTools --command=GeneAvg --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/geneAvg/ --transcripts=input/transcripts/overlap.bed
+
+printf "\nTEST 7\n\n"
+valgrind ../src/cvgTools --command=GenicWindows --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/geneWig/ --transcripts=input/transcripts/overlap.bed
+
+printf "MEMORY CHECKING COMPLETE\n"

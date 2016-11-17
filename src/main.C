@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-            if (command == "toWig")
+            if (command == "ToWig")
             {
                 for (int i = 0; i < in_size; ++i)
                 {
@@ -225,7 +225,7 @@ int main(int argc, char *argv[])
 
         else if (in_type == "b")
         {
-            if (command == "toWig")
+            if (command == "ToWig")
             {
                 for (int i = 0; i < in_size; ++i)
                 {
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
             else 
             {
                 cerr << "ERROR: the only currently supported command for " 
-                     << "bed files input it toWig\n" << endl;
+                     << "bed files input it ToWig\n" << endl;
                 return 1;
             }
 
