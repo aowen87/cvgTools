@@ -1,0 +1,12 @@
+variableStep	chrom=chrom1
+0	9	7
+1	22	10
+2	44	-16
+variableStep	chrom=chrom2
+3	19	-4
+4	0	-2
+variableStep	chrom=chrom3
+5	0	0
+6	0	-1
+7	27	0
+8	12	-1

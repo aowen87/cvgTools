@@ -2,7 +2,8 @@
 * @author: Alister Maguire
 * @version: 1.0 8/28/16
 *****************************************************/
-
+#include <sstream>
+#include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
 #include <readers.h>
@@ -13,61 +14,99 @@
 #include <iostream>
 #include <string.h>
 #include <avl.h>
+#include "boost/program_options.hpp"
 using std::string;
 using std::cout;
 using std::endl;
 using std::cerr;
+using std::vector;
+
+static string FileName(string const &f);
+static bool IsValidCommand(string command, vector<string> validCommands);
+static const char *commands [] = {"ToWig", "NaturalWinAvg", "GeneAvg",
+                            "GenicWindows", "BaseDiff", "WindowDiff"};
 
 
-/***
-* The main driver for cvgTools. 
-***/
 int main(int argc, char *argv[])
 {
+    vector<string> input;
+    vector<string> options;
+    string out_path;
+    string transcriptsFile;
+    string command;
+    string in_type;
+    vector<string> validCommands (commands, commands+6);
 
-    if (!argv[1])
+    try 
     {
-        cerr << "Usage: " << argv[0] << " <command> -<input_format> <input_file> " 
-             << "<output_file> -t <transcripts_file> (if applicable)" << endl;
-        exit(EXIT_FAILURE);
-    }
-    string inputFormat = argv[2];
-    string command     = argv[1];
-    string option      = "";
-    if (argv[5])
-         option = argv[5];
-        
+        namespace po = boost::program_options;
+        po::options_description desc("Options");
+        desc.add_options()
+            ("help", "dislpaly usage")
+            ("input_type", po::value<string>(&in_type)->required(), "input file type")
+            ("input", po::value<vector<string> >(&input)->required(), "input files")
+            ("out_path", po::value<string>(&out_path), "optional path for output files")
+            ("command", po::value<string>(&command)->required(), "command to be run")
+            ("transcripts", po::value<string>(&transcriptsFile), "transcripts file")
+            ("options", po::value<vector<string> >(&options), "additional options");
 
-    if (inputFormat == "-c")
-    {
-        if (option == "-t")
+        po::variables_map vm;
+
+        try
         {
-            bedCovPerBaseReader reader(argv[3], argv[6]);
-            reader.Execute();
-        
-            if (command == "toWig")
+            po::store(po::parse_command_line(argc, argv, desc), vm);
+
+            if (vm.count("help"))
             {
-                WigWriter writer;
-                writer.SetSinkData(reader.GetData()); 
-                writer.Write(argv[4]);
-            }
- 
-            else if (command == "NaturalWinAvg")
-            {
-                WindowAvgWriter writer;
-                reader.SetNaturalWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
-            }
-        
-            else if (command == "GeneAvg")
-            {
-                WindowAvgWriter writer;
-                reader.SetGenicWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
+                cerr << "Usage: " << argv[0] << " --command=<command> "
+                     << "--input_type=<type> --input=<file_1> --out=<file_a> "
+                     << "--options=<option_a> --transcripts=<t_file>" << endl;
+                return 0;
             }
 
+            po::notify(vm);
+        }
+
+        catch(po::error &e)
+        {
+            cerr << "ERROR: " << e.what() << endl;
+            cerr << desc << endl;
+            return 1;
+        }
+
+    }
+
+    catch(std::exception &e)
+    {
+        cerr << "UNHANDLED ERROR: " << e.what() << endl;
+        return 1;
+    }
+
+    if (IsValidCommand(command, validCommands))
+    {
+        int in_size = input.size();                                           
+        if (in_type == "c")
+        {
+            bedCovPerBaseReader **bedCovReaders = new bedCovPerBaseReader*[in_size];
+            //TODO: if command doesn't need 
+           //       transcripts, just ignore them.
+
+            if (!transcriptsFile.empty())
+            {
+                //TODO: create a means for one source to 
+                //      get its transcript data from another
+                //      source that has already loaded it into
+                //      memory. 
+                for (int i = 0; i < in_size; ++i)    
+                {
+                    const char *file = input[i].c_str();
+                    bedCovPerBaseReader *reader = new bedCovPerBaseReader(file, transcriptsFile); 
+                    reader->Execute();
+                    bedCovReaders[i] = reader;
+                }
+            }
+
+<<<<<<< HEAD
             else if (command == "GenicWindows")
             { 
                 WindowWigWriter writer;
@@ -76,154 +115,184 @@ int main(int argc, char *argv[])
                 writer.Write(argv[4]); 
             }
    
+=======
+>>>>>>> buildBranch
             else
             {
-                cout << "ERROR: invalid command provided" << endl;
-                exit(EXIT_FAILURE);
+                for (int i = 0; i < in_size; ++i)    
+                {
+                    const char *file = input[i].c_str();
+                    bedCovPerBaseReader *reader = new bedCovPerBaseReader(file); 
+                    reader->Execute(); 
+                    bedCovReaders[i] = reader;
+                }
             }
-        }
-        else 
-        {
-            bedCovPerBaseReader reader(argv[3]);
-            reader.Execute();
-            
-            if (command == "toWig")
+
+            if (command == "ToWig")
             {
-                WigWriter writer;
-                writer.SetSinkData(reader.GetData()); 
-                writer.Write(argv[4]);
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WigWriter writer;
+                    writer.SetSinkData(bedCovReaders[i]->GetData());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = out_path + FileName(input[i]) + "_" + s_i  + ".wig";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }            
             }
- 
-            else if (command == "NaturalWinAvg")
+
+            else if (command == "NautralWinAvg")
             {
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WindowAvgWriter writer;
+                    bedCovReaders[i]->SetNaturalWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = out_path + FileName(input[i]) + "_" + s_i  + ".txt";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }
+            }
+
+            else if (command == "GeneAvg")
+            {
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WindowAvgWriter writer;
+                    bedCovReaders[i]->SetGenicWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = out_path + FileName(input[i]) + "_GA_" + s_i  + ".txt";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }
+            }
+
+            else if (command == "GenicWindows")
+            {
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WindowWigWriter writer;
+                    bedCovReaders[i]->SetGenicWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = out_path + FileName(input[i]) + "_GW_" + s_i  + ".wig";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }
+            }
+
+            else if (command == "WindowDiff")
+            {
+                if (in_size > 2)
+                {
+                    cerr << "ERROR: WindowDiff currently only supports 2 " 
+                         << "files at a time.\n" << endl;
+                    cerr << "The first two will be compared, but the remaining "
+                         << "will be ignored.\n" << endl;
+                }
+                
                 WindowAvgWriter writer;
-                reader.SetNaturalWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
-            }
-        
-            else if (command == "GeneAvg")
-            {
-                cerr << "ERROR: transcripts are needed for this command" << endl;
-                exit(EXIT_FAILURE);
+                bedCovReaders[0]->SetGenicWindows();
+                bedCovReaders[1]->SetGenicWindows();
+                writer.SetSinkWindowBlock(bedCovReaders[0]->GetWindowBlock());
+                writer.WindowDiff(bedCovReaders[1]->GetWindowBlock());
+              
+                string out_f_str = out_path + FileName(input[0]) + "_WindowDiff.txt";
+                const char *out_f_pt = out_f_str.c_str();
+                writer.Write(out_f_pt);
             }
 
-            else if (command == "GenicWindows")
-            { 
-                cerr << "ERROR: transcripts are needed for this command" << endl;
-                exit(EXIT_FAILURE);
-            }
-   
-            else
+            else if (command == "BaseDiff")
             {
-                cout << "ERROR: invalid command provided" << endl;
-                exit(EXIT_FAILURE);
+                //FIXME: testing 
+                if (in_size > 2)
+                {
+                    cerr << "ERROR: BaseDiff currently only supports 2 " 
+                         << "files at a time.\n" << endl;
+                    cerr << "The first two will be compared, but the remaining "
+                         << "will be ignored.\n" << endl;
+                }
+
+                WigWriter writer;
+                writer.SetSinkData(bedCovReaders[0]->GetData());
+                writer.BaseDiff(bedCovReaders[1]->GetData());
+               
+                string out_f_str = out_path + FileName(input[0]) + "_BaseDiff.wig";
+                const char *out_f_pt = out_f_str.c_str();
+                writer.Write(out_f_pt);
             }
-        }
-    }
-    
-    else if (inputFormat == "-b")
-    {
-        if (option == "-t")
-        {
-            bedReader reader(argv[3], argv[6]);
-            reader.Execute();
             
-            if (command == "toWig")
-            {
-                WigWriter writer;
-                writer.SetSinkData(reader.GetData()); 
-                writer.Write(argv[4]);
-            }
- 
-            else if (command == "NaturalWinAvg")
-            {
-                //TODO: Currently unsuported for bed files. 
-                //WindowAvgWriter writer;
-                //reader.SetNaturalWindows();
-                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                //writer.Write(argv[4]); 
-                cerr << "ERROR: the NatualWinAvg command only accepts bed coverage" << 
-                         "counts files at this time" << endl;
-            }
-        
-            else if (command == "GeneAvg")
-            {
-                //TODO: Currently unsuported for bed files. 
-                //WindowAvgWriter writer;
-                //reader.SetGenicWindows();
-                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                //writer.Write(argv[4]); 
-                cerr << "ERROR: the GeneAvg command only accepts bed coverage" << 
-                         "counts files at this time" << endl;
-            }
+            for (int i = 0; i < in_size; ++i)
+                delete bedCovReaders[i];
+            delete [] bedCovReaders;
 
-            else if (command == "GenicWindows")
-            { 
-                //TODO: Currently unsuported for bed files. 
-                //WindowWigWriter writer;
-                //reader.SetGenicWindows();
-                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                //writer.Write(argv[4]); 
-                cerr << "ERROR: the GenicWindows command only accepts bed coverage" << 
-                         "counts files at this time" << endl;
-            }
-   
-            else
-            {
-                cout << "ERROR: invalid command provided" << endl;
-                exit(EXIT_FAILURE);
-            }
         }
 
-        else 
+        else if (in_type == "b")
         {
-            bedReader reader(argv[3]);
-            reader.Execute();
-            if (command == "toWig")
+            if (command == "ToWig")
             {
-                WigWriter writer;
-                writer.SetSinkData(reader.GetData()); 
-                writer.Write(argv[4]);
+                for (int i = 0; i < in_size; ++i)
+                {
+                    const char *file = input[i].c_str();
+                    bedReader reader(file);
+                    reader.Execute();
+                    WigWriter writer;
+                    writer.SetSinkData(reader.GetData());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = out_path + FileName(input[i]) + "_" + s_i  + ".wig";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }            
             }
  
-            else if (command == "NaturalWinAvg")
+            else 
             {
-                //TODO: Currently unsuported for bed files. 
-                //WindowAvgWriter writer;
-                //reader.SetNaturalWindows();
-                //writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                //writer.Write(argv[4]); 
-                cerr << "ERROR: the NatualWinAvg command only accepts bed coverage" << 
-                         "counts files at this time" << endl;
-            }
-        
-            else if (command == "GeneAvg")
-            {
-                cerr << "ERROR: transcripts are needed for this command" << endl;
-                exit(EXIT_FAILURE);
+                cerr << "ERROR: the only currently supported command for " 
+                     << "bed files input it ToWig\n" << endl;
+                return 1;
             }
 
-            else if (command == "GenicWindows")
-            { 
-                cerr << "ERROR: transcripts are needed for this command" << endl;
-                exit(EXIT_FAILURE);
-            }
-   
-            else
-            {
-                cout << "ERROR: invalid command provided" << endl;
-                exit(EXIT_FAILURE);
-            }
         }
     }
- 
+
     else
     {
-        cerr << "ERROR: invalid input file type." << endl;
-        exit(EXIT_FAILURE);
+        cerr << "ERROR: Invalid command entered: " << command << endl;
+        return 1;
     }
 
+    return 0;
 }
 
+
+static bool IsValidCommand(string command, vector<string> validCommands)
+{
+    if (std::find(validCommands.begin(), validCommands.end(), command) 
+        != validCommands.end())
+        return true;
+    return false;  
+}
+
+
+static string FileName(string const &f)
+{
+
+    if (f[0] == string::npos)
+        return f;
+
+    std::size_t start = f.find_last_of("/\\");
+    string fname      = f.substr(start + 1); 
+    std::size_t end   = fname.find_last_of('.'); 
+    if (end == string::npos)
+        return fname; 
+    return fname.substr(0, end);
+}
 

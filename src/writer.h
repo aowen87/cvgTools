@@ -16,7 +16,7 @@
 class Writer : public Sink
 {
   public:
-    virtual void Write(char *filename) = 0;
+    virtual void Write(const char *filename) = 0;
 };
 
 #endif

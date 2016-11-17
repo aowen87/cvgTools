@@ -5,6 +5,7 @@
 #include <writers.h>
 #include <stdio.h>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <stdlib.h>
 using std::cout;
@@ -22,7 +23,7 @@ using std::ofstream;
 *         written to. 
 *
 ***/
-void WigWriter::Write(char *filename)
+void WigWriter::Write(const char *filename)
 {
     ofstream outfile (filename);
     if (outfile.is_open())
@@ -32,6 +33,7 @@ void WigWriter::Write(char *filename)
         int    curStart;
         int    curStop;
         double curVal;
+        bool   diff     = snkData->IsBaseDiffSet();
         int    len      = snkData->GetDataSize();
         DataLine *lines = snkData->GetLines();   
         DataLine curLine;
@@ -47,10 +49,23 @@ void WigWriter::Write(char *filename)
                 prevChrom = curChrom;
                 outfile << "variableStep\t" << "chrom=" << curChrom << "\n";
             }    
-            while ((curStop - curStart) > 0)
+           
+            if (diff)
             {
-                outfile << curStart+1 << "\t" << curVal << "\n";//FIXME: testing
-                curStart++;
+                while ((curStop - curStart) > 0)
+                {
+                    outfile << curStart+1 << "\t" << curVal << "\t" << curLine.GetBaseDiff() << "\n";
+                    curStart++;
+                }
+            }
+ 
+            else
+            {
+                while ((curStop - curStart) > 0)
+                {
+                    outfile << curStart+1 << "\t" << curVal << "\n";
+                    curStart++;
+                }
             }
         }      
         outfile.close();
@@ -71,22 +86,40 @@ void WigWriter::Write(char *filename)
 *         to. 
 *
 ***/
-void WindowAvgWriter::Write(char *filename)
+void WindowAvgWriter::Write(const char *filename)
 {
     ofstream outfile (filename);
     if (outfile.is_open())
     { 
         unsigned long int len = snkWindowBlock->GetNumWindows();
+        bool diff = snkWindowBlock->IsWindowDiffSet();
         Window  curWindow; 
         if (snkWindowBlock->GetWindows() == NULL)
             cerr << "ERROR: cannot write windows -> windows are NULL" << endl;
         else
         {
-            for (int i = 0; i < len; i++)
+  
+            if (diff)
             {
-                curWindow = snkWindowBlock->GetWindow(i);
-                outfile << curWindow.GetTitle() << "\t" << curWindow.GetStart() << "\t" << 
-                           curWindow.GetStop() << "\t" << curWindow.GetValAvg() << "\n";
+                for (int i = 0; i < len; i++)
+                {
+                    curWindow = snkWindowBlock->GetWindow(i);
+                    outfile << std::setprecision(3) << curWindow.GetTitle() << "\t"
+                            << curWindow.GetStart() << "\t" << curWindow.GetStop() 
+                            << "\t" << curWindow.GetValAvg() << "\t" << curWindow.GetDiff() 
+                            << "\n";
+                }
+            }
+
+            else 
+            {
+                for (int i = 0; i < len; i++)
+                {
+                    curWindow = snkWindowBlock->GetWindow(i);
+                    outfile << std::setprecision(3) << curWindow.GetTitle() << "\t"  
+                            << curWindow.GetStart() << "\t" << curWindow.GetStop() 
+                            << "\t" << curWindow.GetValAvg() << "\n";
+                }
             }
         }      
         outfile.close();
@@ -106,7 +139,7 @@ void WindowAvgWriter::Write(char *filename)
 ***/
 //FIXME: need to remove overlaps from genic windows
 //       may also need to show all zero values (not sure yet)
-void WindowWigWriter::Write(char *filename)
+void WindowWigWriter::Write(const char *filename)
 {
     ofstream outfile (filename);
     if (outfile.is_open())

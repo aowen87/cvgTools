@@ -1,5 +1,6 @@
 
 Foremost:
+<<<<<<< HEAD
     * Finish integrating boost into arg parsing.
     * Create a heap implemented priority queue to sort the data. 
     * Once the data can be sorted, make sure that input data is sorted. 
@@ -9,10 +10,18 @@ Soon:
     * Work on diff operations.
     * Define windows by baseline differences.
     * Integrate normalization into cvgTools.
+=======
+    * Implement boost for arg parsing 
+    * Replace avl tree with hash map for compressing genic regions.
+    * Create a max-heap implemented priority queue to sort the data. 
+    * Once the data can be sorted, make sure that input data is sorted. 
+      If it isn't, sort the data. 
+    
+>>>>>>> buildBranch
 
 Error handling:
     if at any point it is discovered that the file being read is not 
-    sorted, than the program should alert the user and exit. 
+    sorted, the program should alert the user and exit. 
     Also, if the file being read is not of the type specified, an error
     should be raised. 
 

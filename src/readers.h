@@ -25,6 +25,7 @@ class bedReader : public Reader
     void   SetScoreIdx();
   
   public:
+         bedReader() {};
          bedReader(const char *dataFileName, string transcriptsFileName="INVALID");
     int  GetScoreIdx();
     void Execute();
@@ -43,6 +44,7 @@ class bedReader : public Reader
 class bedCovPerBaseReader : public Reader
 {
   public:
+         bedCovPerBaseReader() {};
          bedCovPerBaseReader(const char *dataFileName, string transcriptsFileName="INVALID");
     void Execute();        
 };

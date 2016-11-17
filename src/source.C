@@ -235,9 +235,15 @@ void Source::SetGenicWindows()
     TranscriptLine *transcripts = srcTranscriptData.GetLines();
     DataLine *dataLines         = srcData.GetLines();
     if (transcripts == NULL)
+    {
         cerr << "ERROR: transcripts have not been loaded -> cannot compute gene windows" << endl;
+        exit(EXIT_FAILURE);
+    }
     else if (dataLines == NULL)
+    {
         cerr << "ERROR: data has not been loaded -> cannot compute gene windows" << endl;
+        exit(EXIT_FAILURE);
+    }
     else
 {
         
