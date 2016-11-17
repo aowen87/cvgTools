@@ -106,17 +106,6 @@ int main(int argc, char *argv[])
                 }
             }
 
-<<<<<<< HEAD
-            else if (command == "GenicWindows")
-            { 
-                WindowWigWriter writer;
-                reader.SetGenicWindows();
-                writer.SetSinkWindowBlock(reader.GetWindowBlock()); 
-                writer.Write(argv[4]); 
-            }
-   
-=======
->>>>>>> buildBranch
             else
             {
                 for (int i = 0; i < in_size; ++i)    
