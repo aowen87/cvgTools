@@ -1,5 +1,6 @@
 
 Foremost:
+    * Test multiple file in/out
     * Define windows by baseline differences.
     * Integrate normalization into cvgTools.
     * Create a heap implemented priority queue to sort the data. 
