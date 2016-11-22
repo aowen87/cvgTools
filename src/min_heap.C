@@ -115,8 +115,13 @@ void MinHeap::Swap(long idx1, long idx2)
 ***/
 void MinHeap::UpHeapBubble(long idx)
 {
-    
-
+    if (idx == 0)
+        return;
+    else if (dataHeap[Parent(idx)] > dataHeap[idx])
+    {
+        Swap(Parent(idx), idx);
+        UpHeapBubble(Parent(idx)); 
+    }    
 }
 
 
@@ -125,8 +130,60 @@ void MinHeap::UpHeapBubble(long idx)
 ***/
 void MinHeap::DownHeapBubble(long idx)
 {
+    long left  = LeftChild(idx);
+    long right = RightChild(idx);    
     
-
+    if (left < 0 && right < 0)
+        return;
+    else if (left < 0)
+        SingleChildDownHeap(idx, right);
+    else if (right < 0)
+        SingleChildDownHeap(idx, left);
+    else
+        DoubleChildDownHeap(idx, left, right);
 }
+
+
+/***
+*
+***/
+void MinHeap::DoubleChildDownHeap(long parentIdx, 
+                                  long leftIdx, 
+                                  long rightIdx)
+{
+// change this old comparison to work with 
+// TranscriptLine objects.
+/*
+    long left  = dataHeap[leftIdx];
+    long right = dataHeap[rightIdx];
+    
+    if (dataHeap[parentIdx] < left && dataHeap[parentIdx] < right)
+        return;
+
+    else if (right <= left)
+    {
+        Swap(parentIdx, rightIdx);
+        DownHeapBubble(rightIdx);
+    }
+
+    else if (left < right)
+    {
+        Swap(parentIdx, leftIdx);
+        DownHeapBubble(leftIdx);
+    }
+*/
+}
+
+
+/***
+*
+***/
+void MinHeap::SingleChildDownHeap(long parentIdx, 
+                                  long childIdx)
+{
+    if (dataHeap[parentIdx] > dataHeap[childIdx])
+        Swap(parentIdx, childIdx);
+}
+
 
 
