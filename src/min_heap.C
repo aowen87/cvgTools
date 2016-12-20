@@ -1,7 +1,11 @@
 
 #include <min_heap.h>
 #include <helpers.h>
+#include <iostream>
+#include <stdlib.h>
 
+using std::cerr;
+using std::endl;
 
 /***
 *
@@ -28,6 +32,12 @@ MinHeap::~MinHeap()
 ***/
 void MinHeap::Insert(TranscriptLine *line)
 {
+    if ( (heapSize + 1) == MAX_SIZE)
+    {
+        cerr << "ERROR: heap size limit exceeded! Exiting..\n" << endl;
+        exit(EXIT_FAILURE);
+    }
+
     if (heapSize == 0)
     {
         dataHeap[0] = line;
@@ -50,7 +60,7 @@ TranscriptLine *MinHeap::RemoveMin()
 {
     if (heapSize == 0)
         return NULL;
-    
+
     TranscriptLine *min = dataHeap[0];
     dataHeap[0] = NULL;
     heapSize--;
@@ -117,11 +127,46 @@ void MinHeap::UpHeapBubble(long idx)
 {
     if (idx == 0)
         return;
+   
+    TranscriptLine *child   = dataHeap[idx];
+    TranscriptLine *parent = dataHeap[Parent(idx)];
+    double childChromNum   = HPR::ExtractNumFromString(child->GetChrom());
+    double parentChromNum  = HPR::ExtractNumFromString(parent->GetChrom());
+
+    if (parentChromNum == childChromNum)
+    {
+        int childStart   = child->GetStart();
+        int parentStart  = parent->GetStart();
+
+        if (childStart == parentStart)
+        {
+            if (parent->GetStop() > child->GetStop())
+            {
+                Swap(Parent(idx), idx);
+                UpHeapBubble(Parent(idx)); 
+            } 
+        }
+
+        else if (parentStart > childStart)
+        {
+            Swap(Parent(idx), idx);
+            UpHeapBubble(Parent(idx)); 
+        }
+    }
+
+    else if (parentChromNum > childChromNum)
+    {
+        Swap(Parent(idx), idx);
+        UpHeapBubble(Parent(idx)); 
+    }
+
+/*
     else if (dataHeap[Parent(idx)] > dataHeap[idx])
     {
         Swap(Parent(idx), idx);
         UpHeapBubble(Parent(idx)); 
     }    
+*/
 }
 
 
@@ -132,7 +177,7 @@ void MinHeap::DownHeapBubble(long idx)
 {
     long left  = LeftChild(idx);
     long right = RightChild(idx);    
-    
+
     if (left < 0 && right < 0)
         return;
     else if (left < 0)
@@ -153,10 +198,108 @@ void MinHeap::DoubleChildDownHeap(long parentIdx,
 {
 // change this old comparison to work with 
 // TranscriptLine objects.
+    TranscriptLine *left   = dataHeap[leftIdx];
+    TranscriptLine *right  = dataHeap[rightIdx];
+    TranscriptLine *parent = dataHeap[parentIdx];
+    double leftChromNum    = HPR::ExtractNumFromString(left->GetChrom());
+    double rightChromNum   = HPR::ExtractNumFromString(right->GetChrom());
+    double parentChromNum  = HPR::ExtractNumFromString(parent->GetChrom());
+
+    //check if parent is less than both children
+    if ( (parentChromNum < leftChromNum) && 
+         ((parentChromNum < rightChromNum)))
+        return;
+
+    else if ( (parentChromNum == leftChromNum) && 
+              (parentChromNum == rightChromNum))
+    {
+        int rightStart  = right->GetStart();
+        int leftStart   = left->GetStart();
+        int parentStart = parent->GetStart();
+
+        if ( (parent->GetStart() < leftStart) &&
+             (parent->GetStart() < rightStart))
+            return;
+
+        //else if (leftStart == rightStart)
+        else if ( (parentStart == leftStart) &&
+                  (parentStart == rightStart))
+        {
+            int rightStop  = right->GetStop();
+            int leftStop   = left->GetStop();
+            int parentStop = parent->GetStop();
+
+            if ( (parentStop < leftStop) &&
+                 (parentStop < rightStop))
+                return;            
+
+            else if ( (parentStop == leftStop) &&
+                      (parentStop == rightStop))
+            {
+                cerr << "equal input found in MinHeap. This may be an error..." <<
+                        " line: " << __LINE__ << endl;
+                return; 
+            }
+
+            else if (rightStop <= leftStop)
+            {
+                Swap(parentIdx, rightIdx);
+                DownHeapBubble(rightIdx);
+            }
+ 
+            else if (leftStop < rightStop)
+            {
+                Swap(parentIdx, leftIdx);
+                DownHeapBubble(leftIdx);
+            }
+
+            else
+            {
+                cerr << "ERROR: unknown heap condition; line " << 
+                        __LINE__ << endl;
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        else if (rightStart <= leftStart)
+        {
+            Swap(parentIdx, rightIdx);
+            DownHeapBubble(rightIdx);
+        }
+
+        else if (leftStart < rightStart)
+        {
+            Swap(parentIdx, leftIdx);
+            DownHeapBubble(leftIdx);
+        }
+
+        else
+        {
+            cerr << "ERROR: unknown heap condition; line " << 
+                    __LINE__ << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    else if (rightChromNum <= leftChromNum)
+    {
+        Swap(parentIdx, rightIdx);
+        DownHeapBubble(rightIdx);
+    }
+
+    else if (leftChromNum < rightChromNum)
+    {
+        Swap(parentIdx, leftIdx);
+        DownHeapBubble(leftIdx);
+    }
+
+    else
+    {
+        cerr << "ERROR: unknown heap condition; line " << 
+                __LINE__ << endl;
+        exit(EXIT_FAILURE);
+    }
 /*
-    long left  = dataHeap[leftIdx];
-    long right = dataHeap[rightIdx];
-    
     if (dataHeap[parentIdx] < left && dataHeap[parentIdx] < right)
         return;
 
@@ -181,8 +324,30 @@ void MinHeap::DoubleChildDownHeap(long parentIdx,
 void MinHeap::SingleChildDownHeap(long parentIdx, 
                                   long childIdx)
 {
-    if (dataHeap[parentIdx] > dataHeap[childIdx])
+    TranscriptLine *child  = dataHeap[childIdx];
+    TranscriptLine *parent = dataHeap[parentIdx];
+    double childChromNum   = HPR::ExtractNumFromString(child->GetChrom());
+    double parentChromNum  = HPR::ExtractNumFromString(parent->GetChrom());
+
+    if (parentChromNum == childChromNum)
+    {
+        int childStart   = child->GetStart();
+        int parentStart  = parent->GetStart();
+
+        if (childStart == parentStart)
+        {
+            if (parent->GetStop() > child->GetStop())
+                Swap(parentIdx, childIdx);
+        }
+
+        else if (parentStart > childStart)
+            Swap(parentIdx, childIdx);
+    }
+
+    else if (parentChromNum > childChromNum)
         Swap(parentIdx, childIdx);
+    //if (dataHeap[parentIdx] > dataHeap[childIdx])
+    //    Swap(parentIdx, childIdx);
 }
 
 

@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <avl.h>
+#include <min_heap.h>
 using std::cerr;
 using std::endl;
 using std::ifstream;
@@ -110,7 +111,8 @@ void Reader::ReadTranscripts()
     if (inFile.is_open())
     {
         AVLTree geneTree('g');
-        AVLTree posTree('s');
+        //AVLTree posTree('s');
+        MinHeap posHeap;
         unsigned int gCount = 0;
         string rawLine;
         string chrom;
@@ -143,9 +145,12 @@ void Reader::ReadTranscripts()
 
         while (!geneTree.IsEmpty())
         {
-            posTree.Insert(geneTree.RemoveMin());  //TODO: it would probably be faster to use a min heap for the. 
+            posHeap.Insert(geneTree.RemoveMin()); 
+            //posTree.Insert(geneTree.RemoveMin());  //TODO: it would probably be faster to use a min heap for the. 
             gCount++;                              //      second data structure.
         }
+
+/*
         srcTranscriptData.InitData(gCount);
         TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
         TranscriptLine *treeLine;
@@ -153,10 +158,26 @@ void Reader::ReadTranscripts()
         while (!posTree.IsEmpty())
         {
             treeLine = posTree.RemoveMin();
+            //std::cout << treeLine->GetStart() << endl;//FIXME
             TranscriptLines[tCount] = *treeLine;
             delete treeLine;
             tCount++;
         }
+*/
+
+
+        srcTranscriptData.InitData(gCount);
+        TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
+        TranscriptLine *heapLine;
+        int hCount = 0;
+        while (!posHeap.IsEmpty())
+        {
+            heapLine = posHeap.RemoveMin();
+            TranscriptLines[hCount] = *heapLine;
+            delete heapLine;
+            hCount++;
+        }
+
 
         srcTranscriptData.SetGeneCount(gCount);
     }

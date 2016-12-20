@@ -118,8 +118,6 @@ void Node::SetLeftChild(Node *l)
 ***/
 void Node::SetRightChild(Node *r)
 {
-    //if (right != NULL)
-    //    delete right;
     right = r;
 }
 

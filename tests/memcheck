@@ -21,4 +21,7 @@ valgrind ../src/cvgTools --command=GeneAvg --input_type=c --input=input/countsFi
 printf "\nTEST 7\n\n"
 valgrind ../src/cvgTools --command=GenicWindows --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/geneWig/ --transcripts=input/transcripts/overlap.bed
 
+printf "\nTEST 8\n\n"
+valgrind ../src/cvgTools --command=GenicWindows --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/geneWig/ --transcripts=input/transcripts/many_overlap.bed
+
 printf "MEMORY CHECKING COMPLETE\n"

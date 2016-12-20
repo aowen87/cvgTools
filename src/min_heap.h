@@ -2,8 +2,8 @@
 *    @author: Alister Maguire
 *    @version: 1.0 8/28/16
 *****************************************************/
-#ifndef AVL_H
-#define AVL_H
+#ifndef MIN_HEAP_H
+#define MIN_HEAP_H
 #include <string>
 #include <data.h>
 using std::string;

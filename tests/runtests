@@ -97,4 +97,17 @@ else
     printf "test 7 passed\n"
 fi
 
+#TEST8
+../src/cvgTools --command=GenicWindows --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/geneWig/ --transcripts=input/transcripts/many_overlap.bed
+
+DIFF=$(diff correct/geneWig/many_overlap.wig output/geneWig/geneCount2_O_GW_0.wig)
+
+if [ "$DIFF" != "" ]
+then 
+    printf "\nTEST 8 FAILED: \n"
+    printf "$DIFF\n\n"
+else
+    printf "test 8 passed\n"
+fi
+
 printf "TESTS END\n"
