@@ -148,6 +148,10 @@ class WindowBlock
 ***/
 class TranscriptLine
 {
+
+  //TODO: change all of these private members to 
+  //protected (except for thickEnd). This way 
+  //they can be inherited by a new Gene class. 
   private:
     string chrom;
     string geneId;
