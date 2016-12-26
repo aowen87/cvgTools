@@ -13,6 +13,9 @@ using std::endl;
 
 
 /***
+* @author: Alister Maguire
+*
+* Node constuctor.
 *
 ***/
 Node::Node()
@@ -26,6 +29,11 @@ Node::Node()
 
 /***
 *
+* @author: Alister Maguire
+*
+* Parameterized constructor. 
+*
+* @param: d -> a TranscriptLine pointer. 
 ***/
 Node::Node(TranscriptLine *d)
 {

@@ -84,6 +84,10 @@ int main(int argc, char *argv[])
 
     if (IsValidCommand(command, validCommands))
     {
+
+        if (*out_path.rbegin() != '/')
+            out_path = out_path + "/";
+        
         int in_size = input.size();                                           
         if (in_type == "c")
         {

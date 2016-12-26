@@ -11,7 +11,6 @@
 #include <iostream>
 #include <fstream>
 #include <avl.h>
-#include <min_heap.h>
 using std::cerr;
 using std::endl;
 using std::ifstream;
@@ -103,16 +102,13 @@ void Reader::SetSrcTranscriptDataSize()
 *
 * IMPORTANT: All input files must be sorted beforehand. 
 ***/
-//TODO: make capable of reading different sections of the transcript (other than 
-//      genic regions)
 void Reader::ReadTranscripts()
 {
     ifstream inFile (tfname);
     if (inFile.is_open())
     {
         AVLTree geneTree('g');
-        //AVLTree posTree('s');
-        MinHeap posHeap;
+        AVLTree posTree('s');
         unsigned int gCount = 0;
         string rawLine;
         string chrom;
@@ -137,6 +133,9 @@ void Reader::ReadTranscripts()
             geneId.erase(geneId.length()-2, 2);
             transcriptId.erase(0, 1);
             transcriptId.erase(transcriptId.length()-2, 2);
+            //TODO: this data is lost in the tree (expansion overwrites data).
+            //      let's either not enter the data in the first place or use
+            //      a different method that doesn't involve data loss. 
             TranscriptLine *line = new TranscriptLine(chrom, geneId, transcriptId, 
                                        name, thickStart, thickEnd, rgb, start, stop, strand);
             geneTree.Insert(line);
@@ -145,12 +144,11 @@ void Reader::ReadTranscripts()
 
         while (!geneTree.IsEmpty())
         {
-            posHeap.Insert(geneTree.RemoveMin()); 
-            //posTree.Insert(geneTree.RemoveMin());  //TODO: it would probably be faster to use a min heap for the. 
+            posTree.Insert(geneTree.RemoveMin());  //TODO: it would probably be faster to use a min heap for the. 
             gCount++;                              //      second data structure.
         }
 
-/*
+
         srcTranscriptData.InitData(gCount);
         TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
         TranscriptLine *treeLine;
@@ -158,26 +156,10 @@ void Reader::ReadTranscripts()
         while (!posTree.IsEmpty())
         {
             treeLine = posTree.RemoveMin();
-            //std::cout << treeLine->GetStart() << endl;//FIXME
             TranscriptLines[tCount] = *treeLine;
             delete treeLine;
             tCount++;
         }
-*/
-
-
-        srcTranscriptData.InitData(gCount);
-        TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
-        TranscriptLine *heapLine;
-        int hCount = 0;
-        while (!posHeap.IsEmpty())
-        {
-            heapLine = posHeap.RemoveMin();
-            TranscriptLines[hCount] = *heapLine;
-            delete heapLine;
-            hCount++;
-        }
-
 
         srcTranscriptData.SetGeneCount(gCount);
     }

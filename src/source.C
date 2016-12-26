@@ -245,7 +245,7 @@ void Source::SetGenicWindows()
         exit(EXIT_FAILURE);
     }
     else
-{
+    {
         
         unsigned long int dataSize = srcData.GetDataSize();
         unsigned long int tranSize = srcTranscriptData.GetDataSize();

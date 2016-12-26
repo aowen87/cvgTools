@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #TEST 1
-../src/cvgTools --command=ToWig --input_type=c --input=input/countsFiles/count9 --out_path=output/cov2wig/
+../src/cvgTools --command=ToWig --input_type=c --input=input/countsFiles/count9 --out_path=output/cov2wig
 
 DIFF=$(diff correct/cov2wig/out1.wig output/cov2wig/count9_0.wig)
 
@@ -15,7 +15,7 @@ fi
 
 
 #TEST 2
-../src/cvgTools --command=ToWig --input_type=b --input=input/bedFiles/gaps --out_path=output/cov2wig/
+../src/cvgTools --command=ToWig --input_type=b --input=input/bedFiles/gaps --out_path=output/cov2wig
 
 DIFF=$(diff correct/cov2wig/out2.wig output/cov2wig/gaps_0.wig)
 
