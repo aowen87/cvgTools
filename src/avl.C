@@ -394,6 +394,7 @@ Node *AVLTree::DeleteNode(Node *n)
     n->SetRightChild(DeletionSearch(n->GetRightChild(), origin));
     SetHeight(n->GetRightChild());
     SetHeight(n);     
+    return NULL;
 }
 
 

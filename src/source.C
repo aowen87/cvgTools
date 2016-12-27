@@ -142,7 +142,7 @@ void Source::SetNaturalWindows()
         string curChrom;
         int prevStop;
        
-        for (int j = 0; j < size; j++)//create data excluding all 0 values
+        for (unsigned int j = 0; j < size; j++)//create data excluding all 0 values
         {
             DataLine line = lines[j];
             if (line.GetVal() != 0.0)
@@ -260,22 +260,17 @@ void Source::SetGenicWindows()
         TranscriptLine curTranscript;
         TranscriptLine nxtTranscript;
         string geneChrom;
-        string geneName;
-        string nextName;
         double chromNum;
         unsigned int geneStart;
         unsigned int geneStop;
         unsigned int prevGeneStop = 0;
         unsigned int prevGeneStart;
-        unsigned int prevLineStart;
-        for (int i = 0; i < tranSize; i++)
+        for (unsigned int i = 0; i < tranSize; i++)
         {
             curTranscript = transcripts[i];
             geneChrom = curTranscript.GetChrom();
-            geneName  = curTranscript.GetName();
             geneStart = curTranscript.GetStart();
             geneStop  = curTranscript.GetStop();
-            nextName  = geneName;
             prevDataIdx = dataIdx;
 
             //Note: because the chromosome names contain a string of letters followed
@@ -323,8 +318,7 @@ void Source::SetGenicWindows()
             {
                 DataLine *windowLines = new DataLine[span];
                 DataLine curLine;
-                prevLineStart = dataIdx; 
-                for (int j = dataIdx; j < (dataIdx+span); j++)
+                for (unsigned int j = dataIdx; j < (dataIdx+span); j++)
                 {
                     curLine          = dataLines[j];
                     curValTotal     += curLine.GetVal();

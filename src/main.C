@@ -278,7 +278,7 @@ static bool IsValidCommand(string command, vector<string> validCommands)
 static string FileName(string const &f)
 {
 
-    if (f[0] == string::npos)
+    if ((unsigned)f[0] == (unsigned)string::npos)
         return f;
 
     std::size_t start = f.find_last_of("/\\");

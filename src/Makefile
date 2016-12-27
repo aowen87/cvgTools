@@ -5,7 +5,7 @@ prog: $(OBJ)
 	g++ $(OBJ) -g -o cvgTools -lboost_program_options 
 
 .C.o: $<
-	g++ -g -I. -c $< 
+	g++ -g -I. -c -Wall $< 
 
 clean:
 	rm *.o cvgTools

@@ -20,7 +20,8 @@ using std::swap;
 *         _stop  -> the chromosome stop position. 
 *         _val   -> the value associated with this chromosome. 
 ***/
-DataLine::DataLine(string _chrom, int _start, int _stop, int _val)
+DataLine::DataLine(string _chrom, unsigned int _start, 
+                   unsigned int _stop, int _val)
 {
     chrom = _chrom;
     start = _start;
@@ -37,8 +38,8 @@ DataLine::DataLine(string _chrom, int _start, int _stop, int _val)
 DataLine::DataLine()
 {
     chrom = "";
-    start = -1;
-    stop  = -1;
+    start = 0;
+    stop  = 0;
     val   = -1;
 }
 
@@ -63,7 +64,8 @@ DataLine::~DataLine()
 *         _stop  -> the chromosome stop position. 
 *         _val   -> the value associated with this chromosome. 
 ***/
-void DataLine::SetData(string _chrom, int _start, int _stop, int _val)
+void DataLine::SetData(string _chrom, unsigned int _start, 
+                       unsigned int _stop, int _val)
 {
     chrom    = _chrom;
     start    = _start;
@@ -109,15 +111,17 @@ string DataLine::GetChrom() { return chrom; }
 * 
 * @returns: start -> a chromosome start position. 
 ***/
-int DataLine::GetStart() { return start; }
+unsigned int DataLine::GetStart() { return start; }
 
 
 /***
 * @author: Alister Maguire
 *
+* Get the stop position for a chromosome. 
 *
+* @returns: stop -> a chromosome stop position.
 ***/
-int DataLine::GetStop() { return stop; }
+unsigned int DataLine::GetStop() { return stop; }
 
 
 /***
@@ -248,7 +252,7 @@ void Data::SetData(unsigned long int size, DataLine *lines)
     if (dataSize != size)
         dataSize = size;
     data = new DataLine[dataSize];
-    for (int i = 0; i < dataSize; i++)
+    for (unsigned int i = 0; i < dataSize; i++)
     {
         DataLine curLine = lines[i];
         DataLine newLine(curLine.GetChrom(), curLine.GetStart(), curLine.GetStop(), curLine.GetVal());
@@ -310,7 +314,7 @@ void Data::ComputeValAvg()
     {
         double total    = 0;
         DataLine *lines = GetLines();
-        for (int i = 0; i < dataSize; i++)
+        for (unsigned int i = 0; i < dataSize; i++)
         {
             total += lines[i].GetVal();
         }
@@ -589,7 +593,7 @@ void WindowBlock::SetWindows(unsigned long int winCount, Window *_windows)
         numWindows = winCount;
     }
     windows = new Window[winCount];
-    for (int i = 0; i < winCount; i++)
+    for (unsigned int i = 0; i < winCount; i++)
     {
         Window curWin = _windows[i];
         Window newWindow(curWin.GetTitle(), curWin.GetDataSize(), curWin.GetStart(), curWin.GetStop(), curWin.GetValAvg(), curWin.GetLines());
@@ -643,7 +647,7 @@ bool WindowBlock::IsWindowDiffSet() { return diffSet; }
 * @returns: The window located at windows[idx] iff windows
 *           is not NULL. Otherwise, return a scrap Window. 
 ***/
-Window WindowBlock::GetWindow(int idx) 
+Window WindowBlock::GetWindow(unsigned int idx) 
 {
     if (windows != NULL && idx < numWindows && idx >= 0)
         return windows[idx];
@@ -666,7 +670,7 @@ Window WindowBlock::GetWindow(int idx)
 *           iff windows is not NULL. Otherwise, return a 
 *           pointer to a scrap window. 
 ***/
-Window *WindowBlock::GetWindowPtr(int idx) 
+Window *WindowBlock::GetWindowPtr(unsigned int idx) 
 {
     if (windows != NULL && idx < numWindows && idx >= 0)
         return &windows[idx];
@@ -724,9 +728,8 @@ TranscriptLine::TranscriptLine()
     chrom        = "";
     geneId       = "";
     transcriptId = "";
-    name         = "";
     feature      = "";
-    rgb          = 'X';
+    frame        = 'X';
     start        = -1;
     stop         = -1;
     strand       = 'X';
@@ -741,22 +744,20 @@ TranscriptLine::TranscriptLine()
 * @param: _chrom        -> a chromosome name for this line. 
 *         _geneId       -> the gene id. 
 *         _transcriptId -> the transcript ID.
-*         _name         -> name of the bed line. 
-*         _feature     -> as defined at UCSC Genome Browser. 
-*         _rgb          -> an RGB value. 
+*         _feature      -> gene feature
+*         _frame        -> defined here: http://www.ensembl.org/info/website/upload/gff.html
 *         _start        -> starting position. 
 *         _stop         -> stop position. 
 *         _strand       -> strand direction. 
 ***/
-TranscriptLine::TranscriptLine(string _chrom, string _geneId, string _transcriptId, string _name,
-                               string _feature, char _rgb, int _start, int _stop, char _strand)
+TranscriptLine::TranscriptLine(string _chrom, string _geneId, string _transcriptId, 
+                               string _feature, char _frame, int _start, int _stop, char _strand)
 {
     chrom        = _chrom;
     geneId       = _geneId;
     transcriptId = _transcriptId;
-    name         = _name;
     feature      = _feature;
-    rgb          = _rgb;
+    frame        = _frame;
     start        = _start;
     stop         = _stop;
     strand       = _strand;
@@ -775,9 +776,8 @@ void TranscriptLine::DeepCopy(TranscriptLine line)
     chrom        = line.chrom;
     geneId       = line.geneId;
     transcriptId = line.transcriptId;
-    name         = line.name;
     feature      = line.feature;
-    rgb          = line.rgb;
+    frame        = line.frame;
     start        = line.start;
     stop         = line.stop;
     strand       = line.strand;
@@ -847,16 +847,6 @@ void TranscriptLine::SetStrand(char _strand) { strand = _strand; }
 /***
 * @author: Alister Maguire
 *
-* Set the name of this transcript line. 
-*
-* @param: _name -> the name of this transcript line. 
-***/
-void TranscriptLine::SetName(string _name) { name = _name; }
-
-
-/***
-* @author: Alister Maguire
-*
 * Set the feature value as defined by UCSC Genome Browser. 
 *
 * @param: _feature -> the feature value for this transcript. 
@@ -867,11 +857,11 @@ void TranscriptLine::SetThickEnd(string _feature) { feature = _feature; }
 /***
 * @author: Alister Maguire
 *
-* Set the rgb value for this transcript line. 
+* Set the frame value for this transcript line. 
 *
-* @param _rgb -> the rgb value for this transcript line. 
+* @param _frame -> the frame value for this transcript line. 
 ***/
-void TranscriptLine::SetRGB(char _rgb) { rgb = _rgb; }
+void TranscriptLine::SetRGB(char _frame) { frame = _frame; }
 
 
 /***
@@ -902,16 +892,6 @@ string TranscriptLine::GetGeneId() { return geneId; }
 * @returns: transcriptId -> the transcript ID.
 ***/
 string TranscriptLine::GetTranscriptId() { return transcriptId; }
-
-
-/***
-* @author: Alister Maguire
-*
-* Get the name for this transcript line. 
-*
-* @returns: name -> the name for this transcript line. 
-***/
-string TranscriptLine::GetName() { return name; }
 
 
 /***
@@ -958,11 +938,11 @@ char TranscriptLine::GetStrand() { return strand; }
 /***
 * @author: Alister Maguire
 *
-* Get the rgb value for this transcript line. 
+* Get the frame value for this transcript line. 
 * 
-* @returns: rgb -> the rgb value for this transcript line. 
+* @returns: frame -> the frame value for this transcript line. 
 ***/
-char TranscriptLine::GetRGB() { return rgb; }
+char TranscriptLine::GetRGB() { return frame; }
 
 
 /***
@@ -1067,13 +1047,12 @@ void TranscriptData::SetData(unsigned long int size, TranscriptLine *data)
     if (dataSize != size)
         dataSize = size;
     transcripts = new TranscriptLine[size];
-    for (int i = 0; i < size; i++)
+    for (unsigned int i = 0; i < size; i++)
     {
         TranscriptLine curLine = data[i];
         TranscriptLine newLine(curLine.GetChrom(), curLine.GetGeneId(), curLine.GetTranscriptId(),
-                               curLine.GetName(), curLine.GetThickEnd(), 
-                               curLine.GetRGB(), curLine.GetStart(), curLine.GetStop(), 
-                               curLine.GetStrand());
+                               curLine.GetThickEnd(), curLine.GetRGB(), curLine.GetStart(), 
+                               curLine.GetStop(), curLine.GetStrand());
         transcripts[i] = newLine;
     }
 }
@@ -1148,7 +1127,7 @@ void TranscriptData::InitData(unsigned long int size)
 *           transcripts is not NULL. Otherwise, a scrap TranscriptLine
 *           is returned. 
 ***/
-TranscriptLine TranscriptData::GetTranscriptLine(int idx) 
+TranscriptLine TranscriptData::GetTranscriptLine(unsigned int idx) 
 {
     if (transcripts != NULL && idx < dataSize && idx >= 0)
         return transcripts[idx];

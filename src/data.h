@@ -6,7 +6,9 @@
 #ifndef DATA_H
 #define DATA_H
 #include <string>
+#include <vector>
 using std::string;
+using std::vector;
 
 
 /***
@@ -19,22 +21,24 @@ using std::string;
 class DataLine
 {
   private:
-    string  chrom;
-    int     start;
-    int     stop; 
-    double  val; 
-    double  diff;
+    string       chrom;
+    unsigned int start;
+    unsigned int stop; 
+    double       val; 
+    double       diff;
   public:
-           DataLine(string _chrom, int _start, int _stop, int _val);
-           DataLine();
-          ~DataLine();
-    void   SetData(string _chrom, int _start, int _stop, int _val);
-    void   SetBaseDiff(double d);
-    double GetBaseDiff();
-    int    GetStart();
-    int    GetStop();
-    double GetVal();
-    string GetChrom();
+                 DataLine(string _chrom, unsigned int _start, 
+                          unsigned int _stop, int _val);
+                 DataLine();
+                ~DataLine();
+    void         SetData(string _chrom, unsigned int _start, 
+                         unsigned int _stop, int _val);
+    void         SetBaseDiff(double d);
+    double       GetBaseDiff();
+    unsigned int GetStart();
+    unsigned int GetStop();
+    double       GetVal();
+    string       GetChrom();
 };
 
 
@@ -130,8 +134,8 @@ class WindowBlock
     void      SetNumWindows(unsigned long int winCount);
     void      WindowDiffSet(bool set);//TODO: this name sucks
     bool      IsWindowDiffSet();
-    Window    GetWindow(int idx);
-    Window   *GetWindowPtr(int idx);
+    Window    GetWindow(unsigned int idx);
+    Window   *GetWindowPtr(unsigned int idx);
     Window   *GetWindows();
     unsigned long int  GetNumWindows();
 };
@@ -149,24 +153,22 @@ class WindowBlock
 class TranscriptLine
 {
 
-  //TODO: change all of these private members to 
-  //protected (except for feature). This way 
-  //they can be inherited by a new Gene class. 
   private:
+    string feature;
+   
+  protected:
     string chrom;
     string geneId;
     string transcriptId;
-    string name;
-    string feature;
-    char   rgb;
+    char   frame;
     int    start;
     int    stop;
     char   strand;
         
   public:
            TranscriptLine();
-           TranscriptLine(string _chrom, string _geneId, string _transcriptId, string _name,  
-                          string _feature, char _rgb, int _start, int _stop, char _strand);
+           TranscriptLine(string _chrom, string _geneId, string _transcriptId,  
+                          string _feature, char _frame, int _start, int _stop, char _strand);
     void   DeepCopy(TranscriptLine line);
     void   SetChrom(string _chrom);
     void   SetGeneId(string id);
@@ -174,13 +176,11 @@ class TranscriptLine
     void   SetStart(int _start);
     void   SetStop(int _stop);
     void   SetStrand(char _strand);
-    void   SetName(string _name);
     void   SetThickEnd(string _feature);
-    void   SetRGB(char _rgb);
+    void   SetRGB(char _frame);
     string GetChrom();
     string GetGeneId();
     string GetTranscriptId();
-    string GetName();
     string GetThickStart();
     string GetThickEnd();
     int    GetStart();
@@ -199,7 +199,7 @@ class TranscriptLine
 ***/
 class TranscriptData
 {
-  private:
+  protected:
     TranscriptLine   *transcripts;
     unsigned long int dataSize;
     unsigned int      geneCount;
@@ -220,10 +220,69 @@ class TranscriptData
     void            SetGeneCount(unsigned int gCount);
     TranscriptLine *GetLines();
     void            InitData(unsigned long int size);
-    TranscriptLine  GetTranscriptLine(int idx);
+    TranscriptLine  GetTranscriptLine(unsigned int idx);
     unsigned int    GetGeneCount();
     unsigned long int GetDataSize();
 };
 
+
+class GeneFeature
+{
+  private:
+    string name;
+    string start;
+    string stop;
+
+  public:
+           GeneFeature();
+           GeneFeature(string name, string start, string stop);
+          ~GeneFeature();
+    string GetName();
+    string GetStart();
+    string GetStop();
+    void   SetName(string name);
+    void   SetStart(string start);
+    void   SetStop(string stop);
+};
+
+
+class Gene : public TranscriptLine
+{
+  private:
+    vector<GeneFeature> exons;
+    vector<GeneFeature> startCodons;
+    vector<GeneFeature> stopCodons;
+    vector<GeneFeature> CDS;
+
+  public:
+    void                AddExon(GeneFeature e); 
+    void                AddStartCodon(GeneFeature sc); 
+    void                AddStopCodon(GeneFeature sc); 
+    void                AddCDS(GeneFeature cds); 
+    vector<GeneFeature> GetExons(); 
+    vector<GeneFeature> GetStartCodons(); 
+    vector<GeneFeature> GetStopCodons(); 
+    vector<GeneFeature> GetCDS();
+};
+
+
+class GeneData 
+{
+  private:
+    Gene         *genes;  
+    unsigned int  geneCount;
+
+  public:
+                    GeneData(); 
+                   ~GeneData();
+                    GeneData(GeneData const &copy);
+    void            GeneDataSwap(GeneData &s);
+                    GeneData &operator=(GeneData rhs)
+                    {
+                        rhs.GeneDataSwap(*this);
+                        return *this;
+                    } 
+
+};
 
 #endif

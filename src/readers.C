@@ -120,8 +120,8 @@ void bedReader::Execute()
         int stop;
         int prevStop;
         int score;
-        int count = 0;
         int prevScore = 0;
+        unsigned int count = 0;
         unsigned long int limit = srcData.GetDataSize()-1; 
         DataLine *dataSet = srcData.GetLines();
         switch (scoreIdx)
@@ -259,8 +259,8 @@ void bedCovPerBaseReader::Execute()
         int prevStop;
         int score;
         int prevScore = 0;
-        int count = 0;
-        DataLine *dataSet = srcData.GetLines();
+        unsigned int count = 0;
+        DataLine *dataSet  = srcData.GetLines();
         unsigned long int limit = srcData.GetDataSize()-1; 
         std::getline(inFile, rawLine);                                        
         std::istringstream iss(rawLine);

@@ -66,7 +66,7 @@ double HPR::ExtractNumFromString(string s)
 
     multiplier = 1;
     
-    for (int i = 0; i < len; i++)
+    for (unsigned int i = 0; i < len; i++)
     { 
         cur = s[i];
         if (cur == '.')

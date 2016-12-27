@@ -76,7 +76,7 @@ void Sink::BaseDiff(Data *d2)
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < size; ++i)
+    for (unsigned int i = 0; i < size; ++i)
     {
         d1Line = d1Lines[i]; 
         d2Line = d2Lines[i];
@@ -116,7 +116,7 @@ void Sink::WindowDiff(WindowBlock *w2)
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < size; ++i)
+    for (unsigned int i = 0; i < size; ++i)
     {
         d1Window = d1Windows[i]; 
         d2Window = d2Windows[i];

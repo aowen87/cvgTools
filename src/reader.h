@@ -24,7 +24,7 @@ class Reader : public Source
 
   public:
                       Reader();
-                     ~Reader();
+    virtual          ~Reader();
     unsigned long int SetDataSize(char *fname);
     void              SetSrcDataSize();
     void              SetSrcTranscriptDataSize();

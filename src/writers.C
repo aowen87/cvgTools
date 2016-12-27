@@ -101,7 +101,7 @@ void WindowAvgWriter::Write(const char *filename)
   
             if (diff)
             {
-                for (int i = 0; i < len; i++)
+                for (unsigned int i = 0; i < len; i++)
                 {
                     curWindow = snkWindowBlock->GetWindow(i);
                     outfile << std::setprecision(3) << curWindow.GetTitle() << "\t"
@@ -113,7 +113,7 @@ void WindowAvgWriter::Write(const char *filename)
 
             else 
             {
-                for (int i = 0; i < len; i++)
+                for (unsigned int i = 0; i < len; i++)
                 {
                     curWindow = snkWindowBlock->GetWindow(i);
                     outfile << std::setprecision(3) << curWindow.GetTitle() << "\t"  
@@ -165,7 +165,7 @@ void WindowWigWriter::Write(const char *filename)
             double       curVal;
             prevChrom = "";
 
-            for (int i = 0; i < numWin; i++)
+            for (unsigned int i = 0; i < numWin; i++)
             {
                 curWindow = snkWindowBlock->GetWindow(i);
                 lines     = curWindow.GetLines();
@@ -177,7 +177,7 @@ void WindowWigWriter::Write(const char *filename)
                 } 
                 else
                 {
-                    for (int j = 0; j < numLines; j++)
+                    for (unsigned int j = 0; j < numLines; j++)
                     {
 
                         curLine  = lines[j];
