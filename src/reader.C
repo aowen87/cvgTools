@@ -115,8 +115,7 @@ void Reader::ReadTranscripts()
         string geneId;
         string transcriptId;
         string name;
-        string thickStart;
-        string thickEnd;
+        string feature;
         string scrap;
         string prevName = "";
         char   rgb;
@@ -126,8 +125,8 @@ void Reader::ReadTranscripts()
         while (std::getline(inFile, rawLine))
         {
             std::istringstream iss(rawLine);
-            if (!(iss >> chrom >> start >> stop >> name >> scrap >> strand >> thickStart 
-               >> thickEnd >> rgb >> scrap >> geneId >> scrap >> transcriptId))
+            if (!(iss >> chrom >> start >> stop >> name >> scrap >> strand >> scrap 
+               >> feature >> rgb >> scrap >> geneId >> scrap >> transcriptId))
                 break;
             geneId.erase(0, 1);
             geneId.erase(geneId.length()-2, 2);
@@ -137,7 +136,7 @@ void Reader::ReadTranscripts()
             //      let's either not enter the data in the first place or use
             //      a different method that doesn't involve data loss. 
             TranscriptLine *line = new TranscriptLine(chrom, geneId, transcriptId, 
-                                       name, thickStart, thickEnd, rgb, start, stop, strand);
+                                       name, feature, rgb, start, stop, strand);
             geneTree.Insert(line);
             prevName = name;
         } 

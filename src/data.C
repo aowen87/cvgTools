@@ -725,8 +725,7 @@ TranscriptLine::TranscriptLine()
     geneId       = "";
     transcriptId = "";
     name         = "";
-    thickStart   = "";
-    thickEnd     = "";
+    feature      = "";
     rgb          = 'X';
     start        = -1;
     stop         = -1;
@@ -743,22 +742,20 @@ TranscriptLine::TranscriptLine()
 *         _geneId       -> the gene id. 
 *         _transcriptId -> the transcript ID.
 *         _name         -> name of the bed line. 
-*         _thickStart   -> as defined at UCSC Genome Browser. 
-*         _thickEnd     -> as defined at UCSC Genome Browser. 
+*         _feature     -> as defined at UCSC Genome Browser. 
 *         _rgb          -> an RGB value. 
 *         _start        -> starting position. 
 *         _stop         -> stop position. 
 *         _strand       -> strand direction. 
 ***/
 TranscriptLine::TranscriptLine(string _chrom, string _geneId, string _transcriptId, string _name,
-           string _thickStart, string _thickEnd, char _rgb, int _start, int _stop, char _strand)
+                               string _feature, char _rgb, int _start, int _stop, char _strand)
 {
     chrom        = _chrom;
     geneId       = _geneId;
     transcriptId = _transcriptId;
     name         = _name;
-    thickStart   = _thickStart;
-    thickEnd     = _thickEnd;
+    feature      = _feature;
     rgb          = _rgb;
     start        = _start;
     stop         = _stop;
@@ -779,8 +776,7 @@ void TranscriptLine::DeepCopy(TranscriptLine line)
     geneId       = line.geneId;
     transcriptId = line.transcriptId;
     name         = line.name;
-    thickStart   = line.thickStart;
-    thickEnd     = line.thickEnd;
+    feature      = line.feature;
     rgb          = line.rgb;
     start        = line.start;
     stop         = line.stop;
@@ -861,21 +857,11 @@ void TranscriptLine::SetName(string _name) { name = _name; }
 /***
 * @author: Alister Maguire
 *
-* Set the thickStart value as defined by UCSC Genome Browser. 
+* Set the feature value as defined by UCSC Genome Browser. 
 *
-* @param: _thickStart -> the thickStart value for this transcript. 
+* @param: _feature -> the feature value for this transcript. 
 ***/
-void TranscriptLine::SetThickStart(string _thickStart) { thickStart = _thickStart; }
-
-
-/***
-* @author: Alister Maguire
-*
-* Set the thickEnd value as defined by UCSC Genome Browser. 
-*
-* @param: _thickEnd -> the thickEnd value for this transcript. 
-***/
-void TranscriptLine::SetThickEnd(string _thickEnd) { thickEnd = _thickEnd; }
+void TranscriptLine::SetThickEnd(string _feature) { feature = _feature; }
 
 
 /***
@@ -931,23 +917,12 @@ string TranscriptLine::GetName() { return name; }
 /***
 * @author: Alister Maguire
 *
-* Get the thickStart value for this transcript line as
+* Get the feature value for this transcript line as
 * defined by UCSC Genome Browser. 
 *
-* @returns thickStart
+* @returns feature
 ***/
-string TranscriptLine::GetThickStart() { return thickStart; }
-
-
-/***
-* @author: Alister Maguire
-*
-* Get the thickEnd value for this transcript line as
-* defined by UCSC Genome Browser. 
-*
-* @returns thickEnd
-***/
-string TranscriptLine::GetThickEnd() { return thickEnd; }
+string TranscriptLine::GetThickEnd() { return feature; }
 
 
 /***
@@ -1096,7 +1071,7 @@ void TranscriptData::SetData(unsigned long int size, TranscriptLine *data)
     {
         TranscriptLine curLine = data[i];
         TranscriptLine newLine(curLine.GetChrom(), curLine.GetGeneId(), curLine.GetTranscriptId(),
-                               curLine.GetName(), curLine.GetThickStart(), curLine.GetThickEnd(), 
+                               curLine.GetName(), curLine.GetThickEnd(), 
                                curLine.GetRGB(), curLine.GetStart(), curLine.GetStop(), 
                                curLine.GetStrand());
         transcripts[i] = newLine;

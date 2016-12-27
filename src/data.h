@@ -150,15 +150,14 @@ class TranscriptLine
 {
 
   //TODO: change all of these private members to 
-  //protected (except for thickEnd). This way 
+  //protected (except for feature). This way 
   //they can be inherited by a new Gene class. 
   private:
     string chrom;
     string geneId;
     string transcriptId;
     string name;
-    string thickStart;
-    string thickEnd;
+    string feature;
     char   rgb;
     int    start;
     int    stop;
@@ -167,7 +166,7 @@ class TranscriptLine
   public:
            TranscriptLine();
            TranscriptLine(string _chrom, string _geneId, string _transcriptId, string _name,  
-           string _thickStart, string _thickEnd, char _rgb, int _start, int _stop, char _strand);
+                          string _feature, char _rgb, int _start, int _stop, char _strand);
     void   DeepCopy(TranscriptLine line);
     void   SetChrom(string _chrom);
     void   SetGeneId(string id);
@@ -176,8 +175,7 @@ class TranscriptLine
     void   SetStop(int _stop);
     void   SetStrand(char _strand);
     void   SetName(string _name);
-    void   SetThickStart(string _thickStart);
-    void   SetThickEnd(string _thickEnd);
+    void   SetThickEnd(string _feature);
     void   SetRGB(char _rgb);
     string GetChrom();
     string GetGeneId();
