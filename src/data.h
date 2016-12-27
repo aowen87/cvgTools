@@ -226,26 +226,39 @@ class TranscriptData
 };
 
 
+/***
+* @author: Alister Maguire
+*
+* A gene feature (codon, exon, etc.).
+***/
 class GeneFeature
 {
   private:
     string name;
-    string start;
-    string stop;
+    //TODO: make star and stop unsigned long (need to change in Transcripts as well)
+    int start;
+    int stop;
 
   public:
            GeneFeature();
-           GeneFeature(string name, string start, string stop);
+           GeneFeature(string _name, int _start, int _stop);
           ~GeneFeature();
     string GetName();
-    string GetStart();
-    string GetStop();
-    void   SetName(string name);
-    void   SetStart(string start);
-    void   SetStop(string stop);
+    int    GetStart();
+    int    GetStop();
+    void   SetName(string _name);
+    void   SetStart(int _start);
+    void   SetStop(int _stop);
 };
 
 
+/***
+* @author: Alister Maguire
+*
+* A gene representation. The gene inherits 
+* the attributes of the TranscriptLine, but it
+* also contains more complex feature representations. 
+***/
 class Gene : public TranscriptLine
 {
   private:
@@ -266,6 +279,11 @@ class Gene : public TranscriptLine
 };
 
 
+/***
+* @author: Alister Maguire
+*
+* A collection of genes. 
+***/
 class GeneData 
 {
   private:
@@ -273,16 +291,21 @@ class GeneData
     unsigned int  geneCount;
 
   public:
-                    GeneData(); 
-                   ~GeneData();
-                    GeneData(GeneData const &copy);
-    void            GeneDataSwap(GeneData &s);
-                    GeneData &operator=(GeneData rhs)
-                    {
-                        rhs.GeneDataSwap(*this);
-                        return *this;
-                    } 
-
+                 GeneData(); 
+                ~GeneData();
+                 GeneData(GeneData const &copy);
+    void         GeneDataSwap(GeneData &s);
+                 GeneData &operator=(GeneData rhs)
+                 {
+                     rhs.GeneDataSwap(*this);
+                     return *this;
+                 } 
+    void         SetGenes(unsigned int size,  Gene *_genes);
+    void         SetGeneCount(unsigned int gCount);
+    Gene        *GetGenes();
+    void         InitGenes(unsigned int size);
+    Gene         GetGene(unsigned int idx);
+    unsigned int GetGeneCount();
 };
 
 #endif

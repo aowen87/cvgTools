@@ -1137,3 +1137,189 @@ TranscriptLine TranscriptData::GetTranscriptLine(unsigned int idx)
     cerr << "Invalid attempt to get transcripts" << endl;
     return trash;
 }
+
+
+/***
+* @author: Alister Maguire
+*
+* Default constructor.
+***/
+GeneFeature::GeneFeature()
+{
+    name  = "";
+    start = 0;
+    stop  = 0;
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Parameterized constructor; set values. 
+*
+* @param: name -> the gene name. 
+*         start -> the start position. 
+*         stop -> the stop position. 
+***/
+GeneFeature::GeneFeature(string _name, int _start, int _stop)
+{
+    name  = _name;
+    start = _start;
+    stop  = _stop;
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Empty destructor. 
+***/
+GeneFeature::~GeneFeature() {}
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the gene name. 
+*
+* @returns: name -> the name of the gene. 
+***/
+string GeneFeature::GetName() { return name; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the start position for the gene. 
+*
+* @returns: start -> the gene's start position. 
+***/
+int GeneFeature::GetStart() { return start; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the stop position for the gene. 
+*
+* @returns: the gene's stop position. 
+***/
+int GeneFeature::GetStop() { return stop; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the gene's name. 
+*
+* @param: _name -> the name of the gene. 
+***/
+void GeneFeature::SetName(string _name) { name = _name; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the start position for the gene. 
+*
+* @param: _start -> the start position. 
+***/
+void GeneFeature::SetStart(int _start) { start = _start; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the stop position for the gene. 
+*
+* @param: _stop -> the gene's stop position. 
+***/
+void GeneFeature::SetStop(int _stop) { stop = _stop; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Add an exon to the exon vector. 
+*
+* @param: e -> an exon GeneFeature. 
+***/
+void Gene::AddExon(GeneFeature e) { exons.push_back(e); }
+
+
+/***
+* @author: Alister Maguire
+*
+* Add a start codon to the start codon vector. 
+*
+* @param: sc -> a start codon GeneFeature. 
+***/
+void Gene::AddStartCodon(GeneFeature sc) { startCodons.push_back(sc); }
+
+
+/***
+* @author: Alister Maguire
+*
+* Add a stop codon to the stop codon vector. 
+*
+* @param: sc -> a stop codon GeneFeature. 
+***/
+void Gene::AddStopCodon(GeneFeature sc) { stopCodons.push_back(sc); }
+
+
+/***
+* @author: Alister Maguire
+*
+* Add a cds to the cds vector. 
+*
+* @param: cds -> a cds GeneFeature. 
+***/
+void Gene::AddCDS(GeneFeature cds) { CDS.push_back(cds); }
+
+
+/***
+* @author: Alister Maguire
+*
+* Retrieve the exons. 
+*
+* @returns: exons 
+***/
+vector<GeneFeature> Gene::GetExons() { return exons; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Retrieve the start codons. 
+*
+* @returns: startCodons 
+***/
+vector<GeneFeature> Gene::GetStartCodons() { return startCodons; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Retrieve the stop codons. 
+*
+* @returns: stopCodons 
+***/
+vector<GeneFeature> Gene::GetStopCodons() { return stopCodons; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Retrieve the cds features. 
+*
+* @returns: CDS 
+***/
+vector<GeneFeature> Gene::GetCDS() { return CDS; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Empty constructor. 
+***/
+GeneData::GeneData() {}
