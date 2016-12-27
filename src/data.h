@@ -181,8 +181,7 @@ class TranscriptLine
     string GetChrom();
     string GetGeneId();
     string GetTranscriptId();
-    string GetThickStart();
-    string GetThickEnd();
+    string GetFeature();
     int    GetStart();
     int    GetStop();
     char   GetStrand();
@@ -235,7 +234,7 @@ class GeneFeature
 {
   private:
     string name;
-    //TODO: make star and stop unsigned long (need to change in Transcripts as well)
+    //TODO: make start and stop unsigned long (need to change in Transcripts as well)
     int start;
     int stop;
 
@@ -268,6 +267,13 @@ class Gene : public TranscriptLine
     vector<GeneFeature> CDS;
 
   public:
+                        Gene();
+                        Gene(string _chrom, string _geneId, string _transcriptId,  
+                             char _frame, int _start, int _stop, char _strand);
+                        Gene(string _chrom, string _geneId, string _transcriptId,  
+                             char _frame, int _start, int _stop, char _strand, 
+                             vector<GeneFeature> ex, vector<GeneFeature> startC, 
+                             vector<GeneFeature> stopC, vector<GeneFeature> _cds);
     void                AddExon(GeneFeature e); 
     void                AddStartCodon(GeneFeature sc); 
     void                AddStopCodon(GeneFeature sc); 
@@ -292,18 +298,19 @@ class GeneData
 
   public:
                  GeneData(); 
-                ~GeneData();
+                 GeneData(Gene *_genes, unsigned int gCount);
                  GeneData(GeneData const &copy);
+                ~GeneData();
     void         GeneDataSwap(GeneData &s);
                  GeneData &operator=(GeneData rhs)
                  {
                      rhs.GeneDataSwap(*this);
                      return *this;
                  } 
-    void         SetGenes(unsigned int size,  Gene *_genes);
+    void         SetGenes(unsigned int gCount,  Gene *_genes);
     void         SetGeneCount(unsigned int gCount);
     Gene        *GetGenes();
-    void         InitGenes(unsigned int size);
+    void         InitGenes(unsigned int gCount);
     Gene         GetGene(unsigned int idx);
     unsigned int GetGeneCount();
 };

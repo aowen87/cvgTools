@@ -730,8 +730,8 @@ TranscriptLine::TranscriptLine()
     transcriptId = "";
     feature      = "";
     frame        = 'X';
-    start        = -1;
-    stop         = -1;
+    start        = 0;
+    stop         = 0;
     strand       = 'X';
 }
 
@@ -902,7 +902,7 @@ string TranscriptLine::GetTranscriptId() { return transcriptId; }
 *
 * @returns feature
 ***/
-string TranscriptLine::GetThickEnd() { return feature; }
+string TranscriptLine::GetFeature() { return feature; }
 
 
 /***
@@ -1016,7 +1016,7 @@ TranscriptData::TranscriptData(TranscriptData const &copy)
 ***/
 void TranscriptData::TranscriptDataSwap(TranscriptData &s)
 {
-    swap(this->transcripts, s.transcripts); //FIXME: use my own swap?
+    swap(this->transcripts, s.transcripts); 
     swap(this->dataSize, s.dataSize);
     swap(this->geneCount, s.geneCount);
 }
@@ -1051,7 +1051,7 @@ void TranscriptData::SetData(unsigned long int size, TranscriptLine *data)
     {
         TranscriptLine curLine = data[i];
         TranscriptLine newLine(curLine.GetChrom(), curLine.GetGeneId(), curLine.GetTranscriptId(),
-                               curLine.GetThickEnd(), curLine.GetRGB(), curLine.GetStart(), 
+                               curLine.GetFeature(), curLine.GetRGB(), curLine.GetStart(), 
                                curLine.GetStop(), curLine.GetStrand());
         transcripts[i] = newLine;
     }
@@ -1240,6 +1240,88 @@ void GeneFeature::SetStop(int _stop) { stop = _stop; }
 /***
 * @author: Alister Maguire
 *
+* Default constructor. 
+***/
+Gene::Gene()
+{
+    chrom        = "";
+    geneId       = "";
+    transcriptId = "";
+    frame        = 'X';
+    start        = 0;
+    stop         = 0;
+    strand       = 'X';
+}
+
+
+
+/***
+* @author: Alister Maguire
+*
+* Parameterized constructor.
+*
+* @param: _chrom        -> a chromosome name for this line. 
+*         _geneId       -> the gene id. 
+*         _transcriptId -> the transcript ID.
+*         _frame        -> defined here: http://www.ensembl.org/info/website/upload/gff.html
+*         _start        -> starting position. 
+*         _stop         -> stop position. 
+*         _strand       -> strand direction. 
+*         ex            -> the exons. 
+***/
+Gene::Gene(string _chrom, string _geneId, string _transcriptId,
+           char _frame, int _start, int _stop, char _strand)
+{
+    chrom        = _chrom;
+    geneId       = _geneId;
+    transcriptId = _transcriptId;
+    frame        = _frame;
+    start        = _start;
+    stop         = _stop;
+    strand       = _strand;
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Parameterized constructor.
+*
+* @param: _chrom        -> a chromosome name for this line. 
+*         _geneId       -> the gene id. 
+*         _transcriptId -> the transcript ID.
+*         _frame        -> defined here: http://www.ensembl.org/info/website/upload/gff.html
+*         _start        -> starting position. 
+*         _stop         -> stop position. 
+*         _strand       -> strand direction. 
+*         ex            -> the exons. 
+*         startC        -> the start codons. 
+*         stopC         -> the stop codons. 
+*         _cds          -> the cds features. 
+***/
+Gene::Gene(string _chrom, string _geneId, string _transcriptId,  
+           char _frame, int _start, int _stop, char _strand, 
+           std::vector<GeneFeature> ex, vector<GeneFeature> startC, 
+           vector<GeneFeature> stopC, vector<GeneFeature> cds)
+{
+    chrom        = _chrom;
+    geneId       = _geneId;
+    transcriptId = _transcriptId;
+    frame        = _frame;
+    start        = _start;
+    stop         = _stop;
+    strand       = _strand;
+    exons        = ex;
+    startCodons  = startC;
+    stopCodons   = stopC;
+    CDS          = cds;
+}
+
+
+
+/***
+* @author: Alister Maguire
+*
 * Add an exon to the exon vector. 
 *
 * @param: e -> an exon GeneFeature. 
@@ -1323,3 +1405,138 @@ vector<GeneFeature> Gene::GetCDS() { return CDS; }
 * Empty constructor. 
 ***/
 GeneData::GeneData() {}
+
+
+/***
+* @author: Alister Maguire
+*
+* Parameterized constructor.
+*
+* @param: _genes -> the genes.
+*         gCount -> the number of genes. 
+***/
+GeneData::GeneData(Gene *_genes, unsigned int gCount)
+{
+    geneCount = gCount;
+    SetGenes(geneCount, _genes);
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Destructor. 
+***/
+GeneData::~GeneData() {}
+
+
+/***
+* @author: Alister Maguire
+*
+* Swap data members with another GeneData
+* object. 
+***/
+void GeneData::GeneDataSwap(GeneData &s)
+{
+    swap(this->genes, s.genes); 
+    swap(this->geneCount, s.geneCount);
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the genes. 
+*
+* @param: gCount -> the number of genes. 
+*         _genes -> the genes themselves. 
+***/
+void GeneData::SetGenes(unsigned int gCount, Gene *_genes)
+{
+    if (genes != NULL)
+        delete [] genes;
+    if (geneCount != gCount)
+        geneCount = gCount;
+    genes = new Gene[gCount];
+    for (unsigned int i = 0; i < gCount; i++)
+    {
+        Gene curGene = genes[i];
+        Gene newGene(curGene.GetChrom(), curGene.GetGeneId(), curGene.GetTranscriptId(),
+                     curGene.GetRGB(), curGene.GetStart(), curGene.GetStop(), 
+                     curGene.GetStrand(), curGene.GetExons(), curGene.GetStartCodons(), 
+                     curGene.GetStopCodons(), curGene.GetCDS());
+        genes[i] = newGene;
+    }
+
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the gene count. 
+*
+* @param: gCount -> gene count. 
+***/
+void GeneData::SetGeneCount(unsigned int gCount) { geneCount = gCount; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Retrieve the genes. 
+*
+* @returns: genes ->  the genes.
+***/
+Gene *GeneData::GetGenes() { return genes; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Initialize the genes. 
+*
+* @param: gCount -> the number of genes. 
+***/
+void GeneData::InitGenes(unsigned int gCount)
+{
+    SetGeneCount(gCount);
+    if (genes != NULL)
+        delete [] genes;
+    genes = new Gene[gCount];
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Get a particular gene at a given index. 
+*
+* @param: idx -> the index to retrieve the 
+*                target gene from. 
+* @returns: if idx is a valid index and genes 
+*           has been set, return the gene located 
+*           at genes[idx]. Otherwise, return an
+*           empty scrap gene. 
+***/
+Gene GeneData::GetGene(unsigned int idx)
+{
+    if (idx >= geneCount || idx < 0 || genes == NULL)
+    {
+        Gene scrap;
+        return scrap;
+    }    
+    return genes[idx];
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Retrieve the gene count. 
+*
+* @returns the gene count. 
+***/
+unsigned int GeneData::GetGeneCount() { return geneCount; }
+
+
