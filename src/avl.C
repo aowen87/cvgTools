@@ -20,7 +20,7 @@ using std::endl;
 ***/
 Node::Node()
 {
-    tData  = NULL;
+    gene   = NULL;
     right  = NULL;
     left   = NULL;
     height = 0;
@@ -33,11 +33,11 @@ Node::Node()
 *
 * Parameterized constructor. 
 *
-* @param: d -> a TranscriptLine pointer. 
+* @param: g -> a Gene pointer. 
 ***/
-Node::Node(TranscriptLine *d)
+Node::Node(Gene *g)
 {
-    tData  = d;
+    gene   = g;
     right  = NULL;
     left   = NULL;
     height = 1;
@@ -52,8 +52,8 @@ Node::Node(Node const &n)
     left   = n.left;
     right  = n.right;
     height = n.height;
-    tData  = new TranscriptLine();
-    tData->DeepCopy(*(n.tData));
+    gene  = new Gene();
+    gene->DeepCopy(*(n.gene));
 }
 
 
@@ -62,8 +62,8 @@ Node::Node(Node const &n)
 ***/
 Node::~Node() 
 {
-    if (tData != NULL)
-        delete tData;
+    if (gene != NULL)
+        delete gene;
 }
 
 
@@ -72,9 +72,9 @@ Node::~Node()
 ***/
 bool Node::ExpandDataStart(int _start)
 {
-    if (_start < tData->GetStart())
+    if (_start < gene->GetStart())
     {
-        tData->SetStart(_start);
+        gene->SetStart(_start);
         return true;
     }
     return false;
@@ -86,9 +86,9 @@ bool Node::ExpandDataStart(int _start)
 ***/
 bool Node::ExpandDataStop(int _stop)
 {
-    if (_stop > tData->GetStop())
+    if (_stop > gene->GetStop())
     {
-        tData->SetStop(_stop);
+        gene->SetStop(_stop);
         return true;
     }
     return false;
@@ -98,7 +98,7 @@ bool Node::ExpandDataStop(int _stop)
 /***
 *
 ***/
-TranscriptLine *Node::GetData() { return tData; }
+Gene *Node::GetGene() { return gene; }
 
 
 /***
@@ -133,9 +133,9 @@ void Node::SetRightChild(Node *r)
 /***
 *
 ***/
-void Node::SetData(TranscriptLine *d)
+void Node::SetGene(Gene *g)
 {
-    tData = d;
+    gene = g;
 }
 
 
@@ -216,9 +216,9 @@ void AVLTree::DeleteTree(Node *current)
 /***
 *
 ***/
-void AVLTree::Insert(TranscriptLine *d)
+void AVLTree::Insert(Gene *g)
 {
-    Node *n = new Node(d);
+    Node *n = new Node(g);
     root    = CheckBalance(DoInsertion(root, n));
     delete n;
 }
@@ -227,9 +227,9 @@ void AVLTree::Insert(TranscriptLine *d)
 /***
 *
 ***/
-void AVLTree::Delete(TranscriptLine *d)
+void AVLTree::Delete(Gene *g)
 {
-    Node *n = new Node(d);
+    Node *n = new Node(g);
     root    = DeletionSearch(root, n);
     delete n;
 }
@@ -238,9 +238,9 @@ void AVLTree::Delete(TranscriptLine *d)
 /***
 *
 ***/
-bool AVLTree::Search(TranscriptLine *d)
+bool AVLTree::Search(Gene *g)
 {
-    Node *n    = new Node(d);
+    Node *n    = new Node(g);
     bool found = DoSearch(root, n);
     delete n;
     return found;    
@@ -294,18 +294,18 @@ Node *AVLTree::GetMin()
 /***
 *
 ***/
-TranscriptLine *AVLTree::RemoveMin()
+Gene *AVLTree::RemoveMin()
 {
     if (root == NULL)
     {
-        TranscriptLine *scrap = NULL;
+        Gene *scrap = NULL;
         return scrap;
     }
-    TranscriptLine *outData    = new TranscriptLine; 
-    TranscriptLine *searchData = new TranscriptLine;
+    Gene *outData    = new Gene; 
+    Gene *searchData = new Gene;
     Node *minNode              = FindMin(root);
-    searchData->DeepCopy( *(minNode->GetData()) );
-    outData->DeepCopy( *(minNode->GetData()) );
+    searchData->DeepCopy( *(minNode->GetGene()) );
+    outData->DeepCopy( *(minNode->GetGene()) );
     Node *searchNode = new Node(searchData);
     root             = DeletionSearch(root, searchNode);
     delete searchNode;
@@ -387,10 +387,10 @@ Node *AVLTree::DeleteNode(Node *n)
         }
     }
    
-    TranscriptLine *nData = n->GetData(); 
+    Gene *nData = n->GetGene(); 
     Node *origin    = new Node(nData);
     Node *leftmost  = FindLeftmost(nData, n->GetRightChild());
-    n->SetData(leftmost->GetData());
+    n->SetGene(leftmost->GetGene());
     n->SetRightChild(DeletionSearch(n->GetRightChild(), origin));
     SetHeight(n->GetRightChild());
     SetHeight(n);     
@@ -401,15 +401,15 @@ Node *AVLTree::DeleteNode(Node *n)
 /***
 *
 ***/
-Node *AVLTree::FindLeftmost(TranscriptLine *originData, Node *searchNode)
+Node *AVLTree::FindLeftmost(Gene *originData, Node *searchNode)
 {
     Node *leftmost;
     while (searchNode->GetLeftChild() != NULL)
     {
         searchNode = searchNode->GetLeftChild();
     }
-    leftmost = new Node(searchNode->GetData());
-    searchNode->SetData(originData);
+    leftmost = new Node(searchNode->GetGene());
+    searchNode->SetGene(originData);
     return leftmost; 
 }
 
@@ -419,8 +419,8 @@ Node *AVLTree::FindLeftmost(TranscriptLine *originData, Node *searchNode)
 ***/
 AVLTree::Equality AVLTree::StandardCompare(Node *n1, Node *n2)
 {
-    TranscriptLine *n1Data  = n1->GetData();
-    TranscriptLine *n2Data  = n2->GetData();
+    Gene *n1Data  = n1->GetGene();
+    Gene *n2Data  = n2->GetGene();
     double n1ChromNum = HPR::ExtractNumFromString(n1Data->GetChrom());    
     double n2ChromNum = HPR::ExtractNumFromString(n2Data->GetChrom());
     AVLTree::Equality e;
@@ -477,8 +477,8 @@ AVLTree::Equality AVLTree::StandardCompare(Node *n1, Node *n2)
 ***/
 AVLTree::Equality AVLTree::GenicCompare(Node *n1, Node *n2)
 {
-    TranscriptLine *n1Data = n1->GetData();
-    TranscriptLine *n2Data = n2->GetData();
+    Gene *n1Data = n1->GetGene();
+    Gene *n2Data = n2->GetGene();
     string n1GeneId  = n1Data->GetGeneId();
     string n2GeneId  = n2Data->GetGeneId();
     AVLTree::Equality e;  
@@ -543,8 +543,12 @@ Node *AVLTree::DoInsertion(Node *current, Node *n)
             switch (e)
             {
                 case Eq:  //Merge the genes
-                    current->ExpandDataStart(n->GetData()->GetStart());
-                    current->ExpandDataStop(n->GetData()->GetStop());
+                    current->ExpandDataStart(n->GetGene()->GetStart());
+                    current->ExpandDataStop(n->GetGene()->GetStop());
+                    current->GetGene()->AddExonVector(n->GetGene()->GetExons());
+                    current->GetGene()->AddStartCodonVector(n->GetGene()->GetStartCodons());
+                    current->GetGene()->AddStopCodonVector(n->GetGene()->GetStopCodons());
+                    current->GetGene()->AddCDSVector(n->GetGene()->GetCDS());
                     break;
                 case Lt:
                     current->SetLeftChild(DoInsertion(current->GetLeftChild(), n));
@@ -572,15 +576,15 @@ void AVLTree::InorderTraversal(Node *current)
 {
     Node *left      = current->GetLeftChild();
     Node *right     = current->GetRightChild();
-    TranscriptLine *tData = current->GetData();
+    Gene *gene      = current->GetGene();
     
     if (left != NULL)
     {
         InorderTraversal(left);
     }
 
-    cerr << tData->GetChrom() << "\t" << tData->GetStart() << "\t" << tData->GetStop()
-         << "\t" << tData->GetGeneId() << "\t" << endl;
+    cerr << gene->GetChrom() << "\t" << gene->GetStart() << "\t" << gene->GetStop()
+         << "\t" << gene->GetGeneId() << "\t" << endl;
 
     if (right != NULL)
     {
@@ -597,9 +601,9 @@ void AVLTree::PreorderTraversal(Node *current)
 {
     if (current != NULL)
     {
-        TranscriptLine *tData = current->GetData();
-        cerr << tData->GetChrom() << "\t" << tData->GetStart() << "\t" << tData->GetStop()
-             << "\t" << tData->GetGeneId() << endl;
+        Gene *gene = current->GetGene();
+        cerr << gene->GetChrom() << "\t" << gene->GetStart() << "\t" << gene->GetStop()
+             << "\t" << gene->GetGeneId() << endl;
     
         PreorderTraversal(current->GetLeftChild());
         PreorderTraversal(current->GetRightChild());

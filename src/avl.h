@@ -2,8 +2,8 @@
 *    @author: Alister Maguire
 *    @version: 1.0 8/28/16
 *****************************************************/
-#ifndef AVL_H
-#define AVL_H
+#ifndef AVL_G
+#define AVL_G
 #include <string>
 #include <data.h>
 using std::string;
@@ -21,11 +21,11 @@ class Node
     Node           *left;
     Node           *right; 
     unsigned int    height;
-    TranscriptLine *tData;
+    Gene           *gene;
 
   public:
                     Node();
-                    Node(TranscriptLine *d);
+                    Node(Gene *g);
                     Node(Node const &copy);
                    ~Node();
     bool            ExpandDataStart(int _start);
@@ -33,8 +33,8 @@ class Node
     void            SetHeight(unsigned int h);
     void            SetLeftChild(Node *l);
     void            SetRightChild(Node *r);
-    void            SetData(TranscriptLine *d);
-    TranscriptLine *GetData();
+    void            SetGene(Gene *g);
+    Gene           *GetGene();
     Node           *GetLeftChild();
     Node           *GetRightChild();
     unsigned int    GetHeight();
@@ -54,7 +54,7 @@ class AVLTree
     SortTypes       Sort;      
     Node           *DeletionSearch(Node *current, Node *target); 
     Node           *DeleteNode(Node *n);
-    Node           *FindLeftmost(TranscriptLine *originData, Node *searchNode);
+    Node           *FindLeftmost(Gene *originGene, Node *searchNode);
     Equality        StandardCompare(Node *n1, Node *n2);
     Equality        GenicCompare(Node *n1, Node *n2);
     Node           *DoInsertion(Node *current, Node *n);
@@ -77,14 +77,14 @@ class AVLTree
                     AVLTree();
                     AVLTree(char s);
                    ~AVLTree();
-    void            Insert(TranscriptLine *d);
-    void            Delete(TranscriptLine *d);
-    bool            Search(TranscriptLine *d);
+    void            Insert(Gene *g);
+    void            Delete(Gene *g);
+    bool            Search(Gene *g);
     void            InorderTraverse();
     void            PreorderTraverse();
     bool            IsEmpty();
     Node           *GetMin();
-    TranscriptLine *RemoveMin();
+    Gene           *RemoveMin();
 };
 
 #endif

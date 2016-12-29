@@ -7,6 +7,7 @@
 #include <sstream>
 #include <data.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <iostream>
 #include <fstream>
@@ -114,7 +115,7 @@ void Reader::ReadTranscripts()
         string chrom;
         string geneId;
         string transcriptId;
-        string feature;
+        string featureName;
         string scrap;
         char   frame;
         int    start;
@@ -124,7 +125,7 @@ void Reader::ReadTranscripts()
         {
             std::istringstream iss(rawLine);
             if (!(iss >> chrom >> start >> stop >> scrap >> scrap >> strand >> scrap 
-               >> feature >> frame >> scrap >> geneId >> scrap >> transcriptId))
+               >> featureName >> frame >> scrap >> geneId >> scrap >> transcriptId))
                 break;
             geneId.erase(0, 1);
             geneId.erase(geneId.length()-2, 2);
@@ -133,22 +134,47 @@ void Reader::ReadTranscripts()
             //TODO: this data is lost in the tree (expansion overwrites data).
             //      let's either not enter the data in the first place or use
             //      a different method that doesn't involve data loss. 
+/*
             TranscriptLine *line = new TranscriptLine(chrom, geneId, transcriptId, 
-                                       feature, frame, start, stop, strand);
-            geneTree.Insert(line);
+                                       featureName, frame, start, stop, strand);
+*/
+            
+            Gene *gene = new Gene(chrom, geneId, transcriptId, 
+                                  frame, start, stop, strand);
+                 
+            GeneFeature feature(featureName, start, stop); 
+            if (featureName.compare("exon") == 0)
+                gene->AddExon(feature);
+            else if (featureName.compare("start_codon") == 0)
+                gene->AddStartCodon(feature);
+            else if (featureName.compare("stop_codon") == 0)
+                gene->AddStopCodon(feature);
+            else if (featureName.compare("cds") == 0)
+                gene->AddCDS(feature);
+            else
+            {
+                cerr << "ERROR: Unknown gene feature found! feature: "
+                     << featureName << " line: "
+                     << __LINE__ << endl;
+                cerr << "Exiting program..." << endl;
+                exit(EXIT_FAILURE);
+            }
+
+            //geneTree.Insert(line);
+            geneTree.Insert(gene);
         } 
 
         while (!geneTree.IsEmpty())
         {
-            posTree.Insert(geneTree.RemoveMin());  //TODO: it would probably be faster to use a min heap for the. 
-            gCount++;                              //      second data structure.
+            posTree.Insert(geneTree.RemoveMin());  //TODO: this is super lazy. let's 
+            gCount++;                              //      do a quicksort instead. 
         }
 
-
+/*
         srcTranscriptData.InitData(gCount);
         TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
         TranscriptLine *treeLine;
-        int tCount = 0;
+        unsigned int tCount = 0;
         while (!posTree.IsEmpty())
         {
             treeLine = posTree.RemoveMin();
@@ -158,6 +184,22 @@ void Reader::ReadTranscripts()
         }
 
         srcTranscriptData.SetGeneCount(gCount);
+*/
+//testing
+
+        srcGeneData.InitGenes(gCount);
+        Gene *genes = srcGeneData.GetGenes();
+        Gene *treeGene;
+        unsigned int tCount = 0;
+    
+        while (!posTree.IsEmpty())
+        {
+            treeGene = posTree.RemoveMin();
+            genes[tCount] = *treeGene;
+            delete treeGene;
+            tCount++;
+        }
+        srcGeneData.SetGeneCount(gCount);
     }
     else
         cerr << "ERROR: Unable to open transcripts file" << endl; //TODO: error handling needed

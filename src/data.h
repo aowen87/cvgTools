@@ -265,6 +265,8 @@ class Gene : public TranscriptLine
     vector<GeneFeature> startCodons;
     vector<GeneFeature> stopCodons;
     vector<GeneFeature> CDS;
+    void                ConcatFeatureVectors(vector<GeneFeature> base,
+                                             vector<GeneFeature> add);
 
   public:
                         Gene();
@@ -278,6 +280,11 @@ class Gene : public TranscriptLine
     void                AddStartCodon(GeneFeature sc); 
     void                AddStopCodon(GeneFeature sc); 
     void                AddCDS(GeneFeature cds); 
+    void                AddExonVector(vector<GeneFeature> eVec);
+    void                AddStartCodonVector(vector<GeneFeature> scVec);
+    void                AddStopCodonVector(vector<GeneFeature> scVec);
+    void                AddCDSVector(vector<GeneFeature> cdsVec);
+    void                DeepCopy(Gene g);
     vector<GeneFeature> GetExons(); 
     vector<GeneFeature> GetStartCodons(); 
     vector<GeneFeature> GetStopCodons(); 

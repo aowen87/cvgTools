@@ -27,6 +27,7 @@ class Source
     WindowBlock       srcNaturalWindows;
     WindowBlock       srcWindowBlock;
     TranscriptData    srcTranscriptData;
+    GeneData          srcGeneData;
     long int          natWinCount;
     long int          geneCount;
     bool              genicWindows;
@@ -38,6 +39,7 @@ class Source
     WindowBlock       *GetWindowBlock();
     WindowBlock       *GetNaturalWindows();
     TranscriptData    *GetTranscriptData();
+    GeneData          *GetGeneData();
     long int           GetNatWinCount();
     long int           GetGeneCount();
     void               SetGeneCount(long int count);

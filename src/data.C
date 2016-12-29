@@ -537,7 +537,7 @@ WindowBlock::WindowBlock(WindowBlock const &copy)
 {
     numWindows = copy.numWindows;
     windows = new Window[numWindows];
-    std::copy(&copy.windows[0], &copy.windows[numWindows], windows);//TODO: make my own copy?
+    std::copy(&copy.windows[0], &copy.windows[numWindows], windows);
     diffSet = false;
 }
 
@@ -553,7 +553,7 @@ WindowBlock::WindowBlock(WindowBlock const &copy)
 ***/
 void WindowBlock::WindowBlockSwap(WindowBlock &s)
 {
-    swap(this->windows, s.windows); //FIXME: use my own swap?
+    swap(this->windows, s.windows); 
     swap(this->numWindows, s.numWindows);
 }
 
@@ -1002,7 +1002,7 @@ TranscriptData::TranscriptData(TranscriptData const &copy)
     dataSize  = copy.dataSize;
     geneCount = copy.geneCount;
     transcripts = new TranscriptLine[dataSize];
-    std::copy(&copy.transcripts[0], &copy.transcripts[dataSize], transcripts);//FIXME: make my own copy?
+    std::copy(&copy.transcripts[0], &copy.transcripts[dataSize], transcripts);
 }
 
 
@@ -1362,6 +1362,107 @@ void Gene::AddCDS(GeneFeature cds) { CDS.push_back(cds); }
 /***
 * @author: Alister Maguire
 *
+* Add all elements from the GeneFeature vector "add"
+* to the GeneFeature vector "base". 
+*
+* @param: base -> the base vector to have elements added.
+*         add  -> the vector to retrieve the new elements 
+*                 from. 
+*
+***/
+void Gene::ConcatFeatureVectors(vector<GeneFeature> base,
+                                vector<GeneFeature> add)
+{
+    int size = add.size();
+    for (int i = 0; i < size; ++i)
+        base.push_back(add[i]);
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Add all elements from a vector of GeneFeature
+* objects to exons. 
+*
+* @param: eVec -> a vector of exons. 
+***/
+void Gene::AddExonVector(vector<GeneFeature> eVec)
+{
+    if (!eVec.empty())
+        ConcatFeatureVectors(exons, eVec);
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Add all elements from a vector of GeneFeature
+* objects to startCodons. 
+*
+* @param: scVec -> a vector of start codons. 
+***/
+void Gene::AddStartCodonVector(vector<GeneFeature> scVec)
+{
+    if (!scVec.empty())
+        ConcatFeatureVectors(startCodons, scVec);
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Add all elements from a vector of GeneFeature
+* objects to stopCodons. 
+*
+* @param: scVec -> a vector of stop codons. 
+***/
+void Gene::AddStopCodonVector(vector<GeneFeature> scVec)
+{
+    if (!scVec.empty())
+        ConcatFeatureVectors(stopCodons, scVec);
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Add all elements from a vector of GeneFeature
+* objects to CDS. 
+*
+* @param: cdsVec -> a vector of cds features. 
+***/
+void Gene::AddCDSVector(vector<GeneFeature> cdsVec)
+{
+    if (!cdsVec.empty())
+        ConcatFeatureVectors(CDS, cdsVec);
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Deep copy of a Gene. 
+*
+* @param: g -> a gene to copy from. 
+***/
+void Gene::DeepCopy(Gene g)
+{
+    chrom        = g.chrom;
+    geneId       = g.geneId;
+    transcriptId = g.transcriptId;
+    frame        = g.frame;
+    start        = g.start;
+    stop         = g.stop;
+    strand       = g.strand;
+    exons        = g.exons;
+    startCodons  = g.startCodons;//FIXME: this is deep copy for vectors, right?
+    stopCodons   = g.stopCodons;
+    CDS          = g.CDS; 
+}
+/***
+* @author: Alister Maguire
+*
 * Retrieve the exons. 
 *
 * @returns: exons 
@@ -1404,7 +1505,11 @@ vector<GeneFeature> Gene::GetCDS() { return CDS; }
 *
 * Empty constructor. 
 ***/
-GeneData::GeneData() {}
+GeneData::GeneData() 
+{
+    geneCount = 0;
+    genes     = NULL;
+}
 
 
 /***
@@ -1427,7 +1532,11 @@ GeneData::GeneData(Gene *_genes, unsigned int gCount)
 *
 * Destructor. 
 ***/
-GeneData::~GeneData() {}
+GeneData::~GeneData() 
+{
+    if (genes != NULL)
+        delete [] genes;
+}
 
 
 /***

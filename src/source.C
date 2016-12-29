@@ -75,6 +75,15 @@ TranscriptData *Source::GetTranscriptData() { return &srcTranscriptData; }
 /***
 * @author: Alister Maguire
 *
+* Retreive a reference to srcGeneData.
+* @returns: &srcGeneData.
+***/
+GeneData *Source::GetGeneData() { return &srcGeneData; }
+
+
+/***
+* @author: Alister Maguire
+*
 * Get the number of natural windows.
 *
 * @returns: natWinCount 
@@ -232,11 +241,12 @@ void Source::SetGenicWindows()
 //      on data taken from bed files, and this approach may need to change.
 //      Either that or we change the way we read in bed files.  
 
-    TranscriptLine *transcripts = srcTranscriptData.GetLines();
-    DataLine *dataLines         = srcData.GetLines();
-    if (transcripts == NULL)
+    //TranscriptLine *transcripts = srcTranscriptData.GetLines();
+    Gene *genes         = srcGeneData.GetGenes();    
+    DataLine *dataLines = srcData.GetLines();
+    if (genes == NULL)
     {
-        cerr << "ERROR: transcripts have not been loaded -> cannot compute gene windows" << endl;
+        cerr << "ERROR: genes have not been loaded -> cannot compute gene windows" << endl;
         exit(EXIT_FAILURE);
     }
     else if (dataLines == NULL)
@@ -248,29 +258,30 @@ void Source::SetGenicWindows()
     {
         
         unsigned long int dataSize = srcData.GetDataSize();
-        unsigned long int tranSize = srcTranscriptData.GetDataSize();
-        unsigned int geneCount     = srcTranscriptData.GetGeneCount();
-        Window *curWindows         = new Window[geneCount];
+        //unsigned long int tranSize = srcTranscriptData.GetDataSize();
+        unsigned long int gCount   = srcGeneData.GetGeneCount();
+        //unsigned int geneCount     = srcTranscriptData.GetGeneCount();
+        Window *curWindows         = new Window[gCount];
         unsigned int windowIdx     = 0;
         unsigned int pos           = 0;
         unsigned int dataIdx       = 0;
         unsigned int prevDataIdx   = 0;
         int span                   = 0;
         double curValTotal         = 0.0; 
-        TranscriptLine curTranscript;
-        TranscriptLine nxtTranscript;
+        Gene curGene;
+        Gene nxtGene;
         string geneChrom;
         double chromNum;
         unsigned int geneStart;
         unsigned int geneStop;
         unsigned int prevGeneStop = 0;
         unsigned int prevGeneStart;
-        for (unsigned int i = 0; i < tranSize; i++)
+        for (unsigned int i = 0; i < gCount; i++)
         {
-            curTranscript = transcripts[i];
-            geneChrom = curTranscript.GetChrom();
-            geneStart = curTranscript.GetStart();
-            geneStop  = curTranscript.GetStop();
+            curGene = genes[i];
+            geneChrom = curGene.GetChrom();
+            geneStart = curGene.GetStart();
+            geneStop  = curGene.GetStop();
             prevDataIdx = dataIdx;
 
             //Note: because the chromosome names contain a string of letters followed
@@ -298,8 +309,8 @@ void Source::SetGenicWindows()
 
             if (HPR::ExtractNumFromString(dataLines[dataIdx].GetChrom()) > chromNum)
             {
-                cerr << "Gene not found: " << curTranscript.GetGeneId() << " "
-                     << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
+                cerr << "Gene not found: " << curGene.GetGeneId() << " "
+                     << curGene.GetStart() << " " << curGene.GetStop() << endl;
                 cerr << "line: " << __LINE__ << endl;
                 exit(EXIT_FAILURE);
             }
@@ -309,8 +320,8 @@ void Source::SetGenicWindows()
 
             if (dataLines[dataIdx].GetStart() > geneStart)
             {
-                cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
-                     << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
+                cerr << "Gene not found: " << curGene.GetGeneId() << " " 
+                     << curGene.GetStart() << " " << curGene.GetStop() << endl;
                 cerr << "line: " << __LINE__ << endl;
                 exit(EXIT_FAILURE);
             }
@@ -325,7 +336,7 @@ void Source::SetGenicWindows()
                     windowLines[pos] = curLine;
                     pos++;
                 }
-                Window newWindow(curTranscript.GetGeneId(), span, geneStart, 
+                Window newWindow(curGene.GetGeneId(), span, geneStart, 
                                  geneStop, curValTotal/span, windowLines);
                 curWindows[windowIdx] = newWindow;                 
                 prevGeneStart = geneStart;
@@ -337,13 +348,13 @@ void Source::SetGenicWindows()
             }
             else
             {
-                cerr << "Gene not found: " << curTranscript.GetGeneId() << " " 
-                     << curTranscript.GetStart() << " " << curTranscript.GetStop() << endl;
+                cerr << "Gene not found: " << curGene.GetGeneId() << " " 
+                     << curGene.GetStart() << " " << curGene.GetStop() << endl;
                 cerr << "line: " << __LINE__ << endl;
                 exit(EXIT_FAILURE);
             }
         }
-        srcWindowBlock.SetWindows(geneCount, curWindows);
+        srcWindowBlock.SetWindows(gCount, curWindows);
         genicWindows = true;
         delete [] curWindows;                
     }
