@@ -421,54 +421,26 @@ AVLTree::Equality AVLTree::StandardCompare(Node *n1, Node *n2)
 {
     Gene *n1Data  = n1->GetGene();
     Gene *n2Data  = n2->GetGene();
-    double n1ChromNum = HPR::ExtractNumFromString(n1Data->GetChrom());    
-    double n2ChromNum = HPR::ExtractNumFromString(n2Data->GetChrom());
+    
+    int result = HPR::GeneCompare(*n1Data, *n2Data);
     AVLTree::Equality e;
     
-    if (n1ChromNum == n2ChromNum)
+    switch(result)
     {
-        int n1Start = n1Data->GetStart();
-        int n2Start = n2Data->GetStart();
-
-        if (n1Start == n2Start)
-        {
-            int n1Stop = n1Data->GetStop();
-            int n2Stop = n2Data->GetStop();
-            
-            if (n1Stop == n2Stop)
-            {
-                e = Eq;
-                return e;                         
-            }
-
-            else if (n1Stop < n2Stop)
-            {
-                e = Lt;
-                return e;
-            }
-
+        case(0):
+            e = Eq;
+            return e; 
+        case(1):
             e = Gt;
             return e;
-        }
-    
-        else if (n1Start < n2Start)
-        {
+        case(-1):
             e = Lt;
             return e;
-        }
-
-        e = Gt;
-        return e;
+        default:
+            cerr << "ERROR: unknown case! line: " << __LINE__ << endl;
+            cerr << "Exiting..." << endl;
+            exit(EXIT_FAILURE);
     }
-
-    else if (n1ChromNum < n2ChromNum)
-    {
-        e = Lt;
-        return Lt;
-    }
-
-    e = Gt;
-    return e;
 }
 
 

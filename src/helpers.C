@@ -116,3 +116,88 @@ double HPR::ExtractNumFromString(string s)
 }
 
 
+int HPR::GeneCompare(Gene gene1, Gene gene2)
+{
+    double n1ChromNum = HPR::ExtractNumFromString(gene1.GetChrom());    
+    double n2ChromNum = HPR::ExtractNumFromString(gene2.GetChrom());
+    
+    if (n1ChromNum == n2ChromNum)
+    {
+        int n1Start = gene1.GetStart();
+        int n2Start = gene2.GetStart();
+
+        if (n1Start == n2Start)
+        {
+            int n1Stop = gene1.GetStop();
+            int n2Stop = gene2.GetStop();
+            
+            if (n1Stop == n2Stop)
+                return 0;                         
+
+            else if (n1Stop < n2Stop)
+                return -1;
+
+            return 1;
+        }
+    
+        else if (n1Start < n2Start)
+            return -1;
+
+        return 1;
+    }
+
+    else if (n1ChromNum < n2ChromNum)
+        return -1;
+
+    return 1;
+}
+
+
+int Partition(Gene **genes, int low, int high);
+void ElementSwap(Gene **genes, int i, int j);
+
+void HPR::GeneQuickSort(Gene **genes, int low, int high)
+{
+    if (low < high)
+    {
+        int pivIdx = Partition(genes, low, high);
+        HPR::GeneQuickSort(genes, low, pivIdx);
+        HPR::GeneQuickSort(genes, pivIdx + 1, high);
+    } 
+}
+
+
+int Partition(Gene **genes, int low, int high)
+{
+    Gene pivot = (*genes)[low];
+    int i = low - 1;
+    int j = high + 1;
+
+    while (true)
+    {
+        do
+        {
+            i++;
+        } while (HPR::GeneCompare((*genes)[i], pivot) < 0 );
+
+        do
+        {
+            j--;
+        } while(HPR::GeneCompare((*genes)[j], pivot) > 0); 
+
+        if (i >= j)
+            return j;
+        
+        ElementSwap(genes, i, j);
+    }
+}
+
+
+void ElementSwap(Gene **genes, int i, int j)
+{
+    Gene tmp    = (*genes)[i];
+    (*genes)[i] = (*genes)[j];
+    (*genes)[j] = tmp; 
+}
+
+

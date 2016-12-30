@@ -276,6 +276,7 @@ class Gene : public TranscriptLine
                              char _frame, int _start, int _stop, char _strand, 
                              vector<GeneFeature> ex, vector<GeneFeature> startC, 
                              vector<GeneFeature> stopC, vector<GeneFeature> _cds);
+    void                GeneSwap(Gene &s);
     void                AddExon(GeneFeature e); 
     void                AddStartCodon(GeneFeature sc); 
     void                AddStopCodon(GeneFeature sc); 

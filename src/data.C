@@ -202,7 +202,9 @@ void Data::DataSwap(Data &s)
 {
     swap(this->dataSize, s.dataSize); 
     swap(this->valAverage, s.valAverage);
-    swap(this->data, s.data);
+    DataLine *tmp  = s.data;
+    s.data         = this->data;
+    this->data     = tmp;
 }
 
 
@@ -553,7 +555,9 @@ WindowBlock::WindowBlock(WindowBlock const &copy)
 ***/
 void WindowBlock::WindowBlockSwap(WindowBlock &s)
 {
-    swap(this->windows, s.windows); 
+    Window *tmp   = s.windows;
+    s.windows     = this->windows;
+    this->windows = tmp;
     swap(this->numWindows, s.numWindows);
 }
 
@@ -1016,7 +1020,9 @@ TranscriptData::TranscriptData(TranscriptData const &copy)
 ***/
 void TranscriptData::TranscriptDataSwap(TranscriptData &s)
 {
-    swap(this->transcripts, s.transcripts); 
+    TranscriptLine *tmp = s.transcripts;
+    s.transcripts       = this->transcripts;
+    this->transcripts   = tmp;
     swap(this->dataSize, s.dataSize);
     swap(this->geneCount, s.geneCount);
 }
@@ -1547,7 +1553,10 @@ GeneData::~GeneData()
 ***/
 void GeneData::GeneDataSwap(GeneData &s)
 {
-    swap(this->genes, s.genes); 
+    //swap(this->genes, s.genes); 
+    Gene *tmp   = s.genes;
+    s.genes     = this->genes;
+    this->genes = tmp;
     swap(this->geneCount, s.geneCount);
 }
 

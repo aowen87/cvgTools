@@ -10,9 +10,11 @@ using std::string;
 
 namespace HPR 
 {
-    bool CharIsDigit(char c);
-    int CharToInt(char c);
+    bool   CharIsDigit(char c);
+    int    CharToInt(char c);
     double ExtractNumFromString(string s);
+    void   GeneQuickSort(Gene **genes, int low, int high);
+    int    GeneCompare(Gene gene1, Gene gene2);
 }
 #endif
 
