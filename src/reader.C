@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <avl.h>
+#include <helpers.h>
 using std::cerr;
 using std::endl;
 using std::ifstream;
@@ -109,7 +110,7 @@ void Reader::ReadTranscripts()
     if (inFile.is_open())
     {
         AVLTree geneTree('g');
-        AVLTree posTree('s');
+        //AVLTree posTree('s');
         unsigned int gCount = 0;
         string rawLine;
         string chrom;
@@ -131,14 +132,6 @@ void Reader::ReadTranscripts()
             geneId.erase(geneId.length()-2, 2);
             transcriptId.erase(0, 1);
             transcriptId.erase(transcriptId.length()-2, 2);
-            //TODO: this data is lost in the tree (expansion overwrites data).
-            //      let's either not enter the data in the first place or use
-            //      a different method that doesn't involve data loss. 
-/*
-            TranscriptLine *line = new TranscriptLine(chrom, geneId, transcriptId, 
-                                       featureName, frame, start, stop, strand);
-*/
-            
             Gene *gene = new Gene(chrom, geneId, transcriptId, 
                                   frame, start, stop, strand);
                  
@@ -160,32 +153,32 @@ void Reader::ReadTranscripts()
                 exit(EXIT_FAILURE);
             }
 
-            //geneTree.Insert(line);
             geneTree.Insert(gene);
         } 
 
+        //Testing block begin
+        gCount = geneTree.GetNumNodes();
+        srcGeneData.InitGenes(gCount);
+        Gene *genes = srcGeneData.GetGenes();
+        Gene *treeGene;
+        unsigned int tCount = 0;
+        while (!geneTree.IsEmpty())
+        {
+            treeGene = geneTree.RemoveMin();
+            genes[tCount] = *treeGene;
+            delete treeGene;
+            tCount++;
+        }
+        srcGeneData.SetGeneCount(gCount);
+        HPR::GeneQuickSort(&genes, 0, gCount-1);
+        //Testing block end
+
+/*
         while (!geneTree.IsEmpty())
         {
             posTree.Insert(geneTree.RemoveMin());  //TODO: this is super lazy. let's 
             gCount++;                              //      do a quicksort instead. 
         }
-
-/*
-        srcTranscriptData.InitData(gCount);
-        TranscriptLine *TranscriptLines = srcTranscriptData.GetLines();
-        TranscriptLine *treeLine;
-        unsigned int tCount = 0;
-        while (!posTree.IsEmpty())
-        {
-            treeLine = posTree.RemoveMin();
-            TranscriptLines[tCount] = *treeLine;
-            delete treeLine;
-            tCount++;
-        }
-
-        srcTranscriptData.SetGeneCount(gCount);
-*/
-//testing
 
         srcGeneData.InitGenes(gCount);
         Gene *genes = srcGeneData.GetGenes();
@@ -200,6 +193,7 @@ void Reader::ReadTranscripts()
             tCount++;
         }
         srcGeneData.SetGeneCount(gCount);
+*/
     }
     else
         cerr << "ERROR: Unable to open transcripts file" << endl; //TODO: error handling needed

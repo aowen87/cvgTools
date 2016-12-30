@@ -48,6 +48,7 @@ class AVLTree
 {
   private:
     Node           *root;    
+    unsigned long   numNodes;
     enum            BalanceCase { LEFTLEFT, RIGHTRIGHT, LEFTRIGHT, RIGHTLEFT }; 
     enum            SortTypes { Standard, Genic };
     enum            Equality { Lt, Gt, Eq };
@@ -85,6 +86,7 @@ class AVLTree
     bool            IsEmpty();
     Node           *GetMin();
     Gene           *RemoveMin();
+    unsigned long   GetNumNodes();
 };
 
 #endif

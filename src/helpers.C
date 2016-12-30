@@ -169,7 +169,7 @@ void HPR::GeneQuickSort(Gene **genes, int low, int high)
 
 int Partition(Gene **genes, int low, int high)
 {
-    Gene pivot = (*genes)[low];
+    Gene *pivot = &((*genes)[low]);
     int i = low - 1;
     int j = high + 1;
 
@@ -178,12 +178,12 @@ int Partition(Gene **genes, int low, int high)
         do
         {
             i++;
-        } while (HPR::GeneCompare((*genes)[i], pivot) < 0 );
+        } while (HPR::GeneCompare((*genes)[i], *pivot) < 0 );
 
         do
         {
             j--;
-        } while(HPR::GeneCompare((*genes)[j], pivot) > 0); 
+        } while(HPR::GeneCompare((*genes)[j], *pivot) > 0); 
 
         if (i >= j)
             return j;
@@ -195,9 +195,7 @@ int Partition(Gene **genes, int low, int high)
 
 void ElementSwap(Gene **genes, int i, int j)
 {
-    Gene tmp    = (*genes)[i];
-    (*genes)[i] = (*genes)[j];
-    (*genes)[j] = tmp; 
+    (*genes)[i].GeneSwap((*genes)[j]);
 }
 
 

@@ -164,6 +164,7 @@ AVLTree::AVLTree()
 {
     root = NULL;
     Sort = Standard;
+    numNodes = 0;
 }
 
 
@@ -182,6 +183,7 @@ AVLTree::AVLTree(char s)
         cerr << "Inavlid sort option: " << s << endl;
         exit(EXIT_FAILURE); 
     }
+    numNodes = 0;
 }
 
 
@@ -303,7 +305,7 @@ Gene *AVLTree::RemoveMin()
     }
     Gene *outData    = new Gene; 
     Gene *searchData = new Gene;
-    Node *minNode              = FindMin(root);
+    Node *minNode    = FindMin(root);
     searchData->DeepCopy( *(minNode->GetGene()) );
     outData->DeepCopy( *(minNode->GetGene()) );
     Node *searchNode = new Node(searchData);
@@ -365,6 +367,7 @@ Node *AVLTree::DeleteNode(Node *n)
     Node *left  = n->GetLeftChild();
     Node *right = n->GetRightChild();
     Node *scrap = NULL;
+    numNodes--;
     
     if (left == NULL && right == NULL)
     {
@@ -480,6 +483,7 @@ Node *AVLTree::DoInsertion(Node *current, Node *n)
     
     if (current == NULL)
     {
+        numNodes++;
         current = new Node(*n); 
         return CheckBalance(current);
     }
@@ -820,4 +824,7 @@ bool AVLTree::IsEmpty()
 }
 
 
-
+/***
+*
+***/
+unsigned long AVLTree::GetNumNodes() { return numNodes; }

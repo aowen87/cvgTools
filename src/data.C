@@ -1324,6 +1324,29 @@ Gene::Gene(string _chrom, string _geneId, string _transcriptId,
 }
 
 
+/***
+* @author: Alister Maguire
+*
+* Swap all elementes between this gene and an
+* input gene. 
+*
+* @param: s -> a gene to swap values with. 
+***/
+void Gene::GeneSwap(Gene &s)
+{
+    swap(this->chrom, s.chrom);
+    swap(this->geneId, s.geneId);
+    swap(this->transcriptId, s.transcriptId);
+    swap(this->frame, s.frame);
+    swap(this->start, s.start);
+    swap(this->stop, s.stop);
+    swap(this->strand, s.strand);
+    swap(this->exons, s.exons);
+    swap(this->startCodons, s.startCodons);
+    swap(this->stopCodons, s.stopCodons);
+    swap(this->CDS, s.CDS);
+}
+
 
 /***
 * @author: Alister Maguire
@@ -1553,7 +1576,9 @@ GeneData::~GeneData()
 ***/
 void GeneData::GeneDataSwap(GeneData &s)
 {
+    cerr << "here" << endl;
     Gene *tmp   = s.genes;
+    cerr << "past" << endl;
     s.genes     = this->genes;
     this->genes = tmp;
     swap(this->geneCount, s.geneCount);
