@@ -1553,7 +1553,6 @@ GeneData::~GeneData()
 ***/
 void GeneData::GeneDataSwap(GeneData &s)
 {
-    //swap(this->genes, s.genes); 
     Gene *tmp   = s.genes;
     s.genes     = this->genes;
     this->genes = tmp;
