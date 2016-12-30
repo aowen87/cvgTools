@@ -110,7 +110,6 @@ void Reader::ReadTranscripts()
     if (inFile.is_open())
     {
         AVLTree geneTree('g');
-        //AVLTree posTree('s');
         unsigned int gCount = 0;
         string rawLine;
         string chrom;
@@ -156,7 +155,6 @@ void Reader::ReadTranscripts()
             geneTree.Insert(gene);
         } 
 
-        //Testing block begin
         gCount = geneTree.GetNumNodes();
         srcGeneData.InitGenes(gCount);
         Gene *genes = srcGeneData.GetGenes();
@@ -171,29 +169,6 @@ void Reader::ReadTranscripts()
         }
         srcGeneData.SetGeneCount(gCount);
         HPR::GeneQuickSort(&genes, 0, gCount-1);
-        //Testing block end
-
-/*
-        while (!geneTree.IsEmpty())
-        {
-            posTree.Insert(geneTree.RemoveMin());  //TODO: this is super lazy. let's 
-            gCount++;                              //      do a quicksort instead. 
-        }
-
-        srcGeneData.InitGenes(gCount);
-        Gene *genes = srcGeneData.GetGenes();
-        Gene *treeGene;
-        unsigned int tCount = 0;
-    
-        while (!posTree.IsEmpty())
-        {
-            treeGene = posTree.RemoveMin();
-            genes[tCount] = *treeGene;
-            delete treeGene;
-            tCount++;
-        }
-        srcGeneData.SetGeneCount(gCount);
-*/
     }
     else
         cerr << "ERROR: Unable to open transcripts file" << endl; //TODO: error handling needed
