@@ -30,7 +30,7 @@ class Source
     GeneData          srcGeneData;
     long int          natWinCount;
     long int          geneCount;
-    bool              genicWindows;
+    //bool              genicWindows;
 
   public:
                        Source();

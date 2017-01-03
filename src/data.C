@@ -144,7 +144,7 @@ Data::Data()
 {
     data       = NULL;
     dataSize   = 0.0;
-    valAverage = -1;
+    valAverage = 0;
     diffSet    = false;
 }
 
@@ -163,10 +163,11 @@ Data::Data(int size, DataLine *_data)
 {
     if (data != NULL)
         delete [] data;
-    dataSize = size;
-    data     = new DataLine[dataSize];
-    data     = _data;
-    diffSet  = false;
+    dataSize   = size;
+    data       = new DataLine[dataSize];
+    data       = _data;
+    valAverage = 0;
+    diffSet    = false;
 }
 
 
@@ -382,11 +383,11 @@ void Data::BaseDiffSet(bool set) { diffSet = set; }
 ***/
 Window::Window() 
 {
-    start      = -1;
-    stop       = -1;
-    valAverage = -1;
-    title      = "EMPTY";
-    data       = NULL;
+    start        = 0;
+    stop         = 0;
+    valAverage   = -1;
+    title        = "";
+    data         = NULL;
 }
 
 
@@ -401,11 +402,11 @@ Window::Window()
 ***/
 Window::Window(unsigned long int size) 
 {
-    start      = -1;
-    stop       = -1;
-    valAverage = -1;
-    title      = "EMPTY";
-    data       = new DataLine[size];
+    start        = 0;
+    stop         = 0;
+    valAverage   = -1;
+    title        = "";
+    data         = new DataLine[size];
 }
 
 
@@ -425,19 +426,19 @@ Window::Window(unsigned long int size)
 ***/
 Window::Window(string _title, unsigned long int size, int _start, int _stop, double _avgVal, DataLine *lines)
 {
-    data       = NULL;
+    data         = NULL;
     SetData(size, lines);
-    start      = _start;
-    stop       = _stop;
-    valAverage = _avgVal;
-    title      = _title;
+    start        = _start;
+    stop         = _stop;
+    valAverage   = _avgVal;
+    title        = _title;
 }
 
 
 /***
 * @author: Alister Maguire
 *
-* Set the data members for Window. 
+* Set the basic data members for Window. 
 *
 * @param: _title  -> window title.
 *         _start  -> the start position of the window. 
@@ -500,7 +501,7 @@ string Window::GetTitle() { return title; }
 *
 * @returns: start -> the start position of the window. 
 ***/
-int Window::GetStart() { return start; }
+unsigned int Window::GetStart() { return start; }
 
 
 /***
@@ -510,7 +511,7 @@ int Window::GetStart() { return start; }
 *
 * @returns: stop -> the stop position of the window. 
 ***/
-int Window::GetStop() { return stop; }
+unsigned int Window::GetStop() { return stop; }
 
 
 /***
@@ -946,7 +947,7 @@ char TranscriptLine::GetStrand() { return strand; }
 * 
 * @returns: frame -> the frame value for this transcript line. 
 ***/
-char TranscriptLine::GetRGB() { return frame; }
+char TranscriptLine::GetFrame() { return frame; }
 
 
 /***
@@ -1057,7 +1058,7 @@ void TranscriptData::SetData(unsigned long int size, TranscriptLine *data)
     {
         TranscriptLine curLine = data[i];
         TranscriptLine newLine(curLine.GetChrom(), curLine.GetGeneId(), curLine.GetTranscriptId(),
-                               curLine.GetFeature(), curLine.GetRGB(), curLine.GetStart(), 
+                               curLine.GetFeature(), curLine.GetFrame(), curLine.GetStart(), 
                                curLine.GetStop(), curLine.GetStrand());
         transcripts[i] = newLine;
     }
@@ -1167,7 +1168,7 @@ GeneFeature::GeneFeature()
 *         start -> the start position. 
 *         stop -> the stop position. 
 ***/
-GeneFeature::GeneFeature(string _name, int _start, int _stop)
+GeneFeature::GeneFeature(string _name, unsigned int _start, unsigned int _stop)
 {
     name  = _name;
     start = _start;
@@ -1230,7 +1231,7 @@ void GeneFeature::SetName(string _name) { name = _name; }
 *
 * @param: _start -> the start position. 
 ***/
-void GeneFeature::SetStart(int _start) { start = _start; }
+void GeneFeature::SetStart(unsigned int _start) { start = _start; }
 
 
 /***
@@ -1240,7 +1241,7 @@ void GeneFeature::SetStart(int _start) { start = _start; }
 *
 * @param: _stop -> the gene's stop position. 
 ***/
-void GeneFeature::SetStop(int _stop) { stop = _stop; }
+void GeneFeature::SetStop(unsigned int _stop) { stop = _stop; }
 
 
 /***
@@ -1257,6 +1258,8 @@ Gene::Gene()
     start        = 0;
     stop         = 0;
     strand       = 'X';
+    diffSet      = false;
+    diff         = 0;
 }
 
 
@@ -1276,7 +1279,8 @@ Gene::Gene()
 *         ex            -> the exons. 
 ***/
 Gene::Gene(string _chrom, string _geneId, string _transcriptId,
-           char _frame, int _start, int _stop, char _strand)
+           char _frame, unsigned int _start, unsigned int _stop, 
+           char _strand)
 {
     chrom        = _chrom;
     geneId       = _geneId;
@@ -1285,6 +1289,8 @@ Gene::Gene(string _chrom, string _geneId, string _transcriptId,
     start        = _start;
     stop         = _stop;
     strand       = _strand;
+    diffSet      = false;
+    diff         = 0;
 }
 
 
@@ -1306,8 +1312,8 @@ Gene::Gene(string _chrom, string _geneId, string _transcriptId,
 *         _cds          -> the cds features. 
 ***/
 Gene::Gene(string _chrom, string _geneId, string _transcriptId,  
-           char _frame, int _start, int _stop, char _strand, 
-           std::vector<GeneFeature> ex, vector<GeneFeature> startC, 
+           char _frame, unsigned int _start, unsigned int _stop, 
+           char _strand, std::vector<GeneFeature> ex, vector<GeneFeature> startC, 
            vector<GeneFeature> stopC, vector<GeneFeature> cds)
 {
     chrom        = _chrom;
@@ -1321,6 +1327,8 @@ Gene::Gene(string _chrom, string _geneId, string _transcriptId,
     startCodons  = startC;
     stopCodons   = stopC;
     CDS          = cds;
+    diffSet      = false;
+    diff         = 0;
 }
 
 
@@ -1489,6 +1497,38 @@ void Gene::DeepCopy(Gene g)
     stopCodons   = g.stopCodons;
     CDS          = g.CDS; 
 }
+
+
+/***
+* @author: Alister Maguire
+*
+* Check to see if the diff value is set. 
+*
+* @returns: diffSet -> true if it's set. False otherwise. 
+***/
+bool Gene::IsDiffSet() { return diffSet; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the diff value. 
+*
+* @param: d -> the diff value to set diff as. 
+***/
+void Gene::SetDiff(double d) { diff = d; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the diff value. 
+*
+* @returns: diff -> the diff value. 
+***/
+double Gene::GetDiff() { return diff; }
+
+
 /***
 * @author: Alister Maguire
 *
@@ -1538,6 +1578,7 @@ GeneData::GeneData()
 {
     geneCount = 0;
     genes     = NULL;
+    diffSet   = false;
 }
 
 
@@ -1552,6 +1593,7 @@ GeneData::GeneData()
 GeneData::GeneData(Gene *_genes, unsigned int gCount)
 {
     geneCount = gCount;
+    diffSet   = false;
     SetGenes(geneCount, _genes);
 }
 
@@ -1604,7 +1646,7 @@ void GeneData::SetGenes(unsigned int gCount, Gene *_genes)
     {
         Gene curGene = genes[i];
         Gene newGene(curGene.GetChrom(), curGene.GetGeneId(), curGene.GetTranscriptId(),
-                     curGene.GetRGB(), curGene.GetStart(), curGene.GetStop(), 
+                     curGene.GetFrame(), curGene.GetStart(), curGene.GetStop(), 
                      curGene.GetStrand(), curGene.GetExons(), curGene.GetStartCodons(), 
                      curGene.GetStopCodons(), curGene.GetCDS());
         genes[i] = newGene;
@@ -1681,4 +1723,14 @@ Gene GeneData::GetGene(unsigned int idx)
 ***/
 unsigned int GeneData::GetGeneCount() { return geneCount; }
 
+
+/***
+* @author: Alister Maguire
+*
+* Check to see if the diff values have 
+* been set for the genes. 
+*
+* @returns diffSet -> true iff they've been set. 
+***/
+bool GeneData::IsDiffSet() { return diffSet; }
 

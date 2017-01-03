@@ -279,7 +279,6 @@ void bedCovPerBaseReader::Execute()
             if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && score != 0.0 && prevName == name) || 
             (score == 0.0 && prevScore != 0.0 && prevName == name) || 
             (prevName != name && prevScore != 0))
-             //TODO: optimize?
                 natWinCount++; 
             count++;
             prevStop  = start;

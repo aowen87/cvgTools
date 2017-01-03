@@ -154,9 +154,15 @@ int main(int argc, char *argv[])
             {
                 for (int i = 0; i < in_size; ++i)
                 {
-                    WindowAvgWriter writer;
+                    unsigned int size = options.size();
+                    for (unsigned int m = 0; m < size; ++m)
+                    {
+                        if (options[m] == "Exons")
+                            cerr << "exons" << endl;
+                    }
+                    GeneAvgWriter writer;
                     bedCovReaders[i]->SetGenicWindows();
-                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
+                    writer.SetSinkGeneData(bedCovReaders[i]->GetGeneData());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
                     string out_f_str = out_path + FileName(input[i]) + "_GA_" + s_i  + ".txt";
@@ -169,9 +175,9 @@ int main(int argc, char *argv[])
             {
                 for (int i = 0; i < in_size; ++i)
                 {
-                    WindowWigWriter writer;
+                    GeneWigWriter writer;
                     bedCovReaders[i]->SetGenicWindows();
-                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
+                    writer.SetSinkGeneData(bedCovReaders[i]->GetGeneData());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
                     string out_f_str = out_path + FileName(input[i]) + "_GW_" + s_i  + ".wig";

@@ -26,6 +26,7 @@ class DataLine
     unsigned int stop; 
     double       val; 
     double       diff;
+
   public:
                  DataLine(string _chrom, unsigned int _start, 
                           unsigned int _stop, int _val);
@@ -70,7 +71,7 @@ class Data
               } 
              ~Data();
     DataLine *GetLines();
-    bool      IsBaseDiffSet();
+    bool      IsBaseDiffSet();     
     void      BaseDiffSet(bool set);
     void      SetData(unsigned long int size, DataLine *lines);
     void      SetValAvg(double avg);
@@ -90,22 +91,24 @@ class Data
 class Window : public Data
 {
   private:
-    string    title;
-    int       start;//TODO: check to make sure these can hold enough data for the ranges required
-    int       stop;
-    double    diff;//TODO: implement this
+    string         title;
+    unsigned int   start;
+    unsigned int   stop;
+    double         diff;//TODO: implement this
+
   public:
-              Window();
-              Window(unsigned long int size);
-              Window(string _title, unsigned long int size, int _start, int _stop, double _avgVal, DataLine *lines);
-    void      SetTitle(string _title);
-    void      SetAtts(string _title, int _start, int _stop, double _avg);
-    void      SetWindowDiff(double d);
-    double    GetDiff();
-    string    GetTitle();
-    int       GetStart();
-    int       GetStop();
-    void      SetAvgVal(double val);
+                   Window();
+                   Window(unsigned long int size);
+                   Window(string _title, unsigned long int size, int _start, 
+                          int _stop, double _avgVal, DataLine *lines);
+    void           SetTitle(string _title);
+    void           SetAtts(string _title, int _start, int _stop, double _avg);
+    void           SetWindowDiff(double d);
+    double         GetDiff();
+    string         GetTitle();
+    unsigned int   GetStart();
+    unsigned int   GetStop();
+    void           SetAvgVal(double val);
 };
 
 
@@ -120,6 +123,7 @@ class WindowBlock
     Window  *windows;
     bool     diffSet;
     unsigned long int numWindows;
+
   public:
               WindowBlock();
              ~WindowBlock(); 
@@ -157,18 +161,19 @@ class TranscriptLine
     string feature;
    
   protected:
-    string chrom;
-    string geneId;
-    string transcriptId;
-    char   frame;
-    int    start;
-    int    stop;
-    char   strand;
+    string       chrom;
+    string       geneId;
+    string       transcriptId;
+    char         frame;
+    unsigned int start;
+    unsigned int stop;
+    char         strand;
         
   public:
            TranscriptLine();
            TranscriptLine(string _chrom, string _geneId, string _transcriptId,  
-                          string _feature, char _frame, int _start, int _stop, char _strand);
+                          string _feature, char _frame, int _start, int _stop, 
+                          char _strand);
     void   DeepCopy(TranscriptLine line);
     void   SetChrom(string _chrom);
     void   SetGeneId(string id);
@@ -185,7 +190,7 @@ class TranscriptLine
     int    GetStart();
     int    GetStop();
     char   GetStrand();
-    char   GetRGB();
+    char   GetFrame();
     
 };
 
@@ -205,7 +210,8 @@ class TranscriptData
 
   public:
                     TranscriptData();
-                    TranscriptData(unsigned long int size, TranscriptLine *data, unsigned int gCount);
+                    TranscriptData(unsigned long int size, TranscriptLine *data, 
+                                   unsigned int gCount);
                    ~TranscriptData();
                     TranscriptData(TranscriptData const &copy);
     void            TranscriptDataSwap(TranscriptData &s);
@@ -235,19 +241,20 @@ class GeneFeature
   private:
     string name;
     //TODO: make start and stop unsigned long (need to change in Transcripts as well)
-    int start;
-    int stop;
+    unsigned int start;
+    unsigned int stop;
 
   public:
            GeneFeature();
-           GeneFeature(string _name, int _start, int _stop);
+           GeneFeature(string _name, unsigned int _start, 
+                       unsigned int _stop);
           ~GeneFeature();
     string GetName();
     int    GetStart();
     int    GetStop();
     void   SetName(string _name);
-    void   SetStart(int _start);
-    void   SetStop(int _stop);
+    void   SetStart(unsigned int _start);
+    void   SetStop(unsigned int _stop);
 };
 
 
@@ -258,9 +265,11 @@ class GeneFeature
 * the attributes of the TranscriptLine, but it
 * also contains more complex feature representations. 
 ***/
-class Gene : public TranscriptLine
+class Gene : public TranscriptLine, public Data
 {
   private:
+    double diff;
+    bool   diffSet;
     vector<GeneFeature> exons;
     vector<GeneFeature> startCodons;
     vector<GeneFeature> stopCodons;
@@ -271,10 +280,11 @@ class Gene : public TranscriptLine
   public:
                         Gene();
                         Gene(string _chrom, string _geneId, string _transcriptId,  
-                             char _frame, int _start, int _stop, char _strand);
+                             char _frame, unsigned int _start, unsigned int _stop,
+                             char _strand);
                         Gene(string _chrom, string _geneId, string _transcriptId,  
-                             char _frame, int _start, int _stop, char _strand, 
-                             vector<GeneFeature> ex, vector<GeneFeature> startC, 
+                             char _frame, unsigned int _start, unsigned int _stop, 
+                             char _strand, vector<GeneFeature> ex, vector<GeneFeature> startC, 
                              vector<GeneFeature> stopC, vector<GeneFeature> _cds);
     void                GeneSwap(Gene &s);
     void                AddExon(GeneFeature e); 
@@ -286,6 +296,9 @@ class Gene : public TranscriptLine
     void                AddStopCodonVector(vector<GeneFeature> scVec);
     void                AddCDSVector(vector<GeneFeature> cdsVec);
     void                DeepCopy(Gene g);
+    bool                IsDiffSet();
+    void                SetDiff(double d);
+    double              GetDiff(); 
     vector<GeneFeature> GetExons(); 
     vector<GeneFeature> GetStartCodons(); 
     vector<GeneFeature> GetStopCodons(); 
@@ -303,6 +316,7 @@ class GeneData
   private:
     Gene         *genes;  
     unsigned int  geneCount;
+    bool          diffSet;
 
   public:
                  GeneData(); 
@@ -321,6 +335,7 @@ class GeneData
     void         InitGenes(unsigned int gCount);
     Gene         GetGene(unsigned int idx);
     unsigned int GetGeneCount();
+    bool         IsDiffSet();
 };
 
 #endif

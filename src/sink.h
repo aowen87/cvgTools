@@ -22,10 +22,12 @@ class Sink
     Data           *snkData;
     WindowBlock    *snkWindowBlock;
     TranscriptData *snkTranscriptData;
+    GeneData       *snkGeneData;
   public:
     void  SetSinkData(Data *data);
     void  SetSinkWindowBlock(WindowBlock *block);
     void  SetSinkTranscriptData(TranscriptData *tData);
+    void  SetSinkGeneData(GeneData *gData);
     void  BaseDiff(Data *d2);
     void  WindowDiff(WindowBlock *w2);//TODO: implement
 };

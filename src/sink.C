@@ -49,6 +49,18 @@ void Sink::SetSinkTranscriptData(TranscriptData *tData)
 /***
 * @author: Alister Maguire
 *
+* Set the snkGeneData to point to a given GeneData.
+* @param: gData -> pointer to a GeneData object.
+***/
+void Sink::SetSinkGeneData(GeneData *gData)
+{
+    snkGeneData = gData;
+}
+
+
+/***
+* @author: Alister Maguire
+*
 *
 * @param: d2 -> a Data object to act as a baseline to 
 *           compare to. 
