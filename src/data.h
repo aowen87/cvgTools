@@ -240,7 +240,6 @@ class GeneFeature
 {
   private:
     string name;
-    //TODO: make start and stop unsigned long (need to change in Transcripts as well)
     unsigned int start;
     unsigned int stop;
 
