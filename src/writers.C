@@ -14,6 +14,11 @@ using std::endl;
 using std::ofstream;
 
 
+void GeneFeatureWriter(ofstream *outfile, vector<GeneFeature> features, 
+                       Gene curGene);
+void GeneFeatureDiffWriter(ofstream *outfile, vector<GeneFeature> features, 
+                           Gene curGene);
+
 
 /***
 * @author: Alister Maguire
@@ -311,6 +316,7 @@ GeneFeatureAvgWriter::GeneFeatureAvgWriter(std::string f)
 ***/
 void GeneFeatureAvgWriter::Write(const char *filename)
 {
+
     ofstream outfile (filename);
     if (outfile.is_open())
     { 
@@ -325,43 +331,118 @@ void GeneFeatureAvgWriter::Write(const char *filename)
             {
                 switch (feature)
                 {
+                    //TODO: let's create a helper function to do these case operations
                     case (Exons):
                     {
                         for (unsigned int i = 0; i < len; ++i)
                         {
                             curGene = snkGeneData->GetGene(i);
-                            vector<GeneFeature> exons = curGene.GetExons();
-                            unsigned int fSize = exons.size();
-                            for (unsigned int j = 0; j < fSize; ++j)
-                            {
-                               //FIXME: finish all of this 
-
-                            }
+                            vector<GeneFeature> exons = (*curGene.GetExons());
+                            GeneFeatureDiffWriter(&outfile, exons, curGene);
                         }
-
+                        break;
                     }    
 
+                    case (Start_Codons):
+                    {
+                        for (unsigned int i = 0; i < len; ++i)
+                        {
+                            curGene = snkGeneData->GetGene(i);
+                            vector<GeneFeature> sc = (*curGene.GetStartCodons());
+                            GeneFeatureDiffWriter(&outfile, sc, curGene);
+                        }
+                        break;
+                    }
+
+                    case (Stop_Codons):
+                    {
+                        for (unsigned int i = 0; i < len; ++i)
+                        {
+                            curGene = snkGeneData->GetGene(i);
+                            vector<GeneFeature> sc = (*curGene.GetStopCodons());
+                            GeneFeatureDiffWriter(&outfile, sc, curGene);
+                        }
+                        break;
+                    }
+                    
+                    case (CDS):
+                    {
+                        for (unsigned int i = 0; i < len; ++i)
+                        {
+                            curGene = snkGeneData->GetGene(i);
+                            vector<GeneFeature> cds = (*curGene.GetCDS());
+                            GeneFeatureDiffWriter(&outfile, cds, curGene);
+                        }
+                        break;
+                    }
+   
+                    default:
+                    {
+                        cerr << "ERROR: Invalid feature!? Line: " << __LINE__ 
+                             << endl;
+                        cerr << "Exiting..." << endl;
+                        exit(EXIT_FAILURE);
+                    }
 
                 }
-/*
-                for (unsigned int i = 0; i < len; i++)
-                {
-                    curGene = snkGeneData->GetGene(i);
-                    outfile << std::setprecision(3) << curGene.GetGeneId() << "\t"  
-                            << curGene.GetStart() << "\t" << curGene.GetStop() 
-                            << "\t" << curGene.GetValAvg() << "\t" << curGene.GetDiff() 
-                            << "\n";
-                }
-*/
             }
+
             else 
             {
-                for (unsigned int i = 0; i < len; i++)
+                switch (feature)
                 {
-                    curGene = snkGeneData->GetGene(i);
-                    outfile << std::setprecision(3) << curGene.GetGeneId() << "\t"  
-                            << curGene.GetStart() << "\t" << curGene.GetStop() 
-                            << "\t" << curGene.GetValAvg() << "\t" << "\n";
+                    case (Exons):
+                    {
+                        for (unsigned int i = 0; i < len; ++i)
+                        {
+                            curGene = snkGeneData->GetGene(i);
+                            vector<GeneFeature> exons = (*curGene.GetExons());
+                            GeneFeatureWriter(&outfile, exons, curGene);
+                        }
+                        break;
+                    }    
+
+                    case (Start_Codons):
+                    {
+                        for (unsigned int i = 0; i < len; ++i)
+                        {
+                            curGene = snkGeneData->GetGene(i);
+                            vector<GeneFeature> sc = (*curGene.GetStartCodons());
+                            GeneFeatureWriter(&outfile, sc, curGene);
+                        }
+                        break;
+                    }
+
+                    case (Stop_Codons):
+                    {
+                        for (unsigned int i = 0; i < len; ++i)
+                        {
+                            curGene = snkGeneData->GetGene(i);
+                            vector<GeneFeature> sc = (*curGene.GetStopCodons());
+                            GeneFeatureWriter(&outfile, sc, curGene);
+                        }
+                        break;
+                    }
+                    
+                    case (CDS):
+                    {
+                        for (unsigned int i = 0; i < len; ++i)
+                        {
+                            curGene = snkGeneData->GetGene(i);
+                            vector<GeneFeature> cds = (*curGene.GetCDS());
+                            GeneFeatureWriter(&outfile, cds, curGene);
+                        }
+                        break;
+                    }
+   
+                    default:
+                    {
+                        cerr << "ERROR: Invalid feature!? Line: " << __LINE__ 
+                             << endl;
+                        cerr << "Exiting..." << endl;
+                        exit(EXIT_FAILURE);
+                    }
+                
                 }
             }
         }      
@@ -462,3 +543,53 @@ void GeneWigWriter::Write(const char *filename)
         cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
 }
 
+
+/***
+* @author: Alister Maguire
+*
+* Write computed feature info out to a file. 
+*
+* @param: outfile -> the file to write to. 
+*         features -> a vector of gene features. 
+*         curGene  -> the gene containing these
+*                     features. 
+***/
+void GeneFeatureWriter(ofstream *outfile, vector<GeneFeature> features, 
+                       Gene curGene)
+{
+    unsigned int fSize = features.size();
+    for (unsigned int j = 0; j < fSize; ++j)
+    {
+        GeneFeature feature = features[j];
+        (*outfile) << std::setprecision(3) << curGene.GetGeneId() << "\t"  
+                   << feature.GetName() << "\t" << feature.GetStart() << "\t" 
+                   << feature.GetStop() << "\t" << feature.GetValAvg() << "\n";
+    }
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Write computed feature info out to a file. This
+* method differs from GeneFeatureWriter in that it
+* includes the feature diff value in the output file. 
+*
+* @param: outfile -> the file to write to. 
+*         features -> a vector of gene features. 
+*         curGene  -> the gene containing these
+*                     features. 
+***/
+void GeneFeatureDiffWriter(ofstream *outfile, vector<GeneFeature> features, 
+                           Gene curGene)
+{
+    unsigned int fSize = features.size();
+    for (unsigned int j = 0; j < fSize; ++j)
+    {
+        GeneFeature feature = features[j];
+        (*outfile) << std::setprecision(3) << curGene.GetGeneId() << "\t"  
+                   << feature.GetName() << "\t" << feature.GetStart() << "\t" 
+                   << feature.GetStop() << "\t" << feature.GetValAvg() << "\t"
+                   << feature.GetDiff() << "\n";
+    }
+}

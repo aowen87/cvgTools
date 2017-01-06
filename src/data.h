@@ -242,15 +242,21 @@ class GeneFeature
     string name;
     unsigned int start;
     unsigned int stop;
+    double       avgVal;
+    double       diff; 
 
   public:
            GeneFeature();
            GeneFeature(string _name, unsigned int _start, 
                        unsigned int _stop);
+    
           ~GeneFeature();
     string GetName();
     int    GetStart();
     int    GetStop();
+    double GetValAvg();
+    double GetDiff(); 
+    void   SetValAvg(double avg);
     void   SetName(string _name);
     void   SetStart(unsigned int _start);
     void   SetStop(unsigned int _stop);
@@ -273,7 +279,7 @@ class Gene : public TranscriptLine, public Data
     vector<GeneFeature> startCodons;
     vector<GeneFeature> stopCodons;
     vector<GeneFeature> CDS;
-    void                ConcatFeatureVectors(vector<GeneFeature> base,
+    void                ConcatFeatureVectors(vector<GeneFeature> *base,
                                              vector<GeneFeature> add);
 
   public:
@@ -298,10 +304,10 @@ class Gene : public TranscriptLine, public Data
     bool                IsDiffSet();
     void                SetDiff(double d);
     double              GetDiff(); 
-    vector<GeneFeature> GetExons(); 
-    vector<GeneFeature> GetStartCodons(); 
-    vector<GeneFeature> GetStopCodons(); 
-    vector<GeneFeature> GetCDS();
+    vector<GeneFeature> *GetExons(); 
+    vector<GeneFeature> *GetStartCodons(); 
+    vector<GeneFeature> *GetStopCodons(); 
+    vector<GeneFeature> *GetCDS();
 };
 
 

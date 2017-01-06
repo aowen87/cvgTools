@@ -141,7 +141,7 @@ void Reader::ReadTranscripts()
                 gene->AddStartCodon(feature);
             else if (featureName.compare("stop_codon") == 0)
                 gene->AddStopCodon(feature);
-            else if (featureName.compare("CDS") == 0)
+            else if (featureName.compare("cds") == 0)
                 gene->AddCDS(feature);
             else
             {
@@ -151,7 +151,6 @@ void Reader::ReadTranscripts()
                 cerr << "Exiting program..." << endl;
                 exit(EXIT_FAILURE);
             }
-
             geneTree.Insert(gene);
         } 
 

@@ -1153,9 +1153,11 @@ TranscriptLine TranscriptData::GetTranscriptLine(unsigned int idx)
 ***/
 GeneFeature::GeneFeature()
 {
-    name  = "";
-    start = 0;
-    stop  = 0;
+    name   = "";
+    start  = 0;
+    stop   = 0;
+    avgVal = 0.0;
+    diff   = 0.0;
 }
 
 
@@ -1170,9 +1172,11 @@ GeneFeature::GeneFeature()
 ***/
 GeneFeature::GeneFeature(string _name, unsigned int _start, unsigned int _stop)
 {
-    name  = _name;
-    start = _start;
-    stop  = _stop;
+    name   = _name;
+    start  = _start;
+    stop   = _stop;
+    avgVal = 0.0;
+    diff   = 0.0;
 }
 
 
@@ -1212,6 +1216,36 @@ int GeneFeature::GetStart() { return start; }
 * @returns: the gene's stop position. 
 ***/
 int GeneFeature::GetStop() { return stop; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the diff value. 
+*
+* @returns: diff
+***/
+double GeneFeature::GetDiff() { return diff; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the average value for this feature. 
+*
+* @param: avg -> the average value. 
+***/
+void GeneFeature::SetValAvg(double avg) { avgVal = avg; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the average value for this feature. 
+*
+* @returns: avgVal
+***/
+double GeneFeature::GetValAvg() { return avgVal; }
 
 
 /***
@@ -1407,12 +1441,12 @@ void Gene::AddCDS(GeneFeature cds) { CDS.push_back(cds); }
 *                 from. 
 *
 ***/
-void Gene::ConcatFeatureVectors(vector<GeneFeature> base,
+void Gene::ConcatFeatureVectors(vector<GeneFeature> *base,
                                 vector<GeneFeature> add)
 {
     int size = add.size();
     for (int i = 0; i < size; ++i)
-        base.push_back(add[i]);
+        base->push_back(add[i]);
 }
 
 
@@ -1427,7 +1461,7 @@ void Gene::ConcatFeatureVectors(vector<GeneFeature> base,
 void Gene::AddExonVector(vector<GeneFeature> eVec)
 {
     if (!eVec.empty())
-        ConcatFeatureVectors(exons, eVec);
+        ConcatFeatureVectors(&exons, eVec);
 }
 
 
@@ -1442,7 +1476,7 @@ void Gene::AddExonVector(vector<GeneFeature> eVec)
 void Gene::AddStartCodonVector(vector<GeneFeature> scVec)
 {
     if (!scVec.empty())
-        ConcatFeatureVectors(startCodons, scVec);
+        ConcatFeatureVectors(&startCodons, scVec);
 }
 
 
@@ -1457,7 +1491,7 @@ void Gene::AddStartCodonVector(vector<GeneFeature> scVec)
 void Gene::AddStopCodonVector(vector<GeneFeature> scVec)
 {
     if (!scVec.empty())
-        ConcatFeatureVectors(stopCodons, scVec);
+        ConcatFeatureVectors(&stopCodons, scVec);
 }
 
 
@@ -1472,7 +1506,7 @@ void Gene::AddStopCodonVector(vector<GeneFeature> scVec)
 void Gene::AddCDSVector(vector<GeneFeature> cdsVec)
 {
     if (!cdsVec.empty())
-        ConcatFeatureVectors(CDS, cdsVec);
+        ConcatFeatureVectors(&CDS, cdsVec);
 }
 
 
@@ -1536,7 +1570,7 @@ double Gene::GetDiff() { return diff; }
 *
 * @returns: exons 
 ***/
-vector<GeneFeature> Gene::GetExons() { return exons; }
+vector<GeneFeature> *Gene::GetExons() { return &exons; }
 
 
 /***
@@ -1546,7 +1580,7 @@ vector<GeneFeature> Gene::GetExons() { return exons; }
 *
 * @returns: startCodons 
 ***/
-vector<GeneFeature> Gene::GetStartCodons() { return startCodons; }
+vector<GeneFeature> *Gene::GetStartCodons() { return &startCodons; }
 
 
 /***
@@ -1556,7 +1590,7 @@ vector<GeneFeature> Gene::GetStartCodons() { return startCodons; }
 *
 * @returns: stopCodons 
 ***/
-vector<GeneFeature> Gene::GetStopCodons() { return stopCodons; }
+vector<GeneFeature> *Gene::GetStopCodons() { return &stopCodons; }
 
 
 /***
@@ -1566,7 +1600,7 @@ vector<GeneFeature> Gene::GetStopCodons() { return stopCodons; }
 *
 * @returns: CDS 
 ***/
-vector<GeneFeature> Gene::GetCDS() { return CDS; }
+vector<GeneFeature> *Gene::GetCDS() { return &CDS; }
 
 
 /***
@@ -1647,8 +1681,8 @@ void GeneData::SetGenes(unsigned int gCount, Gene *_genes)
         Gene curGene = genes[i];
         Gene newGene(curGene.GetChrom(), curGene.GetGeneId(), curGene.GetTranscriptId(),
                      curGene.GetFrame(), curGene.GetStart(), curGene.GetStop(), 
-                     curGene.GetStrand(), curGene.GetExons(), curGene.GetStartCodons(), 
-                     curGene.GetStopCodons(), curGene.GetCDS());
+                     curGene.GetStrand(), *(curGene.GetExons()), *(curGene.GetStartCodons()), 
+                     *(curGene.GetStopCodons()), *(curGene.GetCDS()));
         genes[i] = newGene;
     }
 

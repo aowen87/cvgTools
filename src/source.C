@@ -13,6 +13,9 @@ using std::cerr;
 using std::endl;
 
 
+void ComputeFeatureAvg(unsigned int dataIdx, DataLine *dataLines, 
+                       vector<GeneFeature> *features);
+
 /***
 * @author: Alister Maguire
 *
@@ -321,11 +324,12 @@ void Source::SetGenicWindows()
                 cerr << "line: " << __LINE__ << endl;
                 exit(EXIT_FAILURE);
             }
-            else if (geneStop == dataLines[dataIdx+span-1].GetStop() && geneChrom == dataLines[dataIdx+span-1].GetChrom())
+            else if (geneStop == dataLines[dataIdx+span-1].GetStop() && 
+                     geneChrom == dataLines[dataIdx+span-1].GetChrom())
             {
                 DataLine *windowLines = new DataLine[span];
                 DataLine curLine;
-
+               
                 for (unsigned int j = dataIdx; j < (dataIdx+span); j++)
                 {
                     curLine          = dataLines[j];
@@ -334,6 +338,18 @@ void Source::SetGenicWindows()
                     pos++;
                 }
 
+                //Compute feature regions
+                vector<GeneFeature> *exons     = (curGene->GetExons()); 
+                vector<GeneFeature> *startCdns = (curGene->GetStartCodons()); 
+                vector<GeneFeature> *stopCdns  = (curGene->GetStopCodons()); 
+                vector<GeneFeature> *cds       = (curGene->GetCDS()); 
+
+                ComputeFeatureAvg(dataIdx, dataLines, exons);
+                ComputeFeatureAvg(dataIdx, dataLines, startCdns);
+                ComputeFeatureAvg(dataIdx, dataLines, stopCdns);
+                ComputeFeatureAvg(dataIdx, dataLines, cds);
+
+                // Set values for entire gene
                 curGene->SetData(span, windowLines);
                 curGene->SetValAvg(curValTotal/span);
 
@@ -352,5 +368,47 @@ void Source::SetGenicWindows()
                 exit(EXIT_FAILURE);
             }
         }
+    }
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Compute the average values of features
+* for a given vector of gene features. This is 
+* a helper function to be used when computing 
+* genic averages.  
+* 
+* @param: dataIdx -> the current index for the 
+*                    gene data. 
+*         dataLines -> the gene data. 
+*         features  -> a vector of gene features. 
+***/
+void ComputeFeatureAvg(unsigned int dataIdx, DataLine *dataLines, 
+                        vector<GeneFeature> *features)
+{
+
+    unsigned int numFeatures = features->size();
+    for (unsigned int f = 0; f < numFeatures; ++f)
+    {
+        GeneFeature *feature = &(*features)[f]; 
+        unsigned int fStart  = feature->GetStart();
+        unsigned int fStop   = feature->GetStop();
+        double baseCount     = 0;
+        double featureTotal  = 0.0;
+
+        unsigned int fIdx;
+        for (fIdx = dataIdx; fStart > dataLines[fIdx].GetStart(); ++fIdx) 
+        {}
+        fStart++;
+
+        for (;fStop >= dataLines[fIdx].GetStop(); ++fIdx)
+        {
+            featureTotal += dataLines[fIdx].GetVal(); 
+            baseCount++; 
+        }
+
+        feature->SetValAvg(featureTotal/baseCount); 
     }
 }

@@ -521,10 +521,10 @@ Node *AVLTree::DoInsertion(Node *current, Node *n)
                 case Eq:  //Merge the genes
                     current->ExpandDataStart(n->GetGene()->GetStart());
                     current->ExpandDataStop(n->GetGene()->GetStop());
-                    current->GetGene()->AddExonVector(n->GetGene()->GetExons());
-                    current->GetGene()->AddStartCodonVector(n->GetGene()->GetStartCodons());
-                    current->GetGene()->AddStopCodonVector(n->GetGene()->GetStopCodons());
-                    current->GetGene()->AddCDSVector(n->GetGene()->GetCDS());
+                    current->GetGene()->AddExonVector(*(n->GetGene()->GetExons()));
+                    current->GetGene()->AddStartCodonVector(*(n->GetGene()->GetStartCodons()));
+                    current->GetGene()->AddStopCodonVector(*(n->GetGene()->GetStopCodons()));
+                    current->GetGene()->AddCDSVector(*(n->GetGene()->GetCDS()));
                     break;
                 case Lt:
                     current->SetLeftChild(DoInsertion(current->GetLeftChild(), n));

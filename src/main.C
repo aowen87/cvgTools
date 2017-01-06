@@ -31,11 +31,11 @@ int main(int argc, char *argv[])
 {
     vector<string> input;
     vector<string> options;
-    string out_path;
     string transcriptsFile;
     string command;
     string in_type;
     vector<string> validCommands (commands, commands+6);
+    string out_path = "./";
 
     try 
     {
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     if (IsValidCommand(command, validCommands))
     {
 
-        if (*out_path.rbegin() != '/')
+        if ( (*out_path.rbegin() != '/') && (out_path != "./"))
             out_path = out_path + "/";
         
         int in_size = input.size();                                           
@@ -154,12 +154,6 @@ int main(int argc, char *argv[])
             {
                 for (int i = 0; i < in_size; ++i)
                 {
-                    unsigned int size = options.size();
-                    for (unsigned int m = 0; m < size; ++m)
-                    {
-                        if (options[m] == "Exons")
-                            cerr << "exons" << endl;
-                    }
                     GeneAvgWriter writer;
                     bedCovReaders[i]->SetGenicWindows();
                     writer.SetSinkGeneData(bedCovReaders[i]->GetGeneData());
@@ -168,6 +162,46 @@ int main(int argc, char *argv[])
                     string out_f_str = out_path + FileName(input[i]) + "_GA_" + s_i  + ".txt";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
+
+                    unsigned int size = options.size();
+                    for (unsigned int m = 0; m < size; ++m)
+                    {
+                        if (options[m] == "exons")
+                        {
+                            GeneFeatureAvgWriter fWriter("exons");
+                            fWriter.SetSinkGeneData(bedCovReaders[i]->GetGeneData());
+                            out_f_str = out_path + FileName(input[i]) + "_GA_EXONS_" + s_i  + ".txt";
+                            const char *out_f_pt = out_f_str.c_str();
+                            fWriter.Write(out_f_pt);
+                        }
+
+                        else if (options[m] == "start_codons")
+                        {
+                            GeneFeatureAvgWriter fWriter("start_codons");
+                            fWriter.SetSinkGeneData(bedCovReaders[i]->GetGeneData());
+                            out_f_str = out_path + FileName(input[i]) + "_GA_START_CODONS_" + s_i  + ".txt";
+                            const char *out_f_pt = out_f_str.c_str();
+                            fWriter.Write(out_f_pt);
+                        }
+
+                        else if (options[m] == "stop_codons")
+                        {
+                            GeneFeatureAvgWriter fWriter("stop_codons");
+                            fWriter.SetSinkGeneData(bedCovReaders[i]->GetGeneData());
+                            out_f_str = out_path + FileName(input[i]) + "_GA_STOP_CODONS_" + s_i  + ".txt";
+                            const char *out_f_pt = out_f_str.c_str();
+                            fWriter.Write(out_f_pt);
+                        }
+
+                        else if (options[m] == "cds")
+                        {
+                            GeneFeatureAvgWriter fWriter("cds");
+                            fWriter.SetSinkGeneData(bedCovReaders[i]->GetGeneData());
+                            out_f_str = out_path + FileName(input[i]) + "_GA_CDS_" + s_i  + ".txt";
+                            const char *out_f_pt = out_f_str.c_str();
+                            fWriter.Write(out_f_pt);
+                        }
+                    }
                 }
             }
 

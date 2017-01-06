@@ -276,9 +276,10 @@ void bedCovPerBaseReader::Execute()
             dataSet[count] = line; 
             if (count == limit && score == 0.0)
                 break; 
-            if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && score != 0.0 && prevName == name) || 
-            (score == 0.0 && prevScore != 0.0 && prevName == name) || 
-            (prevName != name && prevScore != 0))
+            if ( (((start - prevStop) > 0 ) && prevScore != 0.0 
+                && score != 0.0 && prevName == name) || 
+               (score == 0.0 && prevScore != 0.0 && prevName == name) || 
+               (prevName != name && prevScore != 0))
                 natWinCount++; 
             count++;
             prevStop  = start;
