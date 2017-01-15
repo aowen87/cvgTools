@@ -55,6 +55,8 @@ class Data
     DataLine *data;
     bool      diffSet;
     double    valAverage;
+    double    highVal;
+    double    lowVal;
     void      SetDataSize(unsigned long int size);
     void      ComputeValAvg();
     unsigned long int dataSize;
@@ -75,8 +77,12 @@ class Data
     void      BaseDiffSet(bool set);
     void      SetData(unsigned long int size, DataLine *lines);
     void      SetValAvg(double avg);
+    void      SetHighVal(double high);
+    void      SetLowVal(double low);
     void      InitData(unsigned long int size);
     double    GetValAvg();
+    double    GetHighVal();
+    double    GetLowVal();
     unsigned long int GetDataSize();
 };
 

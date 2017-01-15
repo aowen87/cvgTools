@@ -24,7 +24,8 @@ using std::vector;
 static string FileName(string const &f);
 static bool IsValidCommand(string command, vector<string> validCommands);
 static const char *commands [] = {"ToWig", "NaturalWinAvg", "GeneAvg",
-                            "GenicWindows", "BaseDiff", "WindowDiff"};
+                            "GenicWindows", "BaseDiff", "WindowDiff", 
+                            "PeakAvg"};
 
 
 int main(int argc, char *argv[])
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
     string transcriptsFile;
     string command;
     string in_type;
-    vector<string> validCommands (commands, commands+6);
+    vector<string> validCommands (commands, commands+7);
     string out_path = "./";
 
     try 
@@ -260,6 +261,23 @@ int main(int argc, char *argv[])
                 const char *out_f_pt = out_f_str.c_str();
                 writer.Write(out_f_pt);
             }
+
+            else if (command == "PeakAvg")
+            {
+                //FIXME: testing 
+                for (int i = 0; i < in_size; ++i)
+                {
+                    WindowAvgWriter writer;
+                    bedCovReaders[i]->SetPeakWindows();
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
+                    string s_i = static_cast<std::ostringstream*>
+                                ( &(std::ostringstream() << i) )->str();
+                    string out_f_str = out_path + FileName(input[i]) + 
+                                       "_PeakAvg_" + s_i  + ".txt";
+                    const char *out_f_pt = out_f_str.c_str();
+                    writer.Write(out_f_pt);
+                }
+            }
             
             for (int i = 0; i < in_size; ++i)
                 delete bedCovReaders[i];
@@ -285,6 +303,8 @@ int main(int argc, char *argv[])
                     writer.Write(out_f_pt);
                 }            
             }
+
+         
  
             else 
             {

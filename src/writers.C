@@ -76,7 +76,7 @@ void WigWriter::Write(const char *filename)
         outfile.close();
     }
     else
-        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+        cerr << "Unable to open file for writing" << endl;
 }
 
 
@@ -131,7 +131,7 @@ void WindowAvgWriter::Write(const char *filename)
         outfile.close();
     }
     else
-        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+        cerr << "Unable to open file for writing" << endl; 
 }
 
 
@@ -220,7 +220,7 @@ void WindowWigWriter::Write(const char *filename)
         outfile.close();
     }
     else
-        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+        cerr << "Unable to open file for writing" << endl; 
 }
 
 
@@ -272,7 +272,7 @@ void GeneAvgWriter::Write(const char *filename)
         outfile.close();
     }
     else
-        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+        cerr << "Unable to open file for writing" << endl; 
 }
 
 
@@ -331,7 +331,6 @@ void GeneFeatureAvgWriter::Write(const char *filename)
             {
                 switch (feature)
                 {
-                    //TODO: let's create a helper function to do these case operations
                     case (Exons):
                     {
                         for (unsigned int i = 0; i < len; ++i)
@@ -449,7 +448,7 @@ void GeneFeatureAvgWriter::Write(const char *filename)
         outfile.close();
     }
     else
-        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+        cerr << "Unable to open file for writing" << endl; 
 }
 
 
@@ -461,8 +460,6 @@ void GeneFeatureAvgWriter::Write(const char *filename)
 * @param: filename -> the name of the file to be written
 *         to. 
 ***/
-//FIXME: need to remove overlaps from genic windows
-//       may also need to show all zero values (not sure yet)
 void GeneWigWriter::Write(const char *filename)
 {
     ofstream outfile (filename);
@@ -540,7 +537,7 @@ void GeneWigWriter::Write(const char *filename)
         outfile.close();
     }
     else
-        cerr << "Unable to open file for writing" << endl; //TODO: error handling needed.
+        cerr << "Unable to open file for writing" << endl; 
 }
 
 

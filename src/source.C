@@ -188,7 +188,7 @@ void Source::SetNaturalWindows()
                 delete [] windowLines;
                 prevStop = sparseLines[i].GetStop();
             }
-            if (getStart) //FIXME: is there a better way of doing this?
+            if (getStart) //TODO: is there a better way of doing this?
             {
                 windowStart = sparseLines[i].GetStart();
                 getStart    = false;
@@ -368,6 +368,118 @@ void Source::SetGenicWindows()
                 exit(EXIT_FAILURE);
             }
         }
+    }
+}
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the peak windows for srcData. Peak windows
+* are sections of data that are >= a determined base
+* limit. The base is determined from the peakLimit
+* input value. 
+*
+* @param: peakLimit ->  a value between 0 and 1
+*         that indicates a percentage to determine
+*         the lowest value to be considered for
+*         the peak windows. .5 would indicate that
+*         any value >= the mid value will be included. 
+*         .9 would indicate the highest 90%, inclusive. 
+***/
+void Source::SetPeakWindows(double peakLimit)
+{
+    if ( (peakLimit < 0.0) || (peakLimit > 1.0) )
+    {
+        cerr << "ERROR: peak limit must be between 0.0 and 1.0, inclusive."
+             << " Line: " << __LINE__ <<  endl;
+        exit(EXIT_FAILURE); 
+    }
+
+    double low      = srcData.GetLowVal();
+    double valLimit = low + ((srcData.GetHighVal() - low) 
+                      * peakLimit);
+
+    DataLine *lines = srcData.GetLines();
+    if (lines != NULL)
+    {
+        unsigned long int size = srcData.GetDataSize();
+        vector<Window> windows;
+        unsigned int winCount  = 0; 
+        unsigned int peakCount = 0;
+
+        for (unsigned int i = 0; i < size; ++i)
+        {
+            double winTotal        = 0.0;
+            unsigned int lineCount = 0;
+            int winStart           = -1;
+            unsigned int winStop   = 0;
+            DataLine curLine;
+            curLine = lines[i];
+            string curChrom  = curLine.GetChrom();
+            string prevChrom = curLine.GetChrom();
+
+            while ((curLine.GetVal() >= valLimit) && (i < size)
+                   && (curChrom.compare(prevChrom) == 0))
+            {
+                winTotal += curLine.GetVal();
+                winStop   = curLine.GetStop();
+
+                if (winStart == -1)
+                    winStart = curLine.GetStart();
+                lineCount++;
+                
+                if (i < (size-1))
+                {
+                    i++;
+                    curLine   = lines[i];
+                    prevChrom = curChrom;
+                    curChrom  = curLine.GetChrom();
+
+                }
+                else
+                    i++;
+            }
+
+            //if we actually compute a window, create it.  
+            if (lineCount > 0)
+            {
+                DataLine *winLines = new DataLine[lineCount];
+                DataLine curLine;
+        
+                for (unsigned int j = 0; j < lineCount; ++j)
+                {
+                    curLine     = lines[(i-lineCount) + j];
+                    winLines[j] = curLine;
+                }
+ 
+                string c = static_cast<std::ostringstream*>
+                           (&(std::ostringstream() << peakCount))
+                           ->str();
+                string title = prevChrom + "_peak_" + c; 
+                Window w(title, lineCount, (unsigned int) winStart, 
+                         winStop, winTotal/lineCount, winLines);
+                windows.push_back(w);
+                winCount++;
+                peakCount++;
+                if (prevChrom.compare(curChrom) != 0)
+                {
+                    //we're switching to a new chrom, so 
+                    //set the new peak count, and decrement 
+                    //i by one so that we can grab the start. 
+                    peakCount = 0;
+                    i--;
+                }
+            }
+        }
+
+        unsigned int numWindows = windows.size();
+        Window *finalWindows    = new Window[numWindows];
+        for (unsigned int i = 0; i < numWindows; ++i)
+            finalWindows[i] = windows[i];
+
+        srcWindowBlock.SetWindows(winCount, finalWindows);
+        delete [] finalWindows;
     }
 }
 

@@ -173,7 +173,7 @@ AVLTree::AVLTree()
 ***/
 AVLTree::AVLTree(char s) 
 { 
-    root = NULL;       //FIXME: I'm not a fan of this method
+    root = NULL;       //TODO: I'm not a fan of this method
     if (s == 'g')      //       for setting Sort. Let's change it.
         Sort = Genic;
     else if (s == 's')

@@ -55,7 +55,7 @@ Reader::~Reader()
 * IMPORTANT: All input files must be sorted beforehand. 
 ***/
  //TODO: Make sure the files are sorted
-unsigned long int Reader::SetDataSize(char *fname)//FIXME: change to GetLineCount
+unsigned long int Reader::SetDataSize(char *fname)//TODO: change to GetLineCount
 {
     ifstream inFile (fname);
     unsigned long int size = 0;
@@ -66,7 +66,7 @@ unsigned long int Reader::SetDataSize(char *fname)//FIXME: change to GetLineCoun
             size++;
     }
     else
-        cerr << "ERROR: Unable to open file" << endl; //TODO: error handling needed
+        cerr << "ERROR: Unable to open file" << endl; 
     return size;
 }
 
@@ -166,9 +166,10 @@ void Reader::ReadTranscripts()
             delete treeGene;
             tCount++;
         }
+
         srcGeneData.SetGeneCount(gCount);
         HPR::GeneQuickSort(&genes, 0, gCount-1);
     }
     else
-        cerr << "ERROR: Unable to open transcripts file" << endl; //TODO: error handling needed
+        cerr << "ERROR: Unable to open transcripts file" << endl; 
 }

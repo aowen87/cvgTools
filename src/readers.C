@@ -86,10 +86,10 @@ void bedReader::SetScoreIdx()
         else if (count > 3)
             scoreIdx = 4;
         else
-            cerr << "ERROR: Invalid bed format" << endl; //TODO: error handling needed
+            cerr << "ERROR: Invalid bed format" << endl; 
     }
     else
-        cerr << "ERROR: Unable to open data file" << endl; //TODO: error handling needed
+        cerr << "ERROR: Unable to open data file" << endl; 
 }
 
 
@@ -139,13 +139,18 @@ void bedReader::Execute()
                     std::istringstream iss(rawLine);
                     if (!(iss >> name >> start >> stop >> score))
                         break;
+                    if (score > srcData.GetHighVal())
+                        srcData.SetHighVal(score);
+                    if (score < srcData.GetLowVal())
+                        srcData.SetLowVal(score);
                     DataLine line(name, start, stop, score);
                     dataSet[count] = line; 
                     if (count == limit && score == 0.0)
                         break; 
-                    if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && score != 0.0 && prevName == name) || 
-                    (score == 0.0 && prevScore != 0.0 && prevName == name) || 
-                    (prevName != name && prevScore != 0))
+                    if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && 
+                         score != 0.0 && prevName == name) || 
+                         (score == 0.0 && prevScore != 0.0 && prevName == name) || 
+                         (prevName != name && prevScore != 0))
                         natWinCount++; 
                     prevStop  = stop;
                     prevScore = score;
@@ -171,6 +176,10 @@ void bedReader::Execute()
                     std::istringstream iss(rawLine);
                     if (!(iss >> name >> start >> stop >> scrap >> score))
                         break;
+                    if (score > srcData.GetHighVal())
+                        srcData.SetHighVal(score);
+                    if (score < srcData.GetLowVal())
+                        srcData.SetLowVal(score);
                     DataLine line(name, start, stop, score);
                     dataSet[count] = line; 
                     if (count == limit && score == 0.0)
@@ -196,7 +205,7 @@ void bedReader::Execute()
         }
     }
     else
-        cerr << "ERROR: Unable to open data file" << endl; //TODO: error handling needed
+        cerr << "ERROR: Unable to open data file" << endl; 
 }
 
 
@@ -245,7 +254,7 @@ bedCovPerBaseReader::bedCovPerBaseReader(const char *dataFileName, string transc
 *
 * Execute the bedCovPerBaseReader => read the genome coverage
 * file, and, if a transcripts file was included, call ReadTranscripts().
-*`
+*
 ***/
 void bedCovPerBaseReader::Execute()
 {
@@ -272,6 +281,10 @@ void bedCovPerBaseReader::Execute()
             std::istringstream iss(rawLine);
             if (!(iss >> name >> start >> score))
                 break;
+            if (score > srcData.GetHighVal())
+                srcData.SetHighVal(score);
+            if (score < srcData.GetLowVal())
+                srcData.SetLowVal(score);
             DataLine line(name, start-1, start, score);
             dataSet[count] = line; 
             if (count == limit && score == 0.0)
@@ -296,7 +309,9 @@ void bedCovPerBaseReader::Execute()
         }
     }
     else
-        cerr << "ERROR: Unable to open data file" << endl; //TODO: error handling needed
+        cerr << "ERROR: Unable to open data file" << endl; 
 
 }
+
+
 

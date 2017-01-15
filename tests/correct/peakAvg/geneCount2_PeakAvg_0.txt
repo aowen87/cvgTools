@@ -1,0 +1,7 @@
+Supercontig_12.1_peak_0	99	100	8
+Supercontig_12.1_peak_1	1152	1157	6.6
+Supercontig_12.1_peak_2	1159	1160	8
+Supercontig_12.1_peak_3	1528	1529	5
+Supercontig_12.2_peak_0	1299	1302	5
+Supercontig_12.2_peak_1	3170	3178	6
+Supercontig_12.2_peak_2	4139	4140	9

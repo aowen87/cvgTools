@@ -1,0 +1,1 @@
+NCU10129	start_codon	1151	1152	2

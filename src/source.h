@@ -30,7 +30,6 @@ class Source
     GeneData          srcGeneData;
     long int          natWinCount;
     long int          geneCount;
-    //bool              genicWindows;
 
   public:
                        Source();
@@ -45,6 +44,7 @@ class Source
     void               SetGeneCount(long int count);
     void               SetGenicWindows();
     void               SetNaturalWindows();
+    void               SetPeakWindows(double peakLimit=.5);
     virtual void       Execute() = 0;
     virtual unsigned long int SetDataSize(char *fname) = 0;
 };

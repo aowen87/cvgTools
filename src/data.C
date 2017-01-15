@@ -144,7 +144,9 @@ Data::Data()
 {
     data       = NULL;
     dataSize   = 0.0;
-    valAverage = 0;
+    valAverage = 0.0;
+    highVal    = 0.0;
+    lowVal     = 0.0;
     diffSet    = false;
 }
 
@@ -167,6 +169,8 @@ Data::Data(int size, DataLine *_data)
     data       = new DataLine[dataSize];
     data       = _data;
     valAverage = 0;
+    highVal    = 0.0;
+    lowVal     = 0.0;
     diffSet    = false;
 }
 
@@ -185,6 +189,8 @@ Data::Data(Data const &copy)
 {
     dataSize   = copy.dataSize;
     valAverage = copy.valAverage;
+    highVal    = copy.highVal;
+    lowVal     = copy.lowVal;
     data       = new DataLine[dataSize];
     std::copy(&copy.data[0], &copy.data[dataSize], data);
     diffSet = false;
@@ -203,6 +209,8 @@ void Data::DataSwap(Data &s)
 {
     swap(this->dataSize, s.dataSize); 
     swap(this->valAverage, s.valAverage);
+    swap(this->highVal, s.highVal);
+    swap(this->lowVal, s.lowVal);
     DataLine *tmp  = s.data;
     s.data         = this->data;
     this->data     = tmp;
@@ -280,6 +288,26 @@ void Data::SetValAvg(double avg)
 /***
 * @author: Alister Maguire
 *
+* Set the high value for Data.
+*
+* @param: high -> the high value. 
+***/
+void Data::SetHighVal(double high) { highVal = high; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Set the low value for Data.
+*
+* @param: low -> the low value. 
+***/
+void Data::SetLowVal(double low) { lowVal = low; }
+
+
+/***
+* @author: Alister Maguire
+*
 * Get the size of lines (number of DataLine objects within lines).
 *
 * @returns: dataSize -> the max capacity for data. 
@@ -342,6 +370,30 @@ double Data::GetValAvg()
     }
     return valAverage;
 }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the high value for this source's
+* Data. 
+*
+* @returns: highVal -> the highest value in 
+*                      this source's Data. 
+***/
+double Data::GetHighVal() { return highVal; }
+
+
+/***
+* @author: Alister Maguire
+*
+* Get the low value for this source's
+* Data. 
+*
+* @returns: lowVal -> the lowest value in 
+*                      this source's Data. 
+***/
+double Data::GetLowVal() { return lowVal; }
 
 
 /***
