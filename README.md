@@ -1,6 +1,6 @@
 cvgTools 
 ========
-### version alpha 1
+# version alpha 1
 
 Authors and contact:
  * Alister Maguire
@@ -12,7 +12,7 @@ Advisors:
  * Vince Bicocca, Postdoctoral Fellow at the UO
 
 
-##Introduction
+## Introduction
 
 **cvgTools** was created as a collaborative research project at the University of Oregon 
 to help with DNA analysis being conducted in the department of molecular biology. The 
