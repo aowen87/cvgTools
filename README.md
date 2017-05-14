@@ -121,8 +121,8 @@ primary goals of this project are as follows:
 
  **Available Commands**
 
- * ToWig [^ToWig]
- * NaturalWinAvg [^NaturalWinAvg]
+ * ToWig 
+ * NaturalWinAvg 
  * GeneAvg
  * GenicWindows
  * BaseDiff
@@ -133,8 +133,6 @@ primary goals of this project are as follows:
 
 
 
- * [^ToWig] ToWig:
- * [^NaturalWinAvg] NaturalWinAvg:
 
 
 
