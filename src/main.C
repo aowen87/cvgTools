@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
 
             else if (command == "PeakAvg")
             {
-                //FIXME: testing 
+                //TODO: needs more testing 
                 for (int i = 0; i < in_size; ++i)
                 {
                     WindowAvgWriter writer;
