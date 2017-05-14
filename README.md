@@ -121,14 +121,20 @@ primary goals of this project are as follows:
 
  **Available Commands**
 
- * ToWig
- * NaturalWinAvg
+ * ToWig [^ToWig]
+ * NaturalWinAvg [^NaturalWinAvg]
  * GeneAvg
  * GenicWindows
  * BaseDiff
  * WindowDiff
- * PeakAvg   **needs more testing**
- * BaseDiff  **needs more testing** 
+ * PeakAvg     **note:** needs more testing
+ * BaseDiff    **note:** needs more testing 
+
+
+
+
+ * [^ToWig] ToWig:
+ * [^NaturalWinAvg] NaturalWinAvg:
 
 
 
