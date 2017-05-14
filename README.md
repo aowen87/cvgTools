@@ -1,6 +1,6 @@
 cvgTools 
 ========
-# version alpha 1
+#### version alpha 1
 
 Authors and contact:
  * Alister Maguire
