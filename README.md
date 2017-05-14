@@ -31,6 +31,52 @@ primary goals of this project are as follows:
    extensively.  
 
 
+##Installation
+
+  **Dependencies**
+   * C++
+   * gcc version 5.4.0 or greater
+   * boost (only boost/program\_options are used)
+
+  **Steps to Installation**
+
+ * 1. First, you must retrieve the project from github. It is recommended that you
+      clone the repo, which requires a github account and allows you to retrieve updates
+      to the project as they occur. However, if you do not wish to create a github account,
+      you can also download the project as a zip file directly from the repo page. 
+
+      For cloning, use the following command:
+ 
+      git clone https://github.com/aowen87/cvgTools.git
+
+
+ * 2. From within a terminal, cd into cvgTools/src/
+      Once here, type the following command:
+
+      make
+
+ * 3. 
+
+  **for bash users**:
+      Assuming no errors have occured in either of the previous steps, cd into the 
+      test directory located at cvgTools/tests/ and type 
+
+      bash runtests
+
+      You should see some text of the form "test n passed" for n = 1, 2, 3, ...
+      followed by "TESTS END". As long as you don't see any failures, you've had
+      a successful install!
+
+
+
+
+      
+
+
+
+
+
+##Basic usage
 
 
 

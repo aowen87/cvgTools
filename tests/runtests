@@ -8,9 +8,10 @@ DIFF=$(diff correct/cov2wig/out1.wig output/cov2wig/count9_0.wig)
 if [ "$DIFF" != "" ]
 then
     printf "\nTEST 1 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 else
     printf "test 1 passed\n"
+    rm output/cov2wig/count9_0.wig
 fi
 
 
@@ -22,9 +23,10 @@ DIFF=$(diff correct/cov2wig/out2.wig output/cov2wig/gaps_0.wig)
 if [ "$DIFF" != "" ]
 then
     printf "\nTEST 2 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 else
     printf "test 2 passed\n"
+    rm output/cov2wig/gaps_0.wig
 fi
 
 
@@ -36,9 +38,10 @@ DIFF=$(diff correct/cov2wig/out2.wig output/cov2wig/gaps2_0.wig)
 if [ "$DIFF" != "" ]
 then
     printf "\nTEST 3 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 else
     printf "test 3 passed\n"
+    rm output/cov2wig/gaps2_0.wig 
 fi
 
 
@@ -53,21 +56,25 @@ STOP_C_DIFF=$(diff correct/geneAvg/geneCount2_GA_STOP_CODONS_0.txt output/geneAv
 if [ "$DIFF" != "" ]
 then
     printf "\nTEST 4 GENE AVG FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 elif [ "$EXON_DIFF" != "" ]
 then
     printf "\nTEST 4 EXON AVG FAILED\n"
-    printf "$EXON_DIFF\n\n"
+    #printf "$EXON_DIFF\n\n"
 elif [ "$START_C_DIFF" != "" ]
 then
     printf "\nTEST 4 START CODON AVG FAILED\n"
-    printf "$START_C_DIFF\n\n"
+    #printf "$START_C_DIFF\n\n"
 elif [ "$STOP_C_DIFF" != "" ]
 then
     printf "\nTEST 4 STOP CODON AVG FAILED\n"
-    printf "$STOP_C_DIFF\n\n"
+    #printf "$STOP_C_DIFF\n\n"
 else
     printf "test 4 passed\n"
+    rm output/geneAvg/geneCount2_GA_0.txt
+    rm output/geneAvg/geneCount2_GA_EXONS_0.txt 
+    rm output/geneAvg/geneCount2_GA_START_CODONS_0.txt
+    rm output/geneAvg/geneCount2_GA_STOP_CODONS_0.txt
 fi
 
 
@@ -79,9 +86,10 @@ DIFF=$(diff correct/geneWig/genic2.wig output/geneWig/geneCount2_GW_0.wig)
 if [ "$DIFF" != "" ]
 then 
     printf "\nTEST 5 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 else
     printf "test 5 passed\n"
+    rm output/geneWig/geneCount2_GW_0.wig 
 fi
 
 
@@ -97,25 +105,30 @@ CDS_DIFF=$(diff correct/geneAvg/geneCount2_O_GA_CDS_0.txt output/geneAvg/geneCou
 if [ "$DIFF" != "" ]
 then 
     printf "\nTEST 6 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 elif [ "$EXON_DIFF" != "" ]
 then
     printf "\nTEST 4 EXON AVG FAILED\n"
-    printf "$EXON_DIFF\n\n"
+    #printf "$EXON_DIFF\n\n"
 elif [ "$START_C_DIFF" != "" ]
 then
     printf "\nTEST 4 START CODON AVG FAILED\n"
-    printf "$START_C_DIFF\n\n"
+    #printf "$START_C_DIFF\n\n"
 elif [ "$STOP_C_DIFF" != "" ]
 then
     printf "\nTEST 4 STOP CODON AVG FAILED\n"
-    printf "$STOP_C_DIFF\n\n"
+    #printf "$STOP_C_DIFF\n\n"
 elif [ "$CDS_DIFF" != "" ]
 then
     printf "\nTEST 4 CDS AVG FAILED\n"
-    printf "$CDS_DIFF\n\n"
+    #printf "$CDS_DIFF\n\n"
 else
     printf "test 6 passed\n"
+    rm output/geneAvg/geneCount2_O_GA_0.txt 
+    rm output/geneAvg/geneCount2_O_GA_EXONS_0.txt
+    rm output/geneAvg/geneCount2_O_GA_START_CODONS_0.txt
+    rm output/geneAvg/geneCount2_O_GA_STOP_CODONS_0.txt
+    rm output/geneAvg/geneCount2_O_GA_CDS_0.txt
 fi
 
 
@@ -127,9 +140,10 @@ DIFF=$(diff correct/geneWig/overlap.wig output/geneWig/geneCount2_O_GW_0.wig)
 if [ "$DIFF" != "" ]
 then 
     printf "\nTEST 7 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 else
     printf "test 7 passed\n"
+    rm output/geneWig/geneCount2_O_GW_0.wig
 fi
 
 #TEST8
@@ -140,9 +154,10 @@ DIFF=$(diff correct/geneWig/many_overlap.wig output/geneWig/geneCount2_O_GW_0.wi
 if [ "$DIFF" != "" ]
 then 
     printf "\nTEST 8 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 else
     printf "test 8 passed\n"
+    rm output/geneWig/geneCount2_O_GW_0.wig
 fi
 
 #TEST9
@@ -153,9 +168,10 @@ DIFF=$(diff correct/peakAvg/geneCount2_PeakAvg_0.txt output/peakAvg/geneCount2_P
 if [ "$DIFF" != "" ]
 then 
     printf "\nTEST 9 FAILED: \n"
-    printf "$DIFF\n\n"
+    #printf "$DIFF\n\n"
 else
     printf "test 9 passed\n"
+    rm output/peakAvg/geneCount2_PeakAvg_0.txt
 fi
 
 printf "TESTS END\n"
