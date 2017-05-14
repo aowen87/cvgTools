@@ -12,7 +12,7 @@ Advisors:
  * Vince Bicocca, Postdoctoral Fellow at the UO
 
 
-[TOC]
+[ TOC ]
 
 ## Introduction
 
