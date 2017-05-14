@@ -23,12 +23,12 @@ primary goals of this project are as follows:
  * 2. Provide a modular framework that can easily be extended upon
       for future development. 
 
-> **Note for the user**
+ **Note for the user**
 
-> - It should be noted that the primary developer of cvgTools is a computer scientist with
-    only a basic background in molecular biology. Regardless of the support provided by 
-    faculty in handling molecular data, this tool should be used with scrutiny and tested
-    extensively.  
+ * It should be noted that the primary developer of cvgTools is a computer scientist with
+   only a basic background in molecular biology. Regardless of the support provided by 
+   faculty in handling molecular data, this tool should be used with scrutiny and tested
+   extensively.  
 
 
 ##Installation
@@ -55,9 +55,7 @@ primary goals of this project are as follows:
 
       make
 
- * 3. 
-
-  **for bash users**:
+ * 3. **for bash users**:
       Assuming no errors have occured in either of the previous steps, cd into the 
       test directory located at cvgTools/tests/ and type 
 
@@ -71,29 +69,29 @@ primary goals of this project are as follows:
 
 ##Basic usage
 
-> **Overview**
+ **Overview**
 
-> After building cvgTools, you should find an executable file named "cvgTools" within
-> cvgTools/src/
+ After building cvgTools, you should find an executable file named "cvgTools" within
+ cvgTools/src/
 
-> To run the program, simply type 
+ To run the program, simply type 
 
-> ./cvgTools
+ \./cvgTools
 
-> within a terminal. If you run this command without any options added, then you will 
-> see an error message and a description regarding options for this tool. In general, 
-> the tool is used as follows:
+ within a terminal. If you run this command without any options added, then you will 
+ see an error message and a description regarding options for this tool. In general, 
+ the tool is used as follows:
 
-> ./cvgTools --option/_1=alpha --option/_2=beta ... --option/_n=gamma
+ \./cvgTools --option/_1=alpha --option/_2=beta ... --option/_n=gamma
 
-> where '...' represnts any number of acceptable options that one might want or need
-> to run a particular command.  
+ where '...' represnts any number of acceptable options that one might want or need
+ to run a particular command.  
 
-> For a quick help guide to using this tool, you can type
+ For a quick help guide to using this tool, you can type
 
-> ./cvgTools --help
+ \./cvgTools --help
 
-> **Available Options**
+ **Available Options**
 
 
 
