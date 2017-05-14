@@ -12,6 +12,8 @@ Advisors:
  * Vince Bicocca, Postdoctoral Fellow at the UO
 
 
+`[TOC]`
+
 ## Introduction
 
 **cvgTools** was created as a collaborative research project at the University of Oregon 
@@ -90,7 +92,7 @@ primary goals of this project are as follows:
  the tool is used as follows:
 
  ```
- ./cvgTools --option/_1=alpha --option/_2=beta ... --option/_n=gamma
+ ./cvgTools --option_1=alpha --option_2=beta ... --option_n=gamma
  ```
 
  where '...' represnts any number of acceptable options that one might want or need
@@ -103,6 +105,26 @@ primary goals of this project are as follows:
  ```
 
  **Available Options**
+
+ ```
+ --help                dislpaly usage
+ --input\_type arg      input file type
+ --input arg           input files
+ --out\_path arg        optional path for output files
+ --command arg         command to be run
+ --transcripts arg     transcripts file
+ --options arg         additional options
+ ```
+
+ **Available Commands**
+
+ * ToWig
+ * NaturalWinAvg
+ * GeneAvg
+ * GenicWindows
+ * BaseDiff
+ * WindowDiff
+ * PeakAvg
 
 
 
