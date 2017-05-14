@@ -31,7 +31,7 @@ primary goals of this project are as follows:
    extensively.  
 
 
-##Installation
+## Installation
 
   **Dependencies**
    * C++
@@ -47,27 +47,32 @@ primary goals of this project are as follows:
 
       For cloning, use the following command:
  
+      ```
       git clone https://github.com/aowen87/cvgTools.git
+      ```
 
 
  * 2. From within a terminal, cd into cvgTools/src/
       Once here, type the following command:
 
+      ```
       make
+      ```
 
  * 3. **for bash users**:
       Assuming no errors have occured in either of the previous steps, cd into the 
       test directory located at cvgTools/tests/ and type 
 
+      ```
       bash runtests
+      ```
 
       You should see some text of the form "test n passed" for n = 1, 2, 3, ...
       followed by "TESTS END". As long as you don't see any failures, you've had
       a successful install!
 
-------------------------------
 
-##Basic usage
+## Basic usage
 
  **Overview**
 
@@ -76,20 +81,26 @@ primary goals of this project are as follows:
 
  To run the program, simply type 
 
- \./cvgTools
+ ```
+ ./cvgTools
+ ```
 
  within a terminal. If you run this command without any options added, then you will 
  see an error message and a description regarding options for this tool. In general, 
  the tool is used as follows:
 
- \./cvgTools --option/_1=alpha --option/_2=beta ... --option/_n=gamma
+ ```
+ ./cvgTools --option/_1=alpha --option/_2=beta ... --option/_n=gamma
+ ```
 
  where '...' represnts any number of acceptable options that one might want or need
  to run a particular command.  
 
  For a quick help guide to using this tool, you can type
 
- \./cvgTools --help
+ ```
+ ./cvgTools --help
+ ```
 
  **Available Options**
 
