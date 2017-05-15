@@ -125,10 +125,9 @@ primary goals of this project are as follows:
  * NaturalWinAvg 
  * GeneAvg
  * GenicWindows
- * BaseDiff
  * WindowDiff
- * PeakAvg     **note:** needs more testing
- * BaseDiff    **note:** needs more testing 
+ * PeakAvg   (note: needs more testing)
+ * BaseDiff  (note: needs more testing)
 
 
 
