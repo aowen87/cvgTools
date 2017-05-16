@@ -2,6 +2,8 @@ cvgTools
 ========
 #### version alpha 1
 
+[Introduction](#intro)
+
 Authors and contact:
  * Alister Maguire
  * [linkedin][1]
@@ -116,13 +118,13 @@ primary goals of this project are as follows:
 
 **Supported Input Type**
 
- * Bed files
- * Bed coverage files (per base) **see below for more details** 
+ * Bed files 
+ * Bed coverage files (per base) **see below for important details** 
 
- **Available Commands**
+**Available Commands**
 
- * ToWig 
- * NaturalWinAvg 
+ * ToWig
+ * NaturalWinAvg
  * GeneAvg
  * GenicWindows
  * WindowDiff
@@ -130,6 +132,9 @@ primary goals of this project are as follows:
  * BaseDiff  (note: needs more testing)
 
 
+**Command Usage**
+
+ * 
 
 
 
