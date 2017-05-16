@@ -1,0 +1,7 @@
+Supercontig_12.1	99	101	5
+Supercontig_12.1	1149	1160	4.82
+Supercontig_12.1	1527	1529	3.5
+Supercontig_12.2	1299	1302	5
+Supercontig_12.2	3169	3171	5
+Supercontig_12.2	3177	3180	4
+Supercontig_12.2	4139	4140	9

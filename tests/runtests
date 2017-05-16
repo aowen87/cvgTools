@@ -174,4 +174,54 @@ else
     rm output/peakAvg/geneCount2_PeakAvg_0.txt
 fi
 
+
+
+
+#Test 10
+../src/cvgTools --command=NaturalWinAvg --input_type=c --input=input/countsFiles/geneCount --out_path=output/natWindow/
+
+DIFF=$(diff correct/natWindow/geneCount_NWA_0.txt output/natWindow/geneCount_NWA_0.txt)
+
+if [ "$DIFF" != "" ]
+then 
+    printf "\nTEST 10 FAILED: \n"
+    #printf "$DIFF\n\n"
+else
+    printf "test 10 passed\n"
+    rm output/natWindow/geneCount_NWA_0.txt
+fi
+
+
+
+#Test 11
+../src/cvgTools --command=NaturalWinAvg --input_type=c --input=input/countsFiles/geneCount2 --out_path=output/natWindow/
+
+DIFF=$(diff correct/natWindow/geneCount2_NWA_0.txt output/natWindow/geneCount2_NWA_0.txt)
+
+if [ "$DIFF" != "" ]
+then 
+    printf "\nTEST 11 FAILED: \n"
+    #printf "$DIFF\n\n"
+else
+    printf "test 11 passed\n"
+    rm output/natWindow/geneCount2_NWA_0.txt
+fi
+
+
+
+#Test 12
+../src/cvgTools --command=NaturalWinAvg --input_type=c --input=input/countsFiles/geneCount2_O --out_path=output/natWindow/
+
+DIFF=$(diff correct/natWindow/geneCount2_O_NWA_0.txt output/natWindow/geneCount2_O_NWA_0.txt)
+
+if [ "$DIFF" != "" ]
+then 
+    printf "\nTEST 12 FAILED: \n"
+    #printf "$DIFF\n\n"
+else
+    printf "test 12 passed\n"
+    rm output/natWindow/geneCount2_O_NWA_0.txt
+fi
+
+
 printf "TESTS END\n"

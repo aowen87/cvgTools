@@ -653,7 +653,9 @@ void WindowBlock::SetWindows(unsigned long int winCount, Window *_windows)
     for (unsigned int i = 0; i < winCount; i++)
     {
         Window curWin = _windows[i];
-        Window newWindow(curWin.GetTitle(), curWin.GetDataSize(), curWin.GetStart(), curWin.GetStop(), curWin.GetValAvg(), curWin.GetLines());
+        Window newWindow(curWin.GetTitle(), curWin.GetDataSize(), 
+                         curWin.GetStart(), curWin.GetStop(), 
+                         curWin.GetValAvg(), curWin.GetLines());
         windows[i] = newWindow;
     }
 }

@@ -2,8 +2,6 @@ cvgTools
 ========
 #### version alpha 1
 
-[Introduction](#intro)
-
 Authors and contact:
  * Alister Maguire
  * [linkedin][1]
@@ -74,7 +72,7 @@ primary goals of this project are as follows:
       a successful install!
 
 
-## Basic usage
+## Basic Usage
 
  **Overview**
 
@@ -121,21 +119,43 @@ primary goals of this project are as follows:
  * Bed files 
  * Bed coverage files (per base) **see below for important details** 
 
+
 **Available Commands**
 
- * ToWig
- * NaturalWinAvg
- * GeneAvg
- * GenicWindows
- * WindowDiff
- * PeakAvg   (note: needs more testing)
- * BaseDiff  (note: needs more testing)
+ * [ToWig](#ToWig)
+ * [NaturalWinAvg](#NaturalWinAvg)
+ * [GeneAvg](#GeneAvg)
+ * [GenicWindows](#GenicWindows)
+ * [WindowDiff](#WindowDiff)
+ * [PeakAvg](#PeakAvg)
+ * [BaseDiff](#BaseDiff)
 
 
-**Command Usage**
 
- * 
+##Command Usage
 
+ This section defines how to use each of the available commands and gives 
+ basic examples of usage. 
+
+###ToWig
+
+
+###NaturalWinAvg
+
+
+###GeneAvg
+
+
+###GenicWindows
+
+
+###WindowDiff
+
+
+###PeakAvg
+
+
+###BaseDiff
 
 
 

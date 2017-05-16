@@ -88,7 +88,6 @@ int main(int argc, char *argv[])
 
         if ( (*out_path.rbegin() != '/') && (out_path != "./"))
             out_path = out_path + "/";
-        
         int in_size = input.size();                                           
         if (in_type == "c")
         {
@@ -136,16 +135,16 @@ int main(int argc, char *argv[])
                 }            
             }
 
-            else if (command == "NautralWinAvg")
+            else if (command == "NaturalWinAvg")
             {
                 for (int i = 0; i < in_size; ++i)
                 {
                     WindowAvgWriter writer;
                     bedCovReaders[i]->SetNaturalWindows();
-                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetWindowBlock());
+                    writer.SetSinkWindowBlock(bedCovReaders[i]->GetNaturalWindows());
                     string s_i = static_cast<std::ostringstream*>
                                 ( &(std::ostringstream() << i) )->str();
-                    string out_f_str = out_path + FileName(input[i]) + "_" + s_i  + ".txt";
+                    string out_f_str = out_path + FileName(input[i]) + "_NWA_" + s_i  + ".txt";
                     const char *out_f_pt = out_f_str.c_str();
                     writer.Write(out_f_pt);
                 }
@@ -282,7 +281,6 @@ int main(int argc, char *argv[])
             for (int i = 0; i < in_size; ++i)
                 delete bedCovReaders[i];
             delete [] bedCovReaders;
-
         }
 
         else if (in_type == "b")

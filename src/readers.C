@@ -10,10 +10,12 @@
 #include <fstream>
 #include <iostream>
 #include <data.h>
+#include <cmath>
 using std::cerr;
 using std::endl;
 using std::ifstream;
 using std::string;
+using std::abs;
 
 
 /***
@@ -147,7 +149,8 @@ void bedReader::Execute()
                     dataSet[count] = line; 
                     if (count == limit && score == 0.0)
                         break; 
-                    if ( (((start - prevStop) > 0 ) && prevScore != 0.0 && 
+
+                    if ( ((std::abs(start - prevStop) > 0 ) && prevScore != 0.0 && 
                          score != 0.0 && prevName == name) || 
                          (score == 0.0 && prevScore != 0.0 && prevName == name) || 
                          (prevName != name && prevScore != 0))
@@ -274,6 +277,9 @@ void bedCovPerBaseReader::Execute()
         std::getline(inFile, rawLine);                                        
         std::istringstream iss(rawLine);
         if (!(iss >> prevName >> prevStop >> score))//Set prevStop and prevName
+        prevName  = "NONE";
+        prevStop  = -1;
+        prevScore = -1;
         inFile.clear();
         inFile.seekg(0, std::ios::beg);
         while (std::getline(inFile, rawLine))
@@ -289,18 +295,20 @@ void bedCovPerBaseReader::Execute()
             dataSet[count] = line; 
             if (count == limit && score == 0.0)
                 break; 
-            if ( (((start - prevStop) > 0 ) && prevScore != 0.0 
+            start--;
+
+            if ( ((std::abs(start - prevStop) > 0 ) && prevScore != 0.0 
                 && score != 0.0 && prevName == name) || 
                (score == 0.0 && prevScore != 0.0 && prevName == name) || 
-               (prevName != name && prevScore != 0))
+               (prevName != name && prevScore != 0.0))
                 natWinCount++; 
             count++;
-            prevStop  = start;
+            prevStop  = start + 1;
             prevScore = score;
             prevName  = name;
         } 
 
-        if (score != 0)
+        if (score != 0.0)
             natWinCount++;//Account for the last window
 
         if (tfname != NULL)
