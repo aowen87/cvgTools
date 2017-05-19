@@ -139,22 +139,17 @@ primary goals of this project are as follows:
 
 **ToWig** <a name="ToWig"></a>
 
-## NaturalWinAvg
+**NaturalWinAvg** <a name="NaturalWinAvg"></a>
 
+**GeneAvg** <a name="GeneAvg"></a>
 
-## GeneAvg
+**GenicWindows** <a name="GenicWindows"></a>
 
+**WindowDiff** <a name="WindowDiff"></a>
 
-## GenicWindows
+**PeakAvg** <a name="PeakAvg"></a>
 
-
-## WindowDiff
-
-
-## PeakAvg
-
-
-## BaseDiff
+**BaseDiff** <a name="BaseDiff"></a>
 
 
 
