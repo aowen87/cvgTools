@@ -150,7 +150,9 @@ primary goals of this project are as follows:
 
  * --input/_type: the type of input file. Acceptable types are
      bed files, denoted as "b", and bed [coverage files](#bc_files), 
-     denoted as "c". 
+     denoted as "c". It is important to note, however, that most of the
+     available commands only accept bed coverage files at the moment. 
+
  * --input: the path to the actual input file. 
 
  You also have the option of deciding which directory the output file 
@@ -173,8 +175,8 @@ primary goals of this project are as follows:
   ./cvgTools --command=ToWig --input_type=c --input=path/_to/_input/_file
   ``
 
-  Of course, the command above takes in a bed coverage file, but you can easily use this
-  command with a bed file by changing --input/_type=c to --input/_type=b
+  This is the one command that currently accepts both bed files and bed coverage files as
+  input. 
 
 
 * **NaturalWinAvg** <a name="NaturalWinAvg"></a>
