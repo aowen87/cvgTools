@@ -137,25 +137,25 @@ primary goals of this project are as follows:
  This section defines how to use each of the available commands and gives 
  basic examples of usage. 
 
-### ToWig
+## ToWig
 
 
-### NaturalWinAvg
+## NaturalWinAvg
 
 
-### GeneAvg
+## GeneAvg
 
 
-### GenicWindows
+## GenicWindows
 
 
-### WindowDiff
+## WindowDiff
 
 
-### PeakAvg
+## PeakAvg
 
 
-### BaseDiff
+## BaseDiff
 
 
 
