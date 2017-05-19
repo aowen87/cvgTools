@@ -12,13 +12,16 @@ Advisors:
  * Vince Bicocca, Postdoctoral Fellow at the UO
 
 
-##Table of Contents
+## Table of Contents
 
-1. [**Introduction**](#Introduction)
-1. [**Installation**](##Installation)
+1. [**Introduction**](#Intro)
+2. [**Installation**](#Install)
+3. [**Basic Usage**](#BU)
+4. [**Command Usage**](#command)
+5. [**Extras**](#extras)
 
 
-## Introduction
+## Introduction <a name="Intro"></a>
 
 **cvgTools** was created as a collaborative research project at the University of Oregon 
 to help with DNA analysis being conducted in the department of molecular biology. The 
@@ -78,7 +81,7 @@ primary goals of this project are as follows:
       a successful install!
 
 
-## Basic Usage
+## Basic Usage <a name="BU"></a>
 
  **Overview**
 
@@ -138,12 +141,41 @@ primary goals of this project are as follows:
 
 
 
-## Command Usage
+## Command Usage <a name="command"></a>
 
  This section defines how to use each of the available commands and gives 
  basic examples of usage. 
 
-**ToWig** <a name="ToWig"></a>
+ For starters, each command requires the following arguments:
+
+ * --input/_type: the type of input file. Acceptable types are
+     bed files, denoted as "b", and bed [coverage files](#bc_files), 
+     denoted as "c". 
+ * --input: the path to the actual input file. 
+
+ You also have the option of deciding which directory the output file 
+ will be written to. By default, this file is written to the current
+ directory, and will be named in the following manner:
+ 
+     NameOfInputFile_COMMAND_count.txt
+
+ To change the output path, use the following command:
+
+ * --out/_path
+
+
+**ToWig:** <a name="ToWig"></a>
+
+ ToWig is a basic command that allows conversion from bed files and bed coverage files
+ to wig format. The command is run like so:
+
+ ``
+ ./cvgTools --command=ToWig --input_type=c --input=path/_to/_input/_file
+ ``
+
+ Of course, the command above takes in a bed coverage file, but you can easily use this
+ command with a bed file by changing --input/_type=c to --input/_type=b
+
 
 **NaturalWinAvg** <a name="NaturalWinAvg"></a>
 
@@ -159,8 +191,12 @@ primary goals of this project are as follows:
 
 
 
+##Extras <a name="extras"></a>
 
 
+
+* **Bed Coverage Files:** <a name="bc_files"><a/>
+  
 
 
 
