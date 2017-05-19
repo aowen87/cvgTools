@@ -164,30 +164,30 @@ primary goals of this project are as follows:
  * --out/_path
 
 
-**ToWig:** <a name="ToWig"></a>
+* **ToWig:** <a name="ToWig"></a>
 
- ToWig is a basic command that allows conversion from bed files and bed coverage files
- to wig format. The command is run like so:
+  ToWig is a basic command that allows conversion from bed files and bed coverage files
+  to wig format. The command is run like so:
 
- ``
- ./cvgTools --command=ToWig --input_type=c --input=path/_to/_input/_file
- ``
+  ``
+  ./cvgTools --command=ToWig --input_type=c --input=path/_to/_input/_file
+  ``
 
- Of course, the command above takes in a bed coverage file, but you can easily use this
- command with a bed file by changing --input/_type=c to --input/_type=b
+  Of course, the command above takes in a bed coverage file, but you can easily use this
+  command with a bed file by changing --input/_type=c to --input/_type=b
 
 
-**NaturalWinAvg** <a name="NaturalWinAvg"></a>
+* **NaturalWinAvg** <a name="NaturalWinAvg"></a>
 
-**GeneAvg** <a name="GeneAvg"></a>
+* **GeneAvg** <a name="GeneAvg"></a>
 
-**GenicWindows** <a name="GenicWindows"></a>
+* **GenicWindows** <a name="GenicWindows"></a>
 
-**WindowDiff** <a name="WindowDiff"></a>
+* **WindowDiff** <a name="WindowDiff"></a>
 
-**PeakAvg** <a name="PeakAvg"></a>
+* **PeakAvg** <a name="PeakAvg"></a>
 
-**BaseDiff** <a name="BaseDiff"></a>
+* **BaseDiff** <a name="BaseDiff"></a>
 
 
 
