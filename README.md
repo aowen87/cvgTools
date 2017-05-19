@@ -12,16 +12,21 @@ Advisors:
  * Vince Bicocca, Postdoctoral Fellow at the UO
 
 
+##Table of Contents
+
+1. [**Introduction**](#Introduction)
+
+
 ## Introduction
 
 **cvgTools** was created as a collaborative research project at the University of Oregon 
 to help with DNA analysis being conducted in the department of molecular biology. The 
 primary goals of this project are as follows:
 
- * 1. Provide some basic functionality, mainly in analyzing coverage 
-      over genes and genic features. 
- * 2. Provide a modular framework that can easily be extended upon
-      for future development. 
+ *  Provide some basic functionality, mainly in analyzing coverage 
+    over genes and genic features. 
+ *  Provide a modular framework that can easily be extended upon
+    for future development. 
 
  **Note for the user**
 
