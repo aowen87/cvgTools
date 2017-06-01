@@ -20,8 +20,8 @@ Advisors:
 4. [**Command Usage**](#command)
 5. [**Extras**](#extras)
 
-
-## Introduction <a name="Intro"></a>
+<a name="Intro"></a>
+## Introduction 
 
 **cvgTools** was created as a collaborative research project at the University of Oregon 
 to help with DNA analysis being conducted in the department of molecular biology. The 
@@ -39,7 +39,7 @@ primary goals of this project are as follows:
    faculty in handling molecular data, this tool should be used with scrutiny and tested
    extensively.  
 
-
+<a name="Install"></a>
 ## Installation
 
   **Dependencies**
@@ -80,8 +80,8 @@ primary goals of this project are as follows:
       followed by "TESTS END". As long as you don't see any failures, you've had
       a successful install!
 
-
-## Basic Usage <a name="BU"></a>
+<a name="BU"></a>
+## Basic Usage 
 
  **Overview**
 
@@ -140,8 +140,8 @@ primary goals of this project are as follows:
  * [BaseDiff](#BaseDiff)
 
 
-
-## Command Usage <a name="command"></a>
+<a name="command"></a>
+## Command Usage 
 
  This section defines how to use each of the available commands and gives 
  basic examples of usage. 
