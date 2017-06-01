@@ -148,7 +148,7 @@ primary goals of this project are as follows:
 
  For starters, each command requires the following arguments:
 
- * --input/_type: the type of input file. Acceptable types are
+ * --input\_type: the type of input file. Acceptable types are
      bed files, denoted as "b", and bed [coverage files](#bc_files), 
      denoted as "c". 
  * --input: the path to the actual input file. 
@@ -161,33 +161,38 @@ primary goals of this project are as follows:
 
  To change the output path, use the following command:
 
- * --out/_path
+ * --out\_path
 
-
-* **ToWig:** <a name="ToWig"></a>
+<a name="ToWig"></a>
+* **ToWig:** 
 
   ToWig is a basic command that allows conversion from bed files and bed coverage files
   to wig format. The command is run like so:
 
   ``
-  ./cvgTools --command=ToWig --input_type=c --input=path/_to/_input/_file
+  ./cvgTools --command=ToWig --input_type=c --input=path_to_input_file
   ``
 
   Of course, the command above takes in a bed coverage file, but you can easily use this
   command with a bed file by changing --input/_type=c to --input/_type=b
 
+ <a name="NaturalWinAvg"></a>
+* **NaturalWinAvg**
 
-* **NaturalWinAvg** <a name="NaturalWinAvg"></a>
+<a name="GeneAvg"></a>
+* **GeneAvg** 
 
-* **GeneAvg** <a name="GeneAvg"></a>
+<a name="GenicWindows"></a>
+* **GenicWindows** 
 
-* **GenicWindows** <a name="GenicWindows"></a>
+ <a name="WindowDiff"></a>
+* **WindowDiff**
 
-* **WindowDiff** <a name="WindowDiff"></a>
+<a name="PeakAvg"></a>
+* **PeakAvg** 
 
-* **PeakAvg** <a name="PeakAvg"></a>
-
-* **BaseDiff** <a name="BaseDiff"></a>
+ <a name="BaseDiff"></a>
+* **BaseDiff**
 
 
 
