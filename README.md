@@ -159,9 +159,8 @@ primary goals of this project are as follows:
  
      NameOfInputFile_COMMAND_count.txt
 
- To change the output path, use the following command:
+ To change the output path, use the **--out\_path** command:
 
- * --out\_path
 
 <a name="ToWig"></a>
 * **ToWig:** 
@@ -195,12 +194,12 @@ primary goals of this project are as follows:
 * **BaseDiff**
 
 
+<a name="extras"></a>
+##Extras 
 
-##Extras <a name="extras"></a>
 
-
-
-* **Bed Coverage Files:** <a name="bc_files"><a/>
+<a name="bc_files"><a/>
+* **Bed Coverage Files:** 
   
 
 
