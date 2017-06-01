@@ -173,7 +173,7 @@ primary goals of this project are as follows:
   ``
 
   Of course, the command above takes in a bed coverage file, but you can easily use this
-  command with a bed file by changing --input/_type=c to --input/_type=b
+  command with a bed file by changing --input\_type=c to --input\_type=b
 
  <a name="NaturalWinAvg"></a>
 * **NaturalWinAvg**
