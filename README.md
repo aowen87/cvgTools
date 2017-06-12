@@ -222,7 +222,6 @@ primary goals of this project are as follows:
 
   ```
   ./cvgTools --command=NaturalWinAvg --input_type=c --input=input_path --out_path=output_path
-
   ```
 
   Bed coverage files are the only supported input type for NaturalWinAvg.  
@@ -242,7 +241,7 @@ primary goals of this project are as follows:
   The basic command is run like so:
 
   ```
-./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path 
+  ./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path 
   ```
 
   The above command only computes the mean coverage scores for the genes, but you can easily
