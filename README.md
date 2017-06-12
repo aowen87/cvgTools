@@ -126,7 +126,10 @@ primary goals of this project are as follows:
 **Supported Input Type**
 
  * Bed files 
- * Bed coverage files (per base) **see below for important details** 
+ * Bed coverage files (per base) **IMPORTANT: bed coverage files must be**
+                                 **per base. See [below](#bc_files) for instructions** 
+                                 **on creating per-base bed coverage files**
+                                   
 
 
 **Available Commands**
@@ -181,7 +184,99 @@ primary goals of this project are as follows:
 
 * **NaturalWinAvg** <a name="NaturalWinAvg"></a>
 
+  NaturalWinAvg is a command that finds the "natural windows" within a bed coverage file.
+  A natural window is being define as a region of consecutive base pairs that meets the 
+  following criteria:
+
+    a.) All base pairs share the same chromosome
+    b.) All base pairs have a coverage score > 0.0
+
+  For each natural window, an output will be created noting the range and mean value for
+  this window. 
+
+  For instance, if given the following input,
+
+  ```
+  chrom1  1435    8
+  chrom1  1436    8
+  chrom1  1437    9
+  chrom1  1438    0
+  chrom2  1987    4
+  chrom2  1988    5
+  chrom2  1989    8
+  chrom3  4451    9
+  chrom3  4452    1
+  chrom3  4453    2
+  ```
+
+  the output will be like so:
+
+  ```
+  chrom1  1434    1437    8.33
+  chrom2  1986    1989    5.67
+  chrom3  4450    4453    4
+  ```
+
+  The command is run like so:
+
+  ```
+  ./cvgTools --command=NaturalWinAvg --input_type=c --input=input/_path --out_path=output/_path
+
+  ```
+
+  Bed coverage files are the only supported input type for NaturalWinAvg.  
+
+
 * **GeneAvg** <a name="GeneAvg"></a>
+
+  The GeneAvg command computes the mean coverage scores for each gene within a per-base bed
+  coverage file. It also has the ability to compute the mean coverage scores for the following
+  gene features:
+
+    * exons
+    * start/_codons
+    * stop/_codons
+
+  The basic command is run like so:
+
+  ```
+./cvgTools --command=GeneAvg --input_type=c --input=input/_path --out_path=output/_path --transcripts=transcripts/_path 
+  ```
+
+  The above command only computes the mean coverage scores for the genes, but you can easily
+  compute the scores for any of the available features by adding in an options parameter. For
+  instance, if you wanted to compute the mean scores for the exons, you would add the following
+  command to you basic command above:
+
+  ```
+  --options=exons
+  ```
+
+  Below is an example of computing the mean scores for genes, exons, start/_codons, and 
+  stop/_codons in one run:
+
+  ```
+ ./cvgTools --command=GeneAvg --input_type=c --input=input/_path --out_path=output/_path --transcripts=transcripts/_path --options=exons --options=start/_codons --options=stop/_codons
+  ```
+
+  A single output file will be generated for the mean gene scores, which will be formated 
+  as follows:
+
+  ```
+  Chromosome    start    stop    mean
+  ```
+
+  Additionally, a separate file will be generated for every feature mean that is requested. 
+  For instance, if you asked for exons, start/_codons, and stop/_codons, then you would end 
+  up with 4 files in total. 
+  The feature mean files are formated as follows:
+
+  ```
+  Chromosome    feature    start    stop    mean
+  ```
+
+  The feature files will all have the feature name in their title for easy identification. 
+
 
 * **GenicWindows** <a name="GenicWindows"></a>
 
