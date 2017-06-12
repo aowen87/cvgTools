@@ -257,7 +257,7 @@ primary goals of this project are as follows:
   stop/_codons in one run:
 
   ```
- ./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path --options=exons --options=start_codons --options=stop_codons
+  ./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path --options=exons --options=start_codons --options=stop_codons
   ```
 
   A single output file will be generated for the mean gene scores, which will be formated 
