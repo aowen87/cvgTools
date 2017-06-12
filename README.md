@@ -20,8 +20,8 @@ Advisors:
 4. [**Command Usage**](#command)
 5. [**Extras**](#extras)
 
-
-## Introduction <a name="Intro"></a>
+<a name="Intro"></a>
+## Introduction 
 
 **cvgTools** was created as a collaborative research project at the University of Oregon 
 to help with DNA analysis being conducted in the department of molecular biology. The 
@@ -39,7 +39,7 @@ primary goals of this project are as follows:
    faculty in handling molecular data, this tool should be used with scrutiny and tested
    extensively.  
 
-
+<a name="Install"></a>
 ## Installation
 
   **Dependencies**
@@ -80,8 +80,8 @@ primary goals of this project are as follows:
       followed by "TESTS END". As long as you don't see any failures, you've had
       a successful install!
 
-
-## Basic Usage <a name="BU"></a>
+<a name="BU"></a>
+## Basic Usage 
 
  **Overview**
 
@@ -143,15 +143,15 @@ primary goals of this project are as follows:
  * [BaseDiff](#BaseDiff)
 
 
-
-## Command Usage <a name="command"></a>
+<a name="command"></a>
+## Command Usage 
 
  This section defines how to use each of the available commands and gives 
  basic examples of usage. 
 
  For starters, each command requires the following arguments:
 
- * --input/_type: the type of input file. Acceptable types are
+ * --input\_type: the type of input file. Acceptable types are
      bed files, denoted as "b", and bed [coverage files](#bc_files), 
      denoted as "c". It is important to note, however, that most of the
      available commands only accept bed coverage files at the moment. 
@@ -164,18 +164,17 @@ primary goals of this project are as follows:
  
      NameOfInputFile_COMMAND_count.txt
 
- To change the output path, use the following command:
-
- * --out/_path
+ To change the output path, use the **--out\_path** command:
 
 
-* **ToWig:** <a name="ToWig"></a>
+<a name="ToWig"></a>
+* **ToWig:** 
 
   ToWig is a basic command that allows conversion from bed files and bed coverage files
   to wig format. The command is run like so:
 
   ``
-  ./cvgTools --command=ToWig --input_type=c --input=path/_to/_input/_file
+  ./cvgTools --command=ToWig --input_type=c --input=path_to_input_file
   ``
 
   This is the one command that currently accepts both bed files and bed coverage files as
@@ -278,21 +277,25 @@ primary goals of this project are as follows:
   The feature files will all have the feature name in their title for easy identification. 
 
 
-* **GenicWindows** <a name="GenicWindows"></a>
+<a name="GenicWindows"></a>
+* **GenicWindows** 
 
-* **WindowDiff** <a name="WindowDiff"></a>
+ <a name="WindowDiff"></a>
+* **WindowDiff**
 
-* **PeakAvg** <a name="PeakAvg"></a>
+<a name="PeakAvg"></a>
+* **PeakAvg** 
 
-* **BaseDiff** <a name="BaseDiff"></a>
-
-
-
-##Extras <a name="extras"></a>
-
+ <a name="BaseDiff"></a>
+* **BaseDiff**
 
 
-* **Bed Coverage Files:** <a name="bc_files"><a/>
+<a name="extras"></a>
+##Extras 
+
+
+<a name="bc_files"><a/>
+* **Bed Coverage Files:** 
   
 
 
