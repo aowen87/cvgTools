@@ -165,8 +165,9 @@ primary goals of this project are as follows:
      NameOfInputFile_COMMAND_count.txt
 
  To change the output path, use the **--out\_path** command:
-
-
+  
+  
+  
 <a name="ToWig"></a>
 * **ToWig:** 
 
@@ -179,8 +180,9 @@ primary goals of this project are as follows:
 
   This is the one command that currently accepts both bed files and bed coverage files as
   input. 
-
-
+  
+  
+  
 * **NaturalWinAvg** <a name="NaturalWinAvg"></a>
 
   NaturalWinAvg is a command that finds the "natural windows" within a bed coverage file.
@@ -224,8 +226,9 @@ primary goals of this project are as follows:
   ```
 
   Bed coverage files are the only supported input type for NaturalWinAvg.  
-
-
+  
+  
+  
 * **GeneAvg** <a name="GeneAvg"></a>
 
   The GeneAvg command computes the mean coverage scores for each gene within a per-base bed
@@ -275,21 +278,28 @@ primary goals of this project are as follows:
   ```
 
   The feature files will all have the feature name in their title for easy identification. 
-
-
+  
+  
+  
 <a name="GenicWindows"></a>
 * **GenicWindows** 
-
+  
+  
+  
  <a name="WindowDiff"></a>
 * **WindowDiff**
-
+  
+  
+  
 <a name="PeakAvg"></a>
 * **PeakAvg** 
-
+  
+  
+  
  <a name="BaseDiff"></a>
 * **BaseDiff**
-
-
+  
+  
 <a name="extras"></a>
 ##Extras 
 
