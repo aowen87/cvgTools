@@ -187,7 +187,7 @@ primary goals of this project are as follows:
   A natural window is being define as a region of consecutive base pairs that meets the 
   following criteria:
 
-    a.) All base pairs share the same chromosome__
+    a.) All base pairs share the same chromosome  
     b.) All base pairs have a coverage score > 0.0
 
   For each natural window, an output will be created noting the range and mean value for
@@ -219,7 +219,7 @@ primary goals of this project are as follows:
   The command is run like so:
 
   ```
-  ./cvgTools --command=NaturalWinAvg --input_type=c --input=input/_path --out_path=output/_path
+  ./cvgTools --command=NaturalWinAvg --input_type=c --input=input_path --out_path=output_path
 
   ```
 
@@ -239,7 +239,7 @@ primary goals of this project are as follows:
   The basic command is run like so:
 
   ```
-./cvgTools --command=GeneAvg --input_type=c --input=input/_path --out_path=output/_path --transcripts=transcripts/_path 
+./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path 
   ```
 
   The above command only computes the mean coverage scores for the genes, but you can easily
@@ -255,7 +255,7 @@ primary goals of this project are as follows:
   stop/_codons in one run:
 
   ```
- ./cvgTools --command=GeneAvg --input_type=c --input=input/_path --out_path=output/_path --transcripts=transcripts/_path --options=exons --options=start/_codons --options=stop/_codons
+ ./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path --options=exons --options=start_codons --options=stop_codons
   ```
 
   A single output file will be generated for the mean gene scores, which will be formated 
