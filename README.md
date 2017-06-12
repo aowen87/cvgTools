@@ -187,8 +187,8 @@ primary goals of this project are as follows:
   A natural window is being define as a region of consecutive base pairs that meets the 
   following criteria:
 
-    a.) All base pairs share the same chromosome
-    \nb.) All base pairs have a coverage score > 0.0
+    a.) All base pairs share the same chromosome__
+    b.) All base pairs have a coverage score > 0.0
 
   For each natural window, an output will be created noting the range and mean value for
   this window. 
