@@ -188,7 +188,7 @@ primary goals of this project are as follows:
   following criteria:
 
     a.) All base pairs share the same chromosome
-    b.) All base pairs have a coverage score > 0.0
+    \nb.) All base pairs have a coverage score > 0.0
 
   For each natural window, an output will be created noting the range and mean value for
   this window. 
