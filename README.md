@@ -17,7 +17,7 @@ Advisors:
 1. [**Introduction**](#Intro)
 2. [**Installation**](#Install)
 3. [**Basic Usage**](#BU)
-4. [**Command Usage**](#command)
+4. [**Command Usage**](#COMMAND)
 5. [**Extras**](#extras)
 
 <a name="Intro"></a>
@@ -144,7 +144,7 @@ primary goals of this project are as follows:
  * [BaseDiff](#BaseDiff)
 
 
-<a name="command"></a>
+<a name="COMMAND"></a>
 ## Command Usage 
 
  This section defines how to use each of the available commands and gives 
