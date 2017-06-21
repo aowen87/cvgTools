@@ -238,7 +238,7 @@ primary goals of this project are as follows:
   
   
 * **GeneAvg** <a name="GeneAvg"></a>
-* ####GeneAvg
+* #### GeneAvg
 
   The GeneAvg command computes the mean coverage scores for each gene within a per-base genome
   coverage file. It also has the ability to compute the mean coverage scores for the following
