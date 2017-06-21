@@ -189,7 +189,7 @@ primary goals of this project are as follows:
   
   
   
-* **NaturalWinAvg** <a name="NaturalWinAvg"></a>
+* **NaturalWinAvg:** <a name="NaturalWinAvg"></a>
 
   NaturalWinAvg is a command that finds the "natural windows" within a genome coverage file.
   A natural window is being define as a region of consecutive base pairs that meets the 
@@ -237,8 +237,7 @@ primary goals of this project are as follows:
   
   
   
-* **GeneAvg** <a name="GeneAvg"></a>
-* #### GeneAvg
+* **GeneAvg:** <a name="GeneAvg"></a>
 
   The GeneAvg command computes the mean coverage scores for each gene within a per-base genome
   coverage file. It also has the ability to compute the mean coverage scores for the following
@@ -295,7 +294,7 @@ primary goals of this project are as follows:
   
   
 <a name="GenicWindows"></a>
-* **GenicWindows** 
+* **GenicWindows:** 
 
   As the name implies, the GenicWindows command outputs genic regions (windows) found within
   an input genome coverage file. 
@@ -313,7 +312,7 @@ primary goals of this project are as follows:
   
   
  <a name="WindowDiff"></a>
-* **WindowDiff**
+* **WindowDiff:**
   
   **IMPORTANT**: the WindowDiff command has not been thoroughly tested. 
 
@@ -325,7 +324,7 @@ primary goals of this project are as follows:
   
   
 <a name="PeakAvg"></a>
-* **PeakAvg** 
+* **PeakAvg:** 
 
   **IMPORTANT**: the PeakAvg command has not been thoroughly tested nor has it been 
   updated to take in the variable peak limits from users. 
@@ -341,7 +340,7 @@ primary goals of this project are as follows:
   
   
  <a name="BaseDiff"></a>
-* **BaseDiff**
+* **BaseDiff:**
 
   **IMPORTANT**: the BaseDiff command has not been thoroughly tested. Documentation
   will be updated when testing has been completed. 
