@@ -126,9 +126,10 @@ primary goals of this project are as follows:
 **Supported Input Type**
 
  * Bed files 
- * Bed coverage files (per base) **IMPORTANT: bed coverage files must be**
-                                 **per base. See [below](#bc_files) for instructions** 
-                                 **on creating per-base bed coverage files**
+ * Genome coverage files (per base) 
+   **IMPORTANT: genome coverage files must be**
+   **per base. See [below](#bcFiles) for instructions** 
+   **on creating per-base genome coverage files**
                                    
 
 
@@ -152,9 +153,9 @@ primary goals of this project are as follows:
  For starters, each command requires the following arguments:
 
  * --input\_type: the type of input file. Acceptable types are
-     bed files, denoted as "b", and bed [coverage files](#bc_files), 
+     bed files, denoted as "b", and genome [coverage files](#bcFiles), 
      denoted as "c". It is important to note, however, that most of the
-     available commands only accept bed coverage files at the moment. 
+     available commands only accept genome coverage files at the moment. 
 
  * --input: the path to the actual input file. 
 
@@ -171,21 +172,26 @@ primary goals of this project are as follows:
 <a name="ToWig"></a>
 * **ToWig:** 
 
-  ToWig is a basic command that allows conversion from bed files and bed coverage files
-  to wig format. The command is run like so:
+  ToWig is a basic command that allows conversion from bed files and genome coverage files
+  to wig format. 
+
+  **Required input**:
+  * per-base genome coverage file or basic bed file.
+
+  The command is run like so:
 
   ``
   ./cvgTools --command=ToWig --input_type=c --input=path_to_input_file
   ``
 
-  This is the one command that currently accepts both bed files and bed coverage files as
+  This is the one command that currently accepts both bed files and genome coverage files as
   input. 
   
   
   
 * **NaturalWinAvg** <a name="NaturalWinAvg"></a>
 
-  NaturalWinAvg is a command that finds the "natural windows" within a bed coverage file.
+  NaturalWinAvg is a command that finds the "natural windows" within a genome coverage file.
   A natural window is being define as a region of consecutive base pairs that meets the 
   following criteria:
 
@@ -218,25 +224,32 @@ primary goals of this project are as follows:
   chrom3  4450    4453    4
   ```
 
+  **Required input**:
+  * per-base genome coverage file containing read counts. 
+
   The command is run like so:
 
   ```
   ./cvgTools --command=NaturalWinAvg --input_type=c --input=input_path --out_path=output_path
   ```
 
-  Bed coverage files are the only supported input type for NaturalWinAvg.  
+  Genome coverage files are the only supported input type for NaturalWinAvg.  
   
   
   
 * **GeneAvg** <a name="GeneAvg"></a>
 
-  The GeneAvg command computes the mean coverage scores for each gene within a per-base bed
+  The GeneAvg command computes the mean coverage scores for each gene within a per-base genome
   coverage file. It also has the ability to compute the mean coverage scores for the following
   gene features:
 
     * exons
     * start/_codons
     * stop/_codons
+
+  **Required input**:
+  * per-base genome coverage file containing read counts. 
+  * transcripts file in bed format
 
   The basic command is run like so:
 
@@ -253,8 +266,8 @@ primary goals of this project are as follows:
   --options=exons
   ```
 
-  Below is an example of computing the mean scores for genes, exons, start/_codons, and 
-  stop/_codons in one run:
+  Below is an example of computing the mean scores for genes, exons, start\_codons, and 
+  stop\_codons in one run:
 
   ```
   ./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path --options=exons --options=start_codons --options=stop_codons
@@ -268,7 +281,7 @@ primary goals of this project are as follows:
   ```
 
   Additionally, a separate file will be generated for every feature mean that is requested. 
-  For instance, if you asked for exons, start/_codons, and stop/_codons, then you would end 
+  For instance, if you asked for exons, start\_codons, and stop\_codons, then you would end 
   up with 4 files in total. 
   The feature mean files are formated as follows:
 
@@ -282,32 +295,75 @@ primary goals of this project are as follows:
   
 <a name="GenicWindows"></a>
 * **GenicWindows** 
+
+  As the name implies, the GenicWindows command outputs genic regions (windows) found within
+  an input genome coverage file. 
+
+  **Required input**:
+  * per-base genome coverage file containing read counts. 
+  * transcripts file in bed format
+
+  The command is run like so:
+
+  ```
+  ./cvgTools --command=GenicWindows --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path
+  ```
   
   
   
  <a name="WindowDiff"></a>
 * **WindowDiff**
   
+  **IMPORTANT**: the WindowDiff command has not been thoroughly tested. 
+
+  The WindowDiff command is used to find the differences between two files, each
+  containing the exact same windows (regions of defined base coverage averages) 
+  with potentially different window values. 
+
+  Documentation will be updated when testing is completed. 
   
   
 <a name="PeakAvg"></a>
 * **PeakAvg** 
+
+  **IMPORTANT**: the PeakAvg command has not been thoroughly tested nor has it been 
+  updated to take in the variable peak limits from users. 
+
+  Currently, the PeakAvg command will compute "peaks" within a per-base genome coverage
+  file. These peaks are defined as regions that have a coverage value no less than 
+  a specified peak limit. At the moment, the peak limit is defaulted to .5 for testing
+  purposes. However, the command is built such that users can enter their own peak
+  limits, but this feature has not yet been implemented into the interface. 
+
   
+  Documentation will be updated when testing is completed. 
   
   
  <a name="BaseDiff"></a>
 * **BaseDiff**
+
+  **IMPORTANT**: the BaseDiff command has not been thoroughly tested. Documentation
+  will be updated when testing has been completed. 
+
   
   
 <a name="extras"></a>
 ##Extras 
 
 
-<a name="bc_files"><a/>
-* **Bed Coverage Files:** 
+<a name="bcFiles"><a/>
+* **Genome Coverage Files:** 
+
+  All but one of the currently implemented commands requires a very specific type of 
+  input file: the per-base genome coverage file. This file can be generated by using
+  the genomecov command within bedTools. **IMPORTANT**: you must used the -d option
+  in order to create a per-base coverage file. 
+  Documentation covering the genomecov command and how to use bedTools can be found
+  here: [http://bedtools.readthedocs.io/en/latest/content/tools/genomecov.html?highlight=coverage][2]
   
 
 
 
 
 [1]: https://www.linkedin.com/in/alister-maguire-0a075991/
+[2]: http://bedtools.readthedocs.io/en/latest/content/tools/genomecov.html?highlight=coverage
