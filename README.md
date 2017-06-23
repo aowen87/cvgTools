@@ -247,8 +247,8 @@ primary goals of this project are as follows:
   gene features:
 
     * exons
-    * start/_codons
-    * stop/_codons
+    * start codons
+    * stop codons
 
   **Required input**:
   * per-base genome coverage file containing read counts. 
@@ -269,8 +269,8 @@ primary goals of this project are as follows:
   --options=exons
   ```
 
-  Below is an example of computing the mean scores for genes, exons, start\_codons, and 
-  stop\_codons in one run:
+  Below is an example of computing the mean scores for genes, exons, start codons, and 
+  stop codons in one run:
 
   ```
   ./cvgTools --command=GeneAvg --input_type=c --input=input_path --out_path=output_path --transcripts=transcripts_path --options=exons --options=start_codons --options=stop_codons
@@ -284,7 +284,7 @@ primary goals of this project are as follows:
   ```
 
   Additionally, a separate file will be generated for every feature mean that is requested. 
-  For instance, if you asked for exons, start\_codons, and stop\_codons, then you would end 
+  For instance, if you asked for exons, start codons, and stop codons, then you would end 
   up with 4 files in total. 
   The feature mean files are formated as follows:
 
