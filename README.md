@@ -163,8 +163,11 @@ primary goals of this project are as follows:
  will be written to. By default, this file is written to the current
  directory, and will be named in the following manner:
  
-     NameOfInputFile_COMMAND_count.txt
+     NameOfInputFile_COMMAND_n.txt
 
+ Where n is an integer between 0 and the number of output files for the last
+ command run. 
+ 
  To change the output path, use the **--out\_path** command:
   
   
