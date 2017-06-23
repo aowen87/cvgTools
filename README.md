@@ -8,8 +8,8 @@ Authors and contact:
  * alisterowen87@gmail.com
 
 Advisors:
- * John Conery, Professor at the UO
- * Vince Bicocca, Postdoctoral Fellow at the UO
+ * John Conery, Professor at the University of Oregon
+ * Vince Bicocca, Postdoctoral Fellow at the University of Oregon
 
 
 ## Table of Contents
