@@ -170,7 +170,7 @@ primary goals of this project are as follows:
  
  To change the output path, use the **--out\_path** command:
   
-  
+### Commands:
   
 <a name="ToWig"></a>
 * **ToWig:** 
