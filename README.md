@@ -263,7 +263,7 @@ primary goals of this project are as follows:
   The above command only computes the mean coverage scores for the genes, but you can easily
   compute the scores for any of the available features by adding in an options parameter. For
   instance, if you wanted to compute the mean scores for the exons, you would add the following
-  command to you basic command above:
+  option to your basic command above:
 
   ```
   --options=exons
