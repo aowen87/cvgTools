@@ -115,12 +115,12 @@ primary goals of this project are as follows:
 
  ```
  --help                dislpaly usage
- --input_type arg      input file type
- --input arg           input files
- --out_path arg        optional path for output files
- --command arg         command to be run
- --transcripts arg     transcripts file
- --options arg         additional options
+ --input_type=arg      input file type
+ --input=arg           input files
+ --out_path=arg        optional path for output files
+ --command=arg         command to be run
+ --transcripts=arg     transcripts file
+ --options=arg         additional options
  ```
 
 **Supported Input Type**
